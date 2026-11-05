@@ -17,10 +17,16 @@ LBFGS_OPTS = {"maxiter": 20000, "maxfun": 40000, "ftol": 1e-16, "gtol": 1e-12, "
 # ^ guesses, not tuned
 
 
+def build(n: int):
+    """Entry point for run.py's model discovery: the order-3 max-ent comparator."""
+    return MaxEntModel(n, k=3)
+
+
 class MaxEntModel:
     def __init__(self, n: int, k: int = 3):
         self.n, self.k = n, k
         self.name = f"maxent{k}"
+        self.key = "maxent" if k == 3 else f"maxent{k}"   # metrics.json key suffix
         self.masks = masks_up_to(n, k)
         self.n_params = len(self.masks)
         self.F = parity_matrix(n, self.masks)   # (2^n, n_params)

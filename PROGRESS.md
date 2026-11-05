@@ -18,12 +18,31 @@
   - MaxEnt(2) recovers Ising lambda to 1e-6 at n = 8;
   - fit machinery reaches < 1e-10 from a start near the truth (n = 6).
 
-## In progress
-- (nothing; stopped at the item-2 checkpoint for review)
+## In progress: item 3, STOPPED at the biased residual gate (2026-11-06)
+- Written: `targets.py`, `metrics.py` (no model imports), `run.py` (model discovery via
+  `build(n)` in each models/ module; `--all` refuses without BUDGET_OK; not run).
+- Run (L-BFGS-B, hyperparameters unchanged, 10 restarts, init N(0, 0.05^2)):
+  | target, N = inf, seed 0 | R | G_iqp | G_maxent | G_uniform | resid IQP | resid MaxEnt | gap_valid |
+  |---|---|---|---|---|---|---|---|
+  | ising  | 1.10e13 | 4.67e-4 | 4.2e-17 | 3.53e-3 | 1.75e-2 | 6.4e-15 | false |
+  | biased | 1.92 | 6.56e-4 | 3.42e-4 | 4.49e-4 | 5.72e-3 | 6.1e-16 | false |
+- ising: R >> 1, so the P3 stop rule did not fire (gap invalid anyway: IQP underfit).
+- biased: **IQP cannot reach 1e-10** -> stopped per spec and user instruction; `random`
+  not run, so `check.sh --stage 2` fails only on the missing random metrics.json
+  (the repro check passed).
+  - restart residuals: 1.10e-2, 9.23e-3, 1.44e-2, 1.15e-2, 9.01e-3, 9.19e-3, 7.44e-3,
+    9.79e-3, 9.16e-3, 5.72e-3; every restart ends "RELATIVE REDUCTION OF F <= FACTR*EPSMCH"
+    after 296-546 iterations, i.e. at a stationary point, not at an iteration limit.
+  - best trace: it0 1.59, it5 0.345, it10 8.95e-2, it20 3.51e-2, it50 1.63e-2,
+    it100 1.07e-2, it200 5.76e-3, it388 5.72e-3 (flat).
+  - moment Jacobian at the solution: rank 297/298, sv max 1.73, **sv min 2.70e-9**
+    (ising: 297/298, 4.98 / 1.56e-9). The same near-singular-stationary-point signature
+    as the n = 6 xfail diagnostic.
+  - trained angles: max|theta| 0.63, clifford dist median 0.079.
+  - G_iqp > G_uniform at biased: the underfit IQP completes worse than uniform.
 
 ## Next
-- Item 3: `targets.py`, `metrics.py` (currently a placeholder), `run.py`; N = inf, seed 0,
-  all three targets; ising first, then biased (residual 1e-10 or show the trace).
+- Waiting for the user's decision on the biased fit (no optimizer change without it).
 
 ## Open questions for the user
 1. **FM2 already visible at n = 6 (xfail test, kept as a diagnostic).** Fitting the IQP to

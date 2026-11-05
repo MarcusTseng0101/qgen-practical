@@ -29,8 +29,19 @@ LBFGS_OPTS = {"maxiter": 20000, "maxfun": 40000, "ftol": 1e-16, "gtol": 1e-13, "
 #   absolute once L < 1); maxiter/maxcor not tuned.
 
 
+def build(n: int):
+    """Entry point for run.py's model discovery."""
+    return IQPModel(n)
+
+
 class IQPModel:
     name = "iqp"
+    key = "iqp"   # metrics.json key suffix
+
+    def angles(self):
+        """(angles, generator weights) of the fitted model, for clifford_distance."""
+        from ..bits import popcount
+        return self.params, popcount(self.gens)
 
     def __init__(self, n: int, kmax: int = 3, gens: np.ndarray | None = None):
         self.n = n
@@ -98,22 +109,33 @@ class IQPModel:
         fhat = np.asarray(fhat, dtype=np.float64)
         rng = np.random.default_rng(seed)
         opts = dict(LBFGS_OPTS, **(options or {}))
-        best, residuals = None, []
+        best, residuals, info = None, [], []
         for r in range(n_restarts):
             init = rng.normal(0.0, init_std, self.n_params)
             theta0_r = np.asarray(theta0, dtype=np.float64) if (r == 0 and theta0 is not None) else init
             trace = []
+            cb = _trace_callback(trace)
+
             res = minimize(self.loss_and_grad, theta0_r, args=(fhat, ops), jac=True,
-                           method="L-BFGS-B", options=opts,
-                           callback=lambda xk: trace.append(self.loss_and_grad(xk, fhat, ops)[0]))
+                           method="L-BFGS-B", options=opts, callback=cb)
             L = self.loss_and_grad(res.x, fhat, ops)[0]
             residuals.append(L)
+            info.append({"residual": L, "nit": int(res.nit), "message": str(res.message)})
             if best is None or L < best.train_residual:
                 best = FitResult(params=res.x, train_residual=L, trace=trace,
                                  nit=int(res.nit), message=str(res.message))
         best.restart_residuals = residuals
+        best.restarts = info
         self.params = best.params
         return best
+
+
+def _trace_callback(trace: list):
+    """scipy passes an OptimizeResult (with .fun, the current loss) only when the callback's
+    single parameter is named intermediate_result."""
+    def cb(intermediate_result):
+        trace.append(float(intermediate_result.fun))
+    return cb
 
 
 def iqp_moments_mc(theta, gens, ops, n_samples, rng):

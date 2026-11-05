@@ -152,8 +152,38 @@
 - check.sh --stage 4 still fails on `test_oracle_support_fit_reaches_1e10_at_sigma_005`
   (the test is unchanged).
 
+# Step 3 (specs/step3_completion_vs_sigma.md, master ab2ecab; branch step3-ratio)
+Designed after the step 1–2 diagnostics (notes/2026-11-06_steps1-2_findings.md).
+
+## Build item 2 (2026-11-06): DONE, `check.sh --stage 7` passes
+- Merged master into step2-sigma, then `git switch -c step3-ratio`.
+- `src/step3/run.py` (imports src/step1 and src/step2; both unchanged since 163fe19):
+  - targets: `iqp(σ, s)` from `step2.sweep.sigma_target`. `maxent_proj(σ, s)` comes from
+    step 1's `maxent_projection`, polished by Newton steps on the same convex dual
+    (`refine_projection`, new in step 3: max 20 steps, tol 1e-14, both guesses).
+    - Why the polish: step 1's projection meets 1e-10 only as a sum of squares. Its max
+      |moment error| was 2e-9 to 3.4e-8. After 1–2 Newton steps it is ≤ 6.4e-15 at every σ
+      (seed 0).
+  - **Training input shared by the pair:** the exact order-≤3 moments of `iqp(σ, s)`. Spec:
+    "identical inputs on the pair". Sharing one vector makes the O, G and MaxEnt fits
+    bit-identical on both members; the pair mismatch is recorded (`pair_moment_*`).
+  - fits O (38 oracle gens), G (298 generic) and MaxEnt(3). No recovery gate.
+    R = G / G_maxent at the lowest-training-residual restart (first on ties).
+  - All 10 restarts are kept: replayed with fit_moments' own init draws, each optimized by
+    the production `fit_moments(..., n_restarts=1, theta0=...)`.
+  - The record has every key that check v4 requires, plus per-restart nit/messages, per-level
+    errors and the best params. `--all` is gated on BUDGET_OK (not run).
+- `tests/test_step3.py`, 10 tests, all pass:
+  - maxent_proj vs iqp order-≤3 moments ≤ 1e-10 as both sum of squares and max |diff|,
+    for all 6 σ;
+  - O identical on the pair (residuals per restart to 1e-12, same best restart and params);
+  - R at the lowest-residual restart (not the lowest G);
+  - the replay equals fit_moments with 10 restarts.
+- check.sh --stage 7: ALL CHECKS PASS (it runs the tests, about 2 min 10 s).
+
 ## Next
-- Step 2 is stopped by the H1 kill rule. Waiting for the user.
+- Item 3 (σ = 0.05 and 0.4 at seed 0 for both targets, timing → PROJECTION.json, wait for
+  BUDGET_OK) — not started; waiting for the user.
 - Left in the worktree, not committed: `.harness/STAGE` = 1 (changed by the user, not by me).
 
 ## Open questions for the user

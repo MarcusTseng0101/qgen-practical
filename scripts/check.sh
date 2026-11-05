@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 # Definition of done for step 1 (specs/step1_synthetic_completion_gap.md + specs/step1_amendment1.md).
-# Usage: bash scripts/check.sh --stage N   (stages are cumulative; N in 0..3)
+# Usage: bash scripts/check.sh --stage N   (step 1: N in 0..3, cumulative; step 2: N in 4..6)
 # Exit 0 = every criterion up to stage N holds. Do not edit to make it pass;
 # if a check is wrong, stop and tell the user which one and why.
+# v3 (2026-11-06): stages 4..6 = step 2 track (specs/step2_sigma_boundary.md).
 # v2 (2026-11-06, amendment 1): sparse IQP (n_params_iqp <= n_params_maxent), maxent_proj control,
 # amendment frozen once committed, import-only arch grep, .py-only isolation grep.
 set -u
@@ -15,12 +16,13 @@ PY=python; [ -x .venv/Scripts/python ] && PY=.venv/Scripts/python; [ -x .venv/bi
 TARGETS="biased maxent_proj random"
 
 # ---- stage 0: harness and frozen predictions in place
-for f in specs/step1_synthetic_completion_gap.md specs/step1_amendment1.md prereg/step1.md \
+for f in specs/step1_synthetic_completion_gap.md specs/step1_amendment1.md specs/step2_sigma_boundary.md prereg/step1.md \
          .claude/settings.json .claude/hooks/guard.py .claude/hooks/stop_check.sh PROGRESS.md; do
   [ -f "$f" ] || die "harness" "missing $f"
 done
 
-if [ "$stage" -ge 1 ]; then
+s1=$stage; [ "$stage" -ge 4 ] && s1=0
+if [ "$s1" -ge 1 ]; then
   for f in prereg/step1.md specs/step1_amendment1.md; do
     git ls-files --error-unmatch "$f" >/dev/null 2>&1 || die "prereg" "$f is not committed"
     git diff --quiet HEAD -- "$f" 2>/dev/null || die "prereg" "$f modified after commit (predictions are frozen)"
@@ -53,7 +55,7 @@ if amended and d["gens_mode"] != "sparse": sys.exit(1)
 EOF
 }
 
-if [ "$stage" -ge 2 ]; then
+if [ "$s1" -ge 2 ]; then
   for t in $TARGETS; do
     f=results/step1/$t/Ninf/seed_0/metrics.json
     if [ -f "$f" ]; then check_json "$f" 1; else die "ninf-runs" "missing $f"; fi
@@ -69,7 +71,7 @@ sys.exit(0 if drop(a) == drop(b) else 1)
 EOF
 fi
 
-if [ "$stage" -ge 3 ]; then
+if [ "$s1" -ge 3 ]; then
   [ -f results/step1/PROJECTION.json ] || die "budget" "missing results/step1/PROJECTION.json"
   n=0
   for t in $TARGETS; do for N in Ninf N1000 N10000 N100000; do for s in 0 1 2 3 4; do
@@ -94,6 +96,59 @@ if [ "$stage" -ge 3 ]; then
     done
   else die "summary" "missing $S"; fi
 fi
+
+
+# ==== step 2 track (stages 4..6): specs/step2_sigma_boundary.md. Stage-0 checks above still apply;
+# step-1 stages 1..3 are NOT required (step 1 ended by its kill rule).
+step2_checks() {
+  local st=$1
+  f=specs/step2_sigma_boundary.md
+  git ls-files --error-unmatch "$f" >/dev/null 2>&1 || die "s2-spec" "$f is not committed"
+  git diff --quiet HEAD -- "$f" 2>/dev/null || die "s2-spec" "$f modified after commit (hypotheses are frozen)"
+  [ -f src/step2/sweep.py ] || die "s2-layout" "missing src/step2/sweep.py"
+  git diff --quiet HEAD -- src/step1/ 2>/dev/null || die "s2-closed" "src/step1/ has uncommitted edits (step 1 is a closed record)"
+  [ -z "$(git diff --name-only e7480cc HEAD -- src/step1/ 2>/dev/null)" ] || die "s2-closed" "src/step1/ changed after step 1 closed (e7480cc)"
+  "$PY" -m pytest -q tests/test_step2.py >/tmp/step2_pytest.txt 2>&1 || { die "s2-tests" "tests/test_step2.py fails"; tail -5 /tmp/step2_pytest.txt >&2; }
+  grep -q "NotImplementedError" src/step2/sweep.py || die "s2-stub" "pauli_path_tv stub missing"
+  s2_json() {  # $1 metrics.json
+    "$PY" - "$1" <<'EOF' || die "s2-metrics" "$1 lacks required step-2 keys"
+import json, sys
+d = json.load(open(sys.argv[1]))
+need = ["D3", "hi_order_frac", "collision_ratio_target", "clifford_dist_median_target", "versions"]
+for m in ("O", "G"):
+    need += [f"{m}_best_residual", f"{m}_n_success_restarts", f"{m}_success"]
+miss = [k for k in need if k not in d]
+if miss: print("missing:", miss, file=sys.stderr); sys.exit(1)
+EOF
+  }
+  if [ "$st" -ge 5 ]; then
+    for sg in 0.05 0.4; do
+      p=results/step2/sigma_$sg/seed_0/metrics.json
+      if [ -f "$p" ]; then s2_json "$p"; else die "s2-first" "missing $p"; fi
+    done
+    [ -f results/step2/PROJECTION.json ] || die "s2-budget" "missing results/step2/PROJECTION.json"
+  fi
+  if [ "$st" -ge 6 ]; then
+    n=0
+    for sg in 0.05 0.1 0.15 0.2 0.3 0.4 0.6; do for s in 0 1 2 3 4; do
+      p=results/step2/sigma_$sg/seed_$s/metrics.json
+      if [ -f "$p" ]; then n=$((n+1)); s2_json "$p"; fi
+    done; done
+    [ "$n" -ge 30 ] || die "s2-grid" "only $n/35 runs (30 allowed only with the named sigma=0.15 cut)"
+    for fig in boundary proxies; do
+      [ -f figures/step2/$fig.png ] && [ -f figures/step2/$fig.pdf ] || die "s2-figures" "missing figures/step2/$fig.{png,pdf}"
+    done
+    [ -f results/step2/table.csv ] || die "s2-artifacts" "missing results/step2/table.csv"
+    S=results/step2/SUMMARY.md
+    if [ -f $S ]; then
+      grep -qF "Oracle-support fits are a diagnostic of the landscape, not a practical method; n = 12 proxies are not hardness evidence." $S \
+        || die "s2-summary" "SUMMARY lacks the required oracle/proxy sentence"
+      for h in H1 H2 H3 H4 H5; do grep -qE "$h.*(PASS|FAIL)" $S || die "s2-summary" "SUMMARY does not mark $h PASS/FAIL"; done
+    else die "s2-summary" "missing $S"; fi
+  fi
+}
+
+[ "$stage" -ge 4 ] && step2_checks "$stage"
 
 [ $fail -eq 0 ] && echo "ALL CHECKS PASS (stage $stage)"
 exit $fail

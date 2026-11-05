@@ -63,6 +63,8 @@ if tool in ("Bash", "PowerShell"):
             continue
         if any(p in seg for p in PROTECTED) and WRITES.search(seg):
             block("Shell write into the harness, prereg/ or BUDGET_OK. If a check is wrong, stop and report it.")
+    if re.search(r"step2[./\\]sweep(\.py)?\b.*--all", cmd) and not os.path.exists(os.path.join(root, "BUDGET_OK")):
+        block("Step-2 sweep blocked: no BUDGET_OK. Write results/step2/PROJECTION.json, report it, and wait for the user.")
     if re.search(r"step1[./\\]run(\.py)?\b.*--all", cmd) and not os.path.exists(os.path.join(root, "BUDGET_OK")):
         block("Full grid blocked: no BUDGET_OK. Write PROJECTION.json, report it in PROGRESS.md, and wait for the user.")
 

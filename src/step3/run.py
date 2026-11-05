@@ -55,6 +55,10 @@ TARGETS = ("iqp", "maxent_proj")
 SIGMAS = (0.05, 0.1, 0.2, 0.3, 0.4, 0.6)
 SEEDS = (0, 1, 2, 3, 4)
 ROOT = Path(__file__).resolve().parents[2]
+# Budget cut (1) of the spec ("G restarts 10 -> 3"), chosen by the user on 2026-11-06 after the
+# projection (1.53 h on the spec's sigma = 0.4 basis, 2.72 h with the measured sigma = 0.05
+# time). Applies to the --all grid only. The 3 restarts are the first 3 of the 10 init draws.
+ALL_GRID_RESTARTS = {"G": 3}
 
 
 # ---------------- targets ----------------
@@ -173,6 +177,7 @@ def run_instance(target: str, sigma: float, seed: int, n: int = N_BITS, fits=("O
         out[f"{name}_restart_nit"] = [x["nit"] for x in r["rows"]]
         out[f"{name}_restart_message"] = [x["message"] for x in r["rows"]]
         out[f"{name}_n_params"] = int(model.n_params)
+        out[f"{name}_n_restarts"] = len(r["rows"])
         out[f"{name}_best_params"] = [float(v) for v in b["params"]]
         out["per_level"][name] = b["per_level"]
         out[f"{name}_fit_seconds"] = r["seconds"]
@@ -212,8 +217,9 @@ def main(argv=None):
             for s in SEEDS:
                 pair = make_pair(sg, s)
                 for t in TARGETS:
-                    print(write(run_instance(t, sg, s, fits=fits, pair=pair), default_out(t, sg, s)),
-                          flush=True)
+                    out = run_instance(t, sg, s, fits=fits, pair=pair, restarts=ALL_GRID_RESTARTS)
+                    out["budget_cut"] = "G restarts 10 -> 3 (spec cut 1; user decision 2026-11-06)"
+                    print(write(out, default_out(t, sg, s)), flush=True)
         return
 
     if a.target is None or a.sigma is None:

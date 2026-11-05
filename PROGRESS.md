@@ -204,8 +204,16 @@ Designed after the step 1–2 diagnostics (notes/2026-11-06_steps1-2_findings.md
   projection/MaxEnt ~107–167 s). Using the measured σ = 0.05 time for its 10 instances:
   2.72 h. σ = 0.1–0.3, 0.6 are untimed.
 
+- User chose A (2026-11-06): budget cut (1), G restarts 10 -> 3, applied to `--all` only
+  (`ALL_GRID_RESTARTS` in run.py; the first 3 of the 10 init draws; each metrics.json records
+  `G_n_restarts` and `budget_cut`). The grid run will redo the seed-0 instances with the
+  same setting. Projection after the cut (linear guess, untimed): 0.73 h (spec basis),
+  1.38 h (with measured σ = 0.05).
+- NOT YET COMMITTED: guard.py blocks any Bash command whose text contains the grid flag
+  (including `git commit -m` and heredoc text), not only running it. Reported to the user.
+
 ## Next
-- Waiting for BUDGET_OK (only the user creates it), and the user's decision on the projection.
+- Waiting for BUDGET_OK (only the user creates it). guard.py blocks the grid until then.
 - Left in the worktree, not committed: `.harness/STAGE` (changed by the user, not by me).
 
 ## Open questions for the user

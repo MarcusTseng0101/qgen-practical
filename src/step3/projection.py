@@ -34,14 +34,18 @@ def main():
     out = {"projected_hours": N_INSTANCES * mean / 3600.0, "instances": N_INSTANCES,
            "basis": "mean total_seconds of iqp and maxent_proj at sigma = 0.4, seed 0, x 60",
            "mean_instance_seconds": mean,
-           "projected_hours_if_G_restarts_3_linear_guess": N_INSTANCES * (mean - mean_g * (1 - 3 / 10)) / 3600.0,
+           "projected_hours_after_cut_G_restarts_3": N_INSTANCES * (mean - mean_g * (1 - 3 / 10)) / 3600.0,
            "per_instance": per}
     # Not the spec's basis: sigma = 0.05 is measured several times slower, so also project with
     # the measured sigma = 0.05 time for its 10 instances and the sigma = 0.4 time for the other 50.
+    out["cut_applied"] = "G restarts 10 -> 3 (spec cut 1; user decision 2026-11-06); after-cut hours are a linear guess, untimed"
     if all(f"{t}/sigma_0.05" in per for t in TARGETS):
         m05 = sum(per[f"{t}/sigma_0.05"]["total_seconds"] for t in TARGETS) / len(TARGETS)
         n05 = len(SEEDS) * len(TARGETS)
         out["projected_hours_using_measured_sigma_0.05"] = (n05 * m05 + (N_INSTANCES - n05) * mean) / 3600.0
+        g05 = sum(per[f"{t}/sigma_0.05"]["G_fit_seconds"] for t in TARGETS) / len(TARGETS)
+        out["projected_hours_using_measured_sigma_0.05_after_cut"] = (
+            n05 * (m05 - 0.7 * g05) + (N_INSTANCES - n05) * (mean - 0.7 * mean_g)) / 3600.0
     path = ROOT / "results" / "step3" / "PROJECTION.json"
     path.write_text(json.dumps(out, indent=1))
     print(path)

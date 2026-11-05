@@ -3,7 +3,7 @@
  "instances": 60,
  "basis": "mean total_seconds of iqp and maxent_proj at sigma = 0.4, seed 0, x 60",
  "mean_instance_seconds": 91.85110664367676,
- "projected_hours_if_G_restarts_3_linear_guess": 0.7335010178883872,
+ "projected_hours_after_cut_G_restarts_3": 0.7335010178883872,
  "per_instance": {
   "iqp/sigma_0.05": {
    "total_seconds": 546.2047431468964,
@@ -30,5 +30,7 @@
    "other_seconds": 5.170700550079346
   }
  },
- "projected_hours_using_measured_sigma_0.05": 2.720295480887095
+ "cut_applied": "G restarts 10 -> 3 (spec cut 1; user decision 2026-11-06); after-cut hours are a linear guess, untimed",
+ "projected_hours_using_measured_sigma_0.05": 2.720295480887095,
+ "projected_hours_using_measured_sigma_0.05_after_cut": 1.3806637181507218
 }

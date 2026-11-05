@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 # Definition of done for step 1 (specs/step1_synthetic_completion_gap.md + specs/step1_amendment1.md).
-# Usage: bash scripts/check.sh --stage N   (step 1: N in 0..3, cumulative; step 2: N in 4..6)
+# Usage: bash scripts/check.sh --stage N   (step 1: N in 0..3, cumulative; step 2: N in 4..6; step 3: N in 7..9)
 # Exit 0 = every criterion up to stage N holds. Do not edit to make it pass;
 # if a check is wrong, stop and tell the user which one and why.
+# v4 (2026-11-06): stages 7..9 = step 3 track (specs/step3_completion_vs_sigma.md).
 # v3 (2026-11-06): stages 4..6 = step 2 track (specs/step2_sigma_boundary.md).
 # v2 (2026-11-06, amendment 1): sparse IQP (n_params_iqp <= n_params_maxent), maxent_proj control,
 # amendment frozen once committed, import-only arch grep, .py-only isolation grep.
@@ -16,7 +17,7 @@ PY=python; [ -x .venv/Scripts/python ] && PY=.venv/Scripts/python; [ -x .venv/bi
 TARGETS="biased maxent_proj random"
 
 # ---- stage 0: harness and frozen predictions in place
-for f in specs/step1_synthetic_completion_gap.md specs/step1_amendment1.md specs/step2_sigma_boundary.md prereg/step1.md \
+for f in specs/step1_synthetic_completion_gap.md specs/step1_amendment1.md specs/step2_sigma_boundary.md specs/step3_completion_vs_sigma.md prereg/step1.md \
          .claude/settings.json .claude/hooks/guard.py .claude/hooks/stop_check.sh PROGRESS.md; do
   [ -f "$f" ] || die "harness" "missing $f"
 done
@@ -148,7 +149,59 @@ EOF
   fi
 }
 
-[ "$stage" -ge 4 ] && step2_checks "$stage"
+
+# ==== step 3 track (stages 7..9): specs/step3_completion_vs_sigma.md. Stage-0 checks still apply;
+# step-1 and step-2 stages are NOT required (both ended by their kill rules).
+step3_checks() {
+  local st=$1
+  f=specs/step3_completion_vs_sigma.md
+  git ls-files --error-unmatch "$f" >/dev/null 2>&1 || die "s3-spec" "$f is not committed"
+  git diff --quiet HEAD -- "$f" 2>/dev/null || die "s3-spec" "$f modified after commit (hypotheses are frozen)"
+  [ -f src/step3/run.py ] || die "s3-layout" "missing src/step3/run.py"
+  git diff --quiet HEAD -- src/step1/ src/step2/ 2>/dev/null || die "s3-closed" "src/step1 or src/step2 has uncommitted edits (closed records)"
+  [ -z "$(git diff --name-only 163fe19 HEAD -- src/step1/ src/step2/ 2>/dev/null)" ] || die "s3-closed" "src/step1 or src/step2 changed after step 2 closed (163fe19)"
+  "$PY" -m pytest -q tests/test_step3.py >/tmp/step3_pytest.txt 2>&1 || { die "s3-tests" "tests/test_step3.py fails"; tail -5 /tmp/step3_pytest.txt >&2; }
+  s3_json() {  # $1 metrics.json
+    "$PY" - "$1" <<'EOF' || die "s3-metrics" "$1 lacks required step-3 keys"
+import json, sys
+d = json.load(open(sys.argv[1]))
+need = ["G_maxent", "G_uniform", "D3", "hi_order_frac", "collision_ratio_target", "clifford_dist_median_target", "versions"]
+for m in ("O", "G"):
+    need += [f"{m}_G", f"{m}_R", f"{m}_train_residual", f"{m}_restart_residuals", f"{m}_restart_G"]
+miss = [k for k in need if k not in d]
+if miss: print("missing:", miss, file=sys.stderr); sys.exit(1)
+EOF
+  }
+  if [ "$st" -ge 8 ]; then
+    for t in iqp maxent_proj; do for sg in 0.05 0.4; do
+      p=results/step3/$t/sigma_$sg/seed_0/metrics.json
+      if [ -f "$p" ]; then s3_json "$p"; else die "s3-first" "missing $p"; fi
+    done; done
+    [ -f results/step3/PROJECTION.json ] || die "s3-budget" "missing results/step3/PROJECTION.json"
+  fi
+  if [ "$st" -ge 9 ]; then
+    n=0; nproj=0
+    for t in iqp maxent_proj; do for sg in 0.05 0.1 0.2 0.3 0.4 0.6; do for s in 0 1 2 3 4; do
+      p=results/step3/$t/sigma_$sg/seed_$s/metrics.json
+      if [ -f "$p" ]; then n=$((n+1)); [ "$t" = maxent_proj ] && nproj=$((nproj+1)); s3_json "$p"; fi
+    done; done; done
+    [ "$n" -ge 50 ] || die "s3-grid" "only $n/60 instances (50 allowed only with the named sigma=0.6 cut)"
+    [ "$nproj" -ge 25 ] || die "s3-grid" "only $nproj maxent_proj instances; the paired control is never cut"
+    for fig in ratio_vs_sigma room_and_proxies residual_vs_G; do
+      [ -f figures/step3/$fig.png ] && [ -f figures/step3/$fig.pdf ] || die "s3-figures" "missing figures/step3/$fig.{png,pdf}"
+    done
+    [ -f results/step3/table.csv ] || die "s3-artifacts" "missing results/step3/table.csv"
+    S=results/step3/SUMMARY.md
+    if [ -f $S ]; then
+      grep -qF "Step 3 was designed after the step 1–2 diagnostics; C1 replicates data already seen; oracle-support fits are a landscape diagnostic; n = 12 proxies are not hardness evidence." $S \
+        || die "s3-summary" "SUMMARY lacks the required designed-after sentence"
+      for h in K1 K2 C1 M1 M2 M3; do grep -qE "$h.*(PASS|FAIL)" $S || die "s3-summary" "SUMMARY does not mark $h PASS/FAIL"; done
+    else die "s3-summary" "missing $S"; fi
+  fi
+}
+
+[ "$stage" -ge 4 ] && [ "$stage" -le 6 ] && step2_checks "$stage"
+[ "$stage" -ge 7 ] && step3_checks "$stage"
 
 [ $fail -eq 0 ] && echo "ALL CHECKS PASS (stage $stage)"
 exit $fail

@@ -61,6 +61,8 @@ advantage will be crucial."
 | Huang et al., Science 2022 (arXiv 2112.00778) | Quantum data advantage (unconditional) |
 | Zhao, Huang et al., arXiv 2604.07639 | Memory advantage on massive classical data |
 | Anschuetz, Hu, Huang, Gao, arXiv 2209.14353 | Contextuality expressivity separation |
+| Note: [notes/2026-11-05_iqp-from-limits.md](notes/2026-11-05_iqp-from-limits.md) | Design note: reverse-derive an IQP from known limits; the "completion gap" reframing; kill gates S1–S5 |
+| Note: [notes/2026-11-06_steps1-2_findings.md](notes/2026-11-06_steps1-2_findings.md) | Steps 1–2 (both killed): generic IQP not identifiable from order-≤3 moments; sign ambiguity at small σ but completion stable; exact recovery was the wrong criterion |
 | Note: [notes/2026-11-05_quantum-opt-community-recsys.md](notes/2026-11-05_quantum-opt-community-recsys.md) | Quantum optimization / QMC for community-based recommendation: no proven advantage (dequantized or weak baselines); supports "fair baseline decides the claim" |
 
 ## Not yet decided

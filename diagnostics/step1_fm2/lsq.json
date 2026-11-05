@@ -1,0 +1,52 @@
+{
+ "note": "Truncated at 3 of 10 restarts by the user's decision (each takes ~8-10 min); parsed from lsq.log because the script writes lsq.json only after all 10.",
+ "runs": [
+  {
+   "restart": 0,
+   "residual": 0.007281,
+   "nfev": 803,
+   "njev": 786,
+   "status": 2,
+   "sv_min": 5.91e-10,
+   "seconds": 477,
+   "message": "`ftol` termination condition is satisfied."
+  },
+  {
+   "restart": 1,
+   "residual": 0.01112,
+   "nfev": 983,
+   "njev": 953,
+   "status": 2,
+   "sv_min": 1.64e-09,
+   "seconds": 590,
+   "message": "`ftol` termination condition is satisfied."
+  },
+  {
+   "restart": 2,
+   "residual": 0.008386,
+   "nfev": 959,
+   "njev": 937,
+   "status": 2,
+   "sv_min": 1.67e-09,
+   "seconds": 580,
+   "message": "`ftol` termination condition is satisfied."
+  }
+ ],
+ "sorted_residuals": [
+  0.007281,
+  0.008386,
+  0.01112
+ ],
+ "config": {
+  "target": "biased",
+  "N": "inf",
+  "seed": 0,
+  "n": 12,
+  "method": "trf",
+  "xtol": 1e-15,
+  "ftol": 1e-15,
+  "gtol": 1e-15,
+  "jac": "IQPModel.moment_jacobian",
+  "inits": "first 3 of the 50 small-angle inits of lbfgs.json (= production restarts 0-2)"
+ }
+}

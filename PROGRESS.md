@@ -41,8 +41,24 @@
   - trained angles: max|theta| 0.63, clifford dist median 0.079.
   - G_iqp > G_uniform at biased: the underfit IQP completes worse than uniform.
 
+## FM2 diagnostics (user chose option A; 2026-11-06), `diagnostics/step1_fm2/SUMMARY.md`
+- biased, N = inf, seed 0, n = 12. Diagnostics only: no change to `src/step1/`, nothing
+  written to `results/`.
+- At the embedded truth θ*: residual 1.1e-31, Jacobian rank 298, sv_min 1.4e-5.
+- (1) θ* + noise, L-BFGS-B: σ = 0.01 → 5/5 reach ~1e-12 (4.5k–10k iterations);
+  σ = 0.1 → 0/5 (1.3e-4 to 2.0e-3); σ = 0.3 → 0/5 (3.5e-2 to 1.0e-1).
+- (2) 50 small-angle restarts, L-BFGS-B: 0/50; min 5.72e-3, median 9.49e-3, max 2.05e-2;
+  all end at rank 297, sv_min 3e-11 to 8e-9. Restarts 0–9 reproduce production exactly.
+- (3) least_squares trf with the analytic Jacobian, first 3 inits (**truncated at 3 of 10
+  by the user**): 7.3e-3, 1.1e-2, 8.4e-3; ~8–10 min each.
+- Reading: landscape, not optimizer. The exact solution exists but its basin is narrow
+  (between 0.01 and 0.1 per angle), and every failed run ends at a rank-deficient
+  stationary point. More restarts or trf do not help.
+
 ## Next
-- Waiting for the user's decision on the biased fit (no optimizer change without it).
+- Waiting for `specs/step1_amendment1.md` (on master; given to me only after the user
+  approves it). **Do not change `src/step1/` before that.**
+- Left in the worktree, not committed: `.harness/STAGE` = 1 (changed by the user, not by me).
 
 ## Open questions for the user
 1. **FM2 already visible at n = 6 (xfail test, kept as a diagnostic).** Fitting the IQP to

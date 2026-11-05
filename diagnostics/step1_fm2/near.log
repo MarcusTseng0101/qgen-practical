@@ -1,0 +1,15 @@
+sigma 0.01  rep 0: residual 1.717e-12  nit  7820  sv_min 3.67e-05  |theta-theta*| 0.005
+sigma 0.01  rep 1: residual 1.848e-12  nit  4973  sv_min 1.24e-05  |theta-theta*| 0.013
+sigma 0.01  rep 2: residual 7.355e-13  nit 10423  sv_min 3.42e-05  |theta-theta*| 0.006
+sigma 0.01  rep 3: residual 2.891e-12  nit  8454  sv_min 4.60e-06  |theta-theta*| 0.023
+sigma 0.01  rep 4: residual 7.222e-13  nit  4523  sv_min 1.91e-05  |theta-theta*| 0.012
+sigma 0.1   rep 0: residual 2.006e-03  nit   626  sv_min 8.89e-09  |theta-theta*| 1.955
+sigma 0.1   rep 1: residual 1.334e-04  nit  1365  sv_min 4.08e-08  |theta-theta*| 1.443
+sigma 0.1   rep 2: residual 6.725e-04  nit   866  sv_min 6.33e-09  |theta-theta*| 1.795
+sigma 0.1   rep 3: residual 4.499e-04  nit  1179  sv_min 5.39e-09  |theta-theta*| 1.639
+sigma 0.1   rep 4: residual 5.108e-04  nit   933  sv_min 5.48e-09  |theta-theta*| 1.623
+sigma 0.3   rep 0: residual 3.669e-02  nit   370  sv_min 1.02e-09  |theta-theta*| 6.239
+sigma 0.3   rep 1: residual 1.044e-01  nit   265  sv_min 1.30e-09  |theta-theta*| 6.101
+sigma 0.3   rep 2: residual 3.480e-02  nit   264  sv_min 4.11e-09  |theta-theta*| 6.345
+sigma 0.3   rep 3: residual 8.367e-02  nit   263  sv_min 9.86e-10  |theta-theta*| 6.422
+sigma 0.3   rep 4: residual 6.280e-02  nit   277  sv_min 8.98e-10  |theta-theta*| 6.377

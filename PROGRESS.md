@@ -134,8 +134,26 @@
     (residual ~1e-6).
   - This is H1's first look (seed 0 only). Nothing was changed.
 
+## H1 verdict over 5 seeds (user chose A; 2026-11-06), `diagnostics/step2_h1/SUMMARY.md`
+| seed | best residual | O success | wrong-sign pairs / triples (best restart) | G_maxent | G_iqp min / median / max over 10 restarts |
+|---|---|---|---|---|---|
+| 0 | 1.05e-6 | 0/10 | 8 / 0 | 1.70e-7 | 1.3e-8 / 2.2e-8 / 3.2e-8 |
+| 1 | 9.06e-6 | 0/10 | 8 / 3 | 2.75e-7 | 1.6e-7 / 1.9e-7 / 2.7e-7 |
+| 2 | 4.41e-6 | 0/10 | 7 / 5 | 1.10e-7 | 4.3e-8 / 1.0e-7 / 1.3e-7 |
+| 3 | 6.51e-6 | 0/10 | 7 / 3 | 6.92e-8 | 7.2e-8 / 2.9e-7 / 5.2e-7 |
+| 4 | 1.72e-6 | 0/10 | 7 / 4 | 7.99e-8 | 2.5e-8 / 6.7e-8 / 1.4e-7 |
+- **H1: FAIL (0/5 seeds).** **Step 2 ends by its kill rule.** No fix started.
+- The sign counts use a canonical gauge fixing: B chosen so that all one-body signs match,
+  for each global sign. The first, min-over-all-B count had ties; the canonical one
+  reproduces the seed-0 result (8, all pairs).
+- Completion spread: among solutions with residual < 1e-5, the G_iqp spread is
+  0.1–1.0 × G_maxent (4 evaluable seeds), never larger. G_iqp tracks the residual
+  (log–log corr 0.96). G_true = 0. G_uniform ≈ 0.8.
+- check.sh --stage 4 still fails on `test_oracle_support_fit_reaches_1e10_at_sigma_005`
+  (the test is unchanged).
+
 ## Next
-- Waiting for the user's decision on the failed O test at σ = 0.05 (H1 is a kill rule).
+- Step 2 is stopped by the H1 kill rule. Waiting for the user.
 - Left in the worktree, not committed: `.harness/STAGE` = 1 (changed by the user, not by me).
 
 ## Open questions for the user

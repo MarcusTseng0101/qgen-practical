@@ -1,0 +1,5 @@
+seed 0: best 1.054e-06  success 0/10  best mism pairs 8, triples 0 (total 8)  G_maxent 1.696e-07  G_true 0.0e+00
+seed 1: best 9.059e-06  success 0/10  best mism pairs 8, triples 3 (total 11)  G_maxent 2.750e-07  G_true 0.0e+00
+seed 2: best 4.407e-06  success 0/10  best mism pairs 7, triples 5 (total 12)  G_maxent 1.102e-07  G_true 0.0e+00
+seed 3: best 6.506e-06  success 0/10  best mism pairs 7, triples 3 (total 10)  G_maxent 6.916e-08  G_true 0.0e+00
+seed 4: best 1.717e-06  success 0/10  best mism pairs 7, triples 4 (total 11)  G_maxent 7.992e-08  G_true 0.0e+00

@@ -92,8 +92,21 @@
 - Not run: maxent_proj, random. `results/step1/biased/Ninf/seed_0` is still the old generic
   run, so check v2 rejects it (no gens_mode/support keys).
 
+## P1′ / P6′ verdict over 5 seeds (user chose A; 2026-11-06), `diagnostics/step1_amend1/SUMMARY.md`
+| seed | K | support recall | precision | NNLS residual | IQP residual | R | gap_valid |
+|---|---|---|---|---|---|---|---|
+| 0 | 60 | 0.132 | 0.083 | 0.990 | 1.16e-1 | 2.645 | false |
+| 1 | 60 | 0.053 | 0.033 | 0.865 | 9.36e-2 | 3.528 | false |
+| 2 | 60 | 0.053 | 0.033 | 0.988 | 7.71e-2 | 3.194 | false |
+| 3 | 60 | 0.079 | 0.050 | 0.693 | 6.87e-2 | 2.599 | false |
+| 4 | 60 | 0.105 | 0.067 | 0.971 | 8.92e-2 | 3.168 | false |
+- **P1′: FAIL** (residual ≤ 1e-10 on 0/5; 0/5 valid gaps). **P6′: FAIL** (recall ≥ 0.9 on 0/5).
+- **Step 1 ends by the P1′ kill rule.** No fix started. Outputs are in diagnostics/, not results/.
+- check.sh --stage 1 fails on the three selector tests (known state; tests, K_MAX and
+  threshold unchanged).
+
 ## Next
-- Waiting for the user's decision (amendment 1 selector / P1′). No threshold or K_MAX change.
+- Step 1 is stopped by the kill rule. Waiting for the user.
 - Left in the worktree, not committed: `.harness/STAGE` = 1 (changed by the user, not by me).
 
 ## Open questions for the user

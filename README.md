@@ -61,6 +61,7 @@ advantage will be crucial."
 | Huang et al., Science 2022 (arXiv 2112.00778) | Quantum data advantage (unconditional) |
 | Zhao, Huang et al., arXiv 2604.07639 | Memory advantage on massive classical data |
 | Anschuetz, Hu, Huang, Gao, arXiv 2209.14353 | Contextuality expressivity separation |
+| Note: [notes/2026-11-05_quantum-opt-community-recsys.md](notes/2026-11-05_quantum-opt-community-recsys.md) | Quantum optimization / QMC for community-based recommendation: no proven advantage (dequantized or weak baselines); supports "fair baseline decides the claim" |
 
 ## Not yet decided
 

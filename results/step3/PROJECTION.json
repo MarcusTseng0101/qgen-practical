@@ -1,0 +1,34 @@
+{
+ "projected_hours": 1.5308517773946126,
+ "instances": 60,
+ "basis": "mean total_seconds of iqp and maxent_proj at sigma = 0.4, seed 0, x 60",
+ "mean_instance_seconds": 91.85110664367676,
+ "projected_hours_if_G_restarts_3_linear_guess": 0.7335010178883872,
+ "per_instance": {
+  "iqp/sigma_0.05": {
+   "total_seconds": 546.2047431468964,
+   "O_fit_seconds": 43.31006073951721,
+   "G_fit_seconds": 335.8548958301544,
+   "other_seconds": 167.03978657722473
+  },
+  "maxent_proj/sigma_0.05": {
+   "total_seconds": 493.89693665504456,
+   "O_fit_seconds": 28.16496992111206,
+   "G_fit_seconds": 358.60855197906494,
+   "other_seconds": 107.12341475486755
+  },
+  "iqp/sigma_0.4": {
+   "total_seconds": 92.08368563652039,
+   "O_fit_seconds": 17.8836932182312,
+   "G_fit_seconds": 66.80808782577515,
+   "other_seconds": 7.391904592514038
+  },
+  "maxent_proj/sigma_0.4": {
+   "total_seconds": 91.61852765083313,
+   "O_fit_seconds": 16.56721329689026,
+   "G_fit_seconds": 69.88061380386353,
+   "other_seconds": 5.170700550079346
+  }
+ },
+ "projected_hours_using_measured_sigma_0.05": 2.720295480887095
+}

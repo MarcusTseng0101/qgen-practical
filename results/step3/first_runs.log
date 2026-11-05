@@ -1,0 +1,20 @@
+== iqp sigma=0.4
+C:\Users\tseng\qgen-practical-step1\results\step3\iqp\sigma_0.4\seed_0\metrics.json
+  D3 = 3.030e-01  G_maxent = 3.415e-04  G_uniform = 4.494e-04  pair moment residual = 1.9e-30  (92.1 s)
+  O: R = 8.606e-16  G = 2.939e-19  train residual = 5.865e-17  (17.9 s)
+  G: R = 1.922  G = 6.563e-04  train residual = 5.720e-03  (66.8 s)
+== maxent_proj sigma=0.4
+C:\Users\tseng\qgen-practical-step1\results\step3\maxent_proj\sigma_0.4\seed_0\metrics.json
+  D3 = 3.030e-01  G_maxent = 2.022e-19  G_uniform = 6.325e-05  pair moment residual = 1.9e-30  (91.6 s)
+  O: R = 1.689e+15  G = 3.415e-04  train residual = 5.865e-17  (16.6 s)
+  G: R = 1.724e+15  G = 3.487e-04  train residual = 5.720e-03  (69.9 s)
+== iqp sigma=0.05
+C:\Users\tseng\qgen-practical-step1\results\step3\iqp\sigma_0.05\seed_0\metrics.json
+  D3 = 7.653e-03  G_maxent = 1.696e-07  G_uniform = 8.211e-01  pair moment residual = 1.5e-27  (546.2 s)
+  O: R = 0.0903  G = 1.531e-08  train residual = 1.054e-06  (43.3 s)
+  G: R = 0.121  G = 2.051e-08  train residual = 1.376e-07  (335.9 s)
+== maxent_proj sigma=0.05
+C:\Users\tseng\qgen-practical-step1\results\step3\maxent_proj\sigma_0.05\seed_0\metrics.json
+  D3 = 7.653e-03  G_maxent = 2.373e-13  G_uniform = 8.209e-01  pair moment residual = 1.5e-27  (493.9 s)
+  O: R = 7.575e+05  G = 1.797e-07  train residual = 1.054e-06  (28.2 s)
+  G: R = 6.272e+05  G = 1.488e-07  train residual = 1.376e-07  (358.6 s)

@@ -181,10 +181,32 @@ Designed after the step 1–2 diagnostics (notes/2026-11-06_steps1-2_findings.md
   - the replay equals fit_moments with 10 restarts.
 - check.sh --stage 7: ALL CHECKS PASS (it runs the tests, about 2 min 10 s).
 
+## Build item 3 (2026-11-06): first runs + projection DONE, waiting for BUDGET_OK
+- 4 instances at seed 0 (σ = 0.05, 0.4 × iqp, maxent_proj), each O, G, MaxEnt(3), written to
+  `results/step3/<target>/sigma_<σ>/seed_0/metrics.json`; console log `results/step3/first_runs.log`.
+- `src/step3/projection.py` → `results/step3/PROJECTION.json`.
+- PRELIMINARY (one seed, not an IQR):
+
+  | target | σ | R_O | R_G | G train residual | G_maxent (paired iqp) | instance s |
+  |---|---|---|---|---|---|---|
+  | iqp | 0.05 | 0.0903 | 0.121 | 1.38e-7 | 1.70e-7 | 546 |
+  | iqp | 0.4 | 8.6e-16 | 1.92 | 5.72e-3 | 3.41e-4 | 92 |
+  | maxent_proj | 0.05 | 7.6e5 | 6.3e5 | 1.38e-7 | 1.70e-7 | 494 |
+  | maxent_proj | 0.4 | 1.7e15 | 1.7e15 | 5.72e-3 | 3.41e-4 | 92 |
+
+  - K1: R_O ≥ 1 at both σ. K2: applies at σ = 0.05 only (1.38e-7 ≤ 1.70e-7), R_G ≥ 1 there;
+    at σ = 0.4 G's residual is above the paired G_maxent, so K2 does not constrain it.
+  - On maxent_proj, G_maxent is ~1e-13 / 1e-19 (MaxEnt(3) IS the target), so R there is a
+    ratio over a numerically ~zero denominator: huge, and K1/K2 pass by construction.
+  - C1 (iqp, O, σ = 0.05): R_O = 0.090 < 1, replicates step 2.
+- Projection (spec basis, σ = 0.4 pair × 60): 1.53 h, under 2 h → no cut by the spec rule.
+  But σ = 0.05 is measured ~5.6× slower (546 / 494 s vs 92 s; G fit 336–359 s and the
+  projection/MaxEnt ~107–167 s). Using the measured σ = 0.05 time for its 10 instances:
+  2.72 h. σ = 0.1–0.3, 0.6 are untimed.
+
 ## Next
-- Item 3 (σ = 0.05 and 0.4 at seed 0 for both targets, timing → PROJECTION.json, wait for
-  BUDGET_OK) — not started; waiting for the user.
-- Left in the worktree, not committed: `.harness/STAGE` = 1 (changed by the user, not by me).
+- Waiting for BUDGET_OK (only the user creates it), and the user's decision on the projection.
+- Left in the worktree, not committed: `.harness/STAGE` (changed by the user, not by me).
 
 ## Open questions for the user
 1. **FM2 already visible at n = 6 (xfail test, kept as a diagnostic).** Fitting the IQP to

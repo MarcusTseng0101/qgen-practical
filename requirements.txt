@@ -1,0 +1,6 @@
+# Step 1 stack (specs/step1_synthetic_completion_gap.md). No jax / torch / pennylane / iqpopt.
+# Python 3.12. Pinned to the versions resolved on 2026-11-06.
+numpy==2.5.4
+scipy==1.18.1
+pytest==9.2.0
+matplotlib==3.11.2

@@ -15,9 +15,9 @@ The gradient is the adjoint of those four steps (see loss_and_grad). The cos clo
 from __future__ import annotations
 
 import numpy as np
-from scipy.optimize import minimize
+from scipy.optimize import minimize, nnls
 
-from ..bits import fwht, masks_up_to, parity_matrix
+from ..bits import fwht, masks_up_to, parity_matrix, popcount
 from .base import FitResult
 
 INIT_STD = 0.05     # guess: theta ~ N(0, 0.05^2). Small angles avoid the anticoncentrated,
@@ -29,9 +29,38 @@ LBFGS_OPTS = {"maxiter": 20000, "maxfun": 40000, "ftol": 1e-16, "gtol": 1e-13, "
 #   absolute once L < 1); maxiter/maxcor not tuned.
 
 
-def build(n: int):
-    """Entry point for run.py's model discovery."""
-    return IQPModel(n)
+# Amendment 1 (post-hoc, triggered by the FM2 diagnostics): sparse generator selection.
+SPARSE_REL_THRESHOLD = 1e-3   # guess (amendment 1): keep g with theta_g^2 >= 1e-3 * max theta^2
+K_MAX = 60                    # guess (amendment 1): at most 60 generators, the largest theta^2
+CANDIDATE_KMAX = 3            # candidates: all generators of weight 1..3 (298 at n = 12)
+
+
+def build(n: int, gens: str = "sparse", **_):
+    """Entry point for run.py's model discovery. gens: "sparse" (amendment 1, default) or
+    "generic" (the original 298-generator model, kept so FM2 can be reproduced)."""
+    return IQPModel(n, gens_mode=gens)
+
+
+def select_sparse_generators(fhat, ops) -> dict:
+    """Small-angle NNLS selector (amendment 1). Sees ONLY the training moments (fhat, ops);
+    never the target's layout.
+
+    To second order, m_a := (1 - fhat_a) / 2 ~= sum_g M_ag theta_g^2, with
+    M_ag = 1[|g & a| odd], over all weight-<=3 candidates g. Solve for theta^2 >= 0 with
+    scipy.optimize.nnls, keep theta^2 >= SPARSE_REL_THRESHOLD * max, capped at K_MAX by size.
+    n is the number of bits spanned by ops (the order-1 ops cover every bit)."""
+    fhat = np.asarray(fhat, dtype=np.float64)
+    ops = np.asarray(ops, dtype=np.int64)
+    n = int(max(int(o).bit_length() for o in ops))
+    cand = masks_up_to(n, CANDIDATE_KMAX)
+    M = (popcount(ops[:, None] & cand[None, :]) % 2).astype(np.float64)
+    m = (1.0 - fhat) / 2.0
+    theta2, rnorm = nnls(M, m, maxiter=50 * M.shape[1])
+    keep = np.flatnonzero(theta2 >= SPARSE_REL_THRESHOLD * theta2.max()) if theta2.max() > 0         else np.array([], dtype=np.int64)
+    keep = keep[np.argsort(-theta2[keep], kind="stable")][:K_MAX]
+    keep = np.sort(keep)                       # candidate order (by weight, then lexicographic)
+    return {"gens": cand[keep], "theta2": theta2[keep], "theta2_all": theta2,
+            "candidates": cand, "nnls_rnorm": float(rnorm), "K": int(len(keep))}
 
 
 class IQPModel:
@@ -40,17 +69,25 @@ class IQPModel:
 
     def angles(self):
         """(angles, generator weights) of the fitted model, for clifford_distance."""
-        from ..bits import popcount
         return self.params, popcount(self.gens)
 
-    def __init__(self, n: int, kmax: int = 3, gens: np.ndarray | None = None):
+    def __init__(self, n: int, kmax: int = 3, gens: np.ndarray | None = None,
+                 gens_mode: str = "generic"):
+        if gens_mode not in ("generic", "sparse"):
+            raise ValueError(gens_mode)
         self.n = n
+        self.gens_mode = gens_mode
+        self.selection = None
         # Generic generator set: all subsets of size 1..kmax (298 at n = 12, kmax = 3).
         # Never the target's own generators (that would be an oracle, not a test).
-        self.gens = masks_up_to(n, kmax) if gens is None else np.asarray(gens, dtype=np.int64)
-        self.n_params = len(self.gens)
-        self.S = parity_matrix(n, self.gens)   # (2^n, n_params), S[z, g] = prod_{j in g} s_j(z)
+        # In sparse mode this is replaced in fit_moments by the selector's output.
+        self._set_gens(masks_up_to(n, kmax) if gens is None else np.asarray(gens, dtype=np.int64))
         self.params = None
+
+    def _set_gens(self, gens):
+        self.gens = np.asarray(gens, dtype=np.int64)
+        self.n_params = len(self.gens)
+        self.S = parity_matrix(self.n, self.gens)   # (2^n, n_params), S[z, g] = prod_{j in g} s_j(z)
 
     # ---------------- forward ----------------
     def phase(self, theta) -> np.ndarray:
@@ -104,14 +141,25 @@ class IQPModel:
     def fit_moments(self, fhat, ops, seed: int = 0, n_restarts: int = N_RESTARTS,
                     init_std: float = INIT_STD, options: dict | None = None,
                     theta0: np.ndarray | None = None) -> FitResult:
-        """L-BFGS-B from n_restarts small-angle inits; keep the lowest training residual.
+        """L-BFGS-B from n_restarts inits; keep the lowest training residual.
+        generic: theta ~ N(0, init_std^2). sparse (amendment 1): first select the generators
+        from (fhat, ops) only, then |theta_g| = sqrt(NNLS theta_g^2) with random signs from
+        default_rng(seed*100 + r); restart 0 is all-positive.
         theta0 (tests only) replaces the first restart's init."""
         fhat = np.asarray(fhat, dtype=np.float64)
         rng = np.random.default_rng(seed)
         opts = dict(LBFGS_OPTS, **(options or {}))
+        if self.gens_mode == "sparse":
+            self.selection = select_sparse_generators(fhat, ops)
+            self._set_gens(self.selection["gens"])
+            mag = np.sqrt(self.selection["theta2"])
         best, residuals, info = None, [], []
         for r in range(n_restarts):
-            init = rng.normal(0.0, init_std, self.n_params)
+            if self.gens_mode == "sparse":
+                signs = np.ones(self.n_params) if r == 0 else                     np.random.default_rng(seed * 100 + r).choice([-1.0, 1.0], self.n_params)
+                init = signs * mag
+            else:
+                init = rng.normal(0.0, init_std, self.n_params)
             theta0_r = np.asarray(theta0, dtype=np.float64) if (r == 0 and theta0 is not None) else init
             trace = []
             cb = _trace_callback(trace)

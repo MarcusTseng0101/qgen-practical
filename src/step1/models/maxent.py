@@ -17,8 +17,9 @@ LBFGS_OPTS = {"maxiter": 20000, "maxfun": 40000, "ftol": 1e-16, "gtol": 1e-12, "
 # ^ guesses, not tuned
 
 
-def build(n: int):
-    """Entry point for run.py's model discovery: the order-3 max-ent comparator."""
+def build(n: int, **_):
+    """Entry point for run.py's model discovery: the order-3 max-ent comparator
+    (always all 298 parities; run options such as gens are ignored)."""
     return MaxEntModel(n, k=3)
 
 

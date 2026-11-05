@@ -1,6 +1,6 @@
 """The interface every step-1 model implements (so a new model is one file in models/).
 
-A model module defines build(n) -> model; run.py discovers every module in this package
+A model module defines build(n, **options) -> model; run.py discovers every module in this package
 that has one. A model exposes:
 - name: str (display) and key: str (suffix of its metrics.json keys, e.g. G_<key>);
 - n_params: int;

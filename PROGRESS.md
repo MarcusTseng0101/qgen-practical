@@ -55,9 +55,45 @@
   (between 0.01 and 0.1 per angle), and every failed run ends at a rank-deficient
   stationary point. More restarts or trf do not help.
 
+## Amendment 1 (approved, master f25c205, merged): STOPPED at build step 2/3 (2026-11-06)
+- Implemented (amendment 1, post-hoc): `select_sparse_generators(fhat, ops)` (NNLS,
+  threshold 1e-3·max, K_MAX 60, both guesses and unchanged), sparse init with
+  |θ| = sqrt(NNLS) and signs from default_rng(seed*100 + r) (restart 0 all +),
+  `--gens sparse|generic` (default sparse; generic reproduces FM2 bit for bit),
+  `maxent_proj` target (own dual solver in targets.py; moment residual vs biased 5e-16),
+  support_recall/precision logged after the fit only, grid targets biased/maxent_proj/random.
+- **Spec-mandated selector test fails** (`test_nnls_selector_recovers_small_angle_support`,
+  biased layout with |θ| in [0.04, 0.06], n = 12, seeds 0 and 1):
+  - The ranking is perfect: the 38 true generators are exactly the top 38 NNLS values
+    (smallest true 1.15e-3, largest spurious 1.09e-4 / 1.21e-4).
+  - θ² error max 7.8e-4 / 6.1e-4 (< 1e-3: passes).
+  - But 184 / 176 spurious candidates (28 / 23 pairs and 156 / 153 triples) are ≥ the
+    threshold 1e-3·max ≈ 3.3e-6, so the K_MAX = 60 cap keeps 38 true + 22 spurious.
+  - Cause: second-order truncation. ‖M θ²_true − m‖ = 2.0e-2, while the NNLS residual is
+    3.2e-4. NNLS absorbs the fourth-order terms with small spurious θ².
+    `diagnostics/step1_amend1/nnls_diag.{py,log}`.
+  - Threshold and K_MAX not changed (user instruction).
+- My own test `test_sparse_fit_reaches_small_residual_on_small_angle_target` also fails:
+  with the 60 selected generators (a superset of the truth) and 2 restarts, the residual
+  is 5.2e-6, not < 1e-10.
+- **P1′ (biased, N = inf, seed 0), run as a diagnostic into
+  `diagnostics/step1_amend1/biased_Ninf_seed0_sparse_metrics.json`, not into results/**
+  (tests were failing):
+  - K = 60 (the cap): 1 one-body and 59 triples.
+  - support recall 5/38 = 0.13, precision 5/60 = 0.083. The hits are (6,), (0,4,5),
+    (0,8,9), (2,3,11), (8,10,11).
+  - NNLS residual 0.99: at θ ~ N(0, 0.4²) (median |θ| 0.26, max 0.90) the small-angle
+    expansion does not hold.
+  - IQP residual 0.116 (best of 10; restarts 0.116 to 0.166).
+  - Trace: it0 1.54, it5 0.445, it20 0.175, it50 0.120, it100 0.1162, it130 0.1162 (flat).
+  - Jacobian rank 60/60, sv min/max 0.216 / 1.60 (well conditioned: a genuine local
+    minimum of an under-specified model, not a near-singular point).
+  - R = 2.65, gap_valid false. P1′ fails on seed 0 and P6′ fails on seed 0.
+- Not run: maxent_proj, random. `results/step1/biased/Ninf/seed_0` is still the old generic
+  run, so check v2 rejects it (no gens_mode/support keys).
+
 ## Next
-- Waiting for `specs/step1_amendment1.md` (on master; given to me only after the user
-  approves it). **Do not change `src/step1/` before that.**
+- Waiting for the user's decision (amendment 1 selector / P1′). No threshold or K_MAX change.
 - Left in the worktree, not committed: `.harness/STAGE` = 1 (changed by the user, not by me).
 
 ## Open questions for the user

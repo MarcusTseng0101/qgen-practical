@@ -195,3 +195,49 @@ def test_iqp_fits_its_own_moments_from_small_init_n6():
 def test_mc_estimator_is_a_stub():
     with pytest.raises(NotImplementedError):
         iqp_moments_mc(np.zeros(3), np.array([1, 2, 4]), np.array([1]), 10, np.random.default_rng(0))
+
+
+# ---------------- amendment 1: sparse NNLS selector ----------------
+import inspect
+
+from src.step1.models.iqp import K_MAX, select_sparse_generators
+from src.step1.targets import iqp_distribution, _iqp_layout
+from src.step1.bits import subset_mask
+
+
+def _small_angle_target(n=12, seed=0):
+    """Same layout recipe as `biased` (12 + 18 pairs + 8 triples), but |theta| in [0.04, 0.06]."""
+    rng = np.random.default_rng(500 + seed)
+    layout = _iqp_layout(n, rng)
+    masks = np.array([subset_mask(g) for g in layout], dtype=np.int64)
+    theta = rng.uniform(0.04, 0.06, len(masks)) * rng.choice([-1.0, 1.0], len(masks))
+    return masks, theta, iqp_distribution(n, masks, theta)
+
+
+@pytest.mark.parametrize("seed", [0, 1])
+def test_nnls_selector_recovers_small_angle_support(seed):
+    n = 12
+    masks, theta, p = _small_angle_target(n, seed)
+    ops = masks_up_to(n, 3)
+    sel = select_sparse_generators(parity_coefficients(p)[ops], ops)
+    assert set(int(g) for g in sel["gens"]) == set(int(m) for m in masks)   # exact support
+    assert sel["K"] == len(masks) <= K_MAX
+    est = dict(zip((int(g) for g in sel["gens"]), sel["theta2"]))
+    err = max(abs(est[int(m)] - t**2) for m, t in zip(masks, theta))
+    assert err < 1e-3, err
+
+
+def test_selector_signature_sees_only_training_moments():
+    """The selector's only inputs are the training moments (fhat, ops): no target layout,
+    no n, no seed, no truth of any kind can reach it."""
+    assert list(inspect.signature(select_sparse_generators).parameters) == ["fhat", "ops"]
+
+
+def test_sparse_fit_reaches_small_residual_on_small_angle_target():
+    n = 12
+    masks, theta, p = _small_angle_target(n, 0)
+    ops = masks_up_to(n, 3)
+    model = IQPModel(n, gens_mode="sparse")
+    fit = model.fit_moments(parity_coefficients(p)[ops], ops, seed=0, n_restarts=2)
+    assert set(int(m) for m in masks) <= set(int(g) for g in model.gens)   # recall 1
+    assert fit.train_residual < 1e-10, fit.train_residual

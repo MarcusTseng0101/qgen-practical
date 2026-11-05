@@ -1,0 +1,14 @@
+best restart residual 1.054e-06
+after gauge alignment (B=0xc65, global -1): 8/38 sign mismatches
+mismatched generators (layout, theta*, fitted aligned):
+   (0, 3)  -0.0331  +0.0329
+   (0, 7)  +0.0184  -0.0181
+   (2, 6)  -0.0039  +0.0029
+   (2, 7)  +0.1125  -0.1124
+   (3, 11)  +0.0623  -0.0624
+   (4, 8)  +0.0906  -0.0909
+   (5, 6)  -0.0261  +0.0259
+   (5, 9)  +0.0898  -0.0897
+max |aligned - theta*| over matching signs: 3.64e-03
+Jacobian at fit: rank 38/38, sv min/max 8.01e-03/8.11e+00
+Jacobian at truth: sv min/max 2.20e-02/8.11e+00; residual at truth 1.9e-29; |grad| at fit 4.48e-08

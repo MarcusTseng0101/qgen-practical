@@ -105,8 +105,37 @@
 - check.sh --stage 1 fails on the three selector tests (known state; tests, K_MAX and
   threshold unchanged).
 
+# Step 2 (specs/step2_sigma_boundary.md, master 619c63b; branch step2-sigma)
+
+## Build item 2 (2026-11-06): code done, STOPPED on the spec-mandated O test
+- Merged master into step1-synthetic, then `git switch -c step2-sigma`.
+- `src/step2/sweep.py`:
+  - targets: θ = σ·z on the step-1 biased layout, with z reused across σ; σ = 0.4 is
+    step 1's biased bit for bit;
+  - fits O (oracle support, 38 gens) and G (generic 298), plus MaxEnt(3);
+  - D3 = KL(p ‖ MaxEnt3(p)), hi_order_frac, collision, Clifford median of the target;
+  - R only on success;
+  - `--all` gated on BUDGET_OK; `pauli_path_tv` raises NotImplementedError.
+  - `src/step1/` is imported, never edited.
+- `tests/test_step2.py`: 7 pass (z reuse, σ = 0.4 equals step-1 biased, D3 = 0 on a
+  MaxEnt(3) target to 1e-10, the stub, KL and hi_order_frac sanity).
+  **`test_oracle_support_fit_reaches_1e10_at_sigma_005` fails** → `check.sh --stage 4` fails.
+- Diagnostic for O at σ = 0.05, seed 0: `diagnostics/step2_h1/o_sigma005_seed0.{py,log,json}`.
+  - All 10 restarts stop at stationary points with ftol: 1.05e-6 to 4.20e-6 (|grad| 4.5e-8).
+  - Trace: it0 1.25e-1, it10 5.0e-3, it20 1.5e-4, it50 5.4e-6, it100 1.3e-6,
+    it584 1.05e-6 (flat).
+  - Jacobian at the fit: rank 38/38, sv min 8.0e-3 (at the truth: 2.2e-2; residual 1.9e-29).
+    So these are well-conditioned local minima, not FM2's near-singular points.
+  - After aligning the signs over the exact gauge group (θ_g → (−1)^{|g∩B|} θ_g, and
+    global −θ): magnitudes match to 3.6e-3, but **8/38 signs are wrong, all on pairs**:
+    (0,3), (0,7), (2,6), (2,7), (3,11), (4,8), (5,6), (5,9).
+  - Interpretation: at small σ the order-≤3 moments see pair signs only through
+    third-order products (~θ³), so wrong-sign configurations are near-degenerate minima
+    (residual ~1e-6).
+  - This is H1's first look (seed 0 only). Nothing was changed.
+
 ## Next
-- Step 1 is stopped by the kill rule. Waiting for the user.
+- Waiting for the user's decision on the failed O test at σ = 0.05 (H1 is a kill rule).
 - Left in the worktree, not committed: `.harness/STAGE` = 1 (changed by the user, not by me).
 
 ## Open questions for the user

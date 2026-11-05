@@ -209,11 +209,19 @@ Designed after the step 1–2 diagnostics (notes/2026-11-06_steps1-2_findings.md
   `G_n_restarts` and `budget_cut`). The grid run will redo the seed-0 instances with the
   same setting. Projection after the cut (linear guess, untimed): 0.73 h (spec basis),
   1.38 h (with measured σ = 0.05).
-- NOT YET COMMITTED: guard.py blocks any Bash command whose text contains the grid flag
-  (including `git commit -m` and heredoc text), not only running it. Reported to the user.
+- Committed as 0836290 after the user created BUDGET_OK (the guard then let it through).
+
+## Build item 4 (2026-11-06): DONE, `check.sh --stage 9` passes
+- Full grid, 60/60 instances, G with 3 restarts: 118 min wall clock (`results/step3/grid.log`).
+- `python -m src.step3.run --report` → `table.csv`, `verdicts.json`, `figures/step3/*`.
+- `results/step3/SUMMARY.md`: K1 PASS, K2 PASS (both by construction: maxent_proj's truth is
+  MaxEnt(3), G_maxent ≈ 0, so only a correctness check), C1 PASS (R_O median 0.42),
+  M1 FAIL (3 violations), M2 FAIL (σ = 0.05, 0.1), M3 FAIL (W = {0.1, 0.2, 0.3, 0.4};
+  0.3 and 0.4 come from oracle exact recovery). Residual–G correlation breaks down for G at
+  σ ≥ 0.3 (stated prominently). Non-oracle G: R_G < 1 at σ ≤ 0.2.
 
 ## Next
-- Waiting for BUDGET_OK (only the user creates it). guard.py blocks the grid until then.
+- Step 3 is complete. Waiting for the user.
 - Left in the worktree, not committed: `.harness/STAGE` (changed by the user, not by me).
 
 ## Open questions for the user

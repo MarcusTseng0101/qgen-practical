@@ -4,6 +4,7 @@ specs/step3_completion_vs_sigma.md (designed after the step 1-2 diagnostics).
 
   python -m src.step3.run --target iqp --sigma 0.05 --seed 0 [--fits O,G] [--out DIR]
   python -m src.step3.run --all          (refuses to start without BUDGET_OK)
+  python -m src.step3.run --report       (table.csv, verdicts.json, figures/step3/*)
 
 Targets (n = 12, N = inf):
 - iqp(sigma, s): the step-2 construction (step-1 biased layout, z reused across sigma),
@@ -185,6 +186,200 @@ def run_instance(target: str, sigma: float, seed: int, n: int = N_BITS, fits=("O
     return out
 
 
+# ---------------- report (build order item 4) ----------------
+D3_ROOM = 1e-2          # carried over from step 2 (a guess, frozen in the spec)
+FLOOR = 1e-30           # log-plot floor for exact-zero residuals / G (display only)
+
+
+def load_grid() -> dict:
+    """{(target, sigma, seed): metrics} for every metrics.json present."""
+    out = {}
+    for t in TARGETS:
+        for sg in SIGMAS:
+            for s in SEEDS:
+                f = default_out(t, sg, s) / "metrics.json"
+                if f.exists():
+                    out[(t, sg, s)] = json.loads(f.read_text())
+    return out
+
+
+def iqr(x):
+    x = np.asarray(x, dtype=np.float64)
+    q1, med, q3 = np.percentile(x, [25, 50, 75])
+    return float(q1), float(med), float(q3)
+
+
+def verdict_at(x) -> str:
+    """Spec section 3: "R < 1" = IQR entirely below 1; "R >= 1" = IQR entirely at or above 1."""
+    q1, _, q3 = iqr(x)
+    return "<1" if q3 < 1 else (">=1" if q1 >= 1 else "undecided")
+
+
+def write_table(grid: dict, path: Path):
+    cols = ["target", "sigma", "seed", "D3", "G_maxent", "G_uniform", "maxent_train_residual",
+            "O_R", "O_G", "O_train_residual", "O_best_restart", "O_n_restarts",
+            "G_R", "G_G", "G_train_residual", "G_best_restart", "G_n_restarts",
+            "paired_iqp_G_maxent", "hi_order_frac", "collision_ratio_target",
+            "clifford_dist_median_target", "total_seconds"]
+    lines = [",".join(cols)]
+    for (t, sg, s), d in sorted(grid.items(), key=lambda kv: (kv[0][0], kv[0][1], kv[0][2])):
+        row = dict(d)
+        row["paired_iqp_G_maxent"] = grid.get(("iqp", sg, s), {}).get("G_maxent", "")
+        lines.append(",".join(str(row.get(c, "")) for c in cols))
+    path.write_text("\n".join(lines) + "\n")
+
+
+def verdicts(grid: dict) -> dict:
+    v = {"per_sigma": {}}
+    for sg in SIGMAS:
+        row = {}
+        for t in TARGETS:
+            ds = [grid[(t, sg, s)] for s in SEEDS if (t, sg, s) in grid]
+            if not ds:
+                continue
+            for m in ("O", "G"):
+                R = [d[f"{m}_R"] for d in ds]
+                row[f"{t}_{m}_R_iqr"] = iqr(R)
+                row[f"{t}_{m}_R_verdict"] = verdict_at(R)
+                row[f"{t}_{m}_train_residual_iqr"] = iqr([d[f"{m}_train_residual"] for d in ds])
+            row[f"{t}_G_maxent_iqr"] = iqr([d["G_maxent"] for d in ds])
+            row[f"{t}_n_seeds"] = len(ds)
+        ds_i = [grid[("iqp", sg, s)] for s in SEEDS if ("iqp", sg, s) in grid]
+        row["D3_iqr"] = iqr([d["D3"] for d in ds_i])
+        # K2 condition, per instance: maxent_proj's G-fit training residual <= G_maxent of the
+        # paired iqp instance (same sigma, same seed).
+        k2 = [s for s in SEEDS if ("maxent_proj", sg, s) in grid and ("iqp", sg, s) in grid
+              and grid[("maxent_proj", sg, s)]["G_train_residual"] <= grid[("iqp", sg, s)]["G_maxent"]]
+        row["K2_qualifying_seeds"] = k2
+        if k2:
+            Rk = [grid[("maxent_proj", sg, s)]["G_R"] for s in k2]
+            row["K2_R_iqr"] = iqr(Rk)
+            row["K2_verdict"] = verdict_at(Rk)
+        v["per_sigma"][f"{sg:g}"] = row
+    ps = v["per_sigma"]
+    v["K1"] = all(ps[k]["maxent_proj_O_R_verdict"] == ">=1" for k in ps)
+    v["K2"] = all(ps[k].get("K2_verdict", ">=1") == ">=1" for k in ps)
+    v["K2_sigmas_constrained"] = [k for k in ps if ps[k]["K2_qualifying_seeds"]]
+    v["C1"] = ps["0.05"]["iqp_O_R_verdict"] == "<1"
+    medO = [ps[k]["iqp_O_R_iqr"][1] for k in ps]
+    v["M1_violations"] = int(sum(b < a for a, b in zip(medO, medO[1:])))
+    v["M1"] = v["M1_violations"] <= 1
+    v["M2_failing_sigmas"] = [k for k in ps if ps[k]["iqp_G_R_iqr"][1] < ps[k]["iqp_O_R_iqr"][1]]
+    v["M2"] = not v["M2_failing_sigmas"]
+    v["W"] = [float(k) for k in ps if ps[k]["iqp_O_R_verdict"] == "<1" and ps[k]["D3_iqr"][1] >= D3_ROOM]
+    v["M3"] = set(v["W"]) <= {0.1}
+    return v
+
+
+def residual_G_correlations(grid: dict) -> dict:
+    """corr(log10 residual, log10 G) over all restarts of the iqp target, per sigma and fit."""
+    out = {}
+    for m in ("O", "G"):
+        for sg in SIGMAS:
+            r, g = [], []
+            for s in SEEDS:
+                d = grid.get(("iqp", sg, s))
+                if d:
+                    r += d[f"{m}_restart_residuals"]
+                    g += d[f"{m}_restart_G"]
+            lr = np.log10(np.maximum(r, FLOOR))
+            lg = np.log10(np.maximum(g, FLOOR))
+            out[f"{m}/{sg:g}"] = (float(np.corrcoef(lr, lg)[0, 1]) if len(r) > 2 and lr.std() > 0
+                                  and lg.std() > 0 else None)
+    return out
+
+
+def make_figures(grid: dict, v: dict, fig_dir: Path):
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    fig_dir.mkdir(parents=True, exist_ok=True)
+    sg = np.array(SIGMAS)
+    ps = v["per_sigma"]
+
+    def save(fig, name):
+        for ax in fig.axes:
+            if ax.get_xlabel() == "σ":       # ticks at the grid values, no minor labels
+                ax.xaxis.set_major_locator(matplotlib.ticker.FixedLocator(SIGMAS))
+                ax.xaxis.set_major_formatter(matplotlib.ticker.FixedFormatter([f"{x:g}" for x in SIGMAS]))
+                ax.xaxis.set_minor_locator(matplotlib.ticker.NullLocator())
+        fig.tight_layout()
+        fig.savefig(fig_dir / f"{name}.png", dpi=150)
+        fig.savefig(fig_dir / f"{name}.pdf")
+        plt.close(fig)
+
+    # 1. ratio_vs_sigma
+    fig, ax = plt.subplots(figsize=(6.4, 4.6))
+    styles = {("iqp", "O"): ("o", "-", "k"), ("iqp", "G"): ("s", "--", "0.35"),
+              ("maxent_proj", "O"): ("^", ":", "k"), ("maxent_proj", "G"): ("v", "-.", "0.35")}
+    for (t, m), (mk, ls, c) in styles.items():
+        q = np.array([ps[f"{x:g}"][f"{t}_{m}_R_iqr"] for x in sg])
+        ax.plot(sg, q[:, 1], marker=mk, ls=ls, color=c, label=f"{m} on {t}")
+        ax.fill_between(sg, q[:, 0], q[:, 2], color=c, alpha=0.15, lw=0)
+    ax.axhline(1.0, color="k", lw=0.8)
+    for w in v["W"]:
+        ax.axvspan(w / 1.15, w * 1.15, facecolor="none", hatch="//", edgecolor="0.5", lw=0)
+    ax.set_xscale("log"); ax.set_yscale("log")
+    ax.set_xlabel("σ"); ax.set_ylabel("R = G_iqp / G_maxent (median, IQR band)")
+    ax.set_title(f"Completion ratio vs σ (n = 12, N = ∞; W = {v['W']} hatched)", fontsize=9)
+    ax.legend(fontsize=8)
+    save(fig, "ratio_vs_sigma")
+
+    # 2. room_and_proxies
+    fig, axs = plt.subplots(2, 2, figsize=(7.6, 5.6))
+    panels = [("D3", "D3 of iqp target (KL to MaxEnt3)", True),
+              ("hi_order_frac", "hi_order_frac of target", True),
+              ("collision_ratio_target", "collision ratio of target", False),
+              ("clifford_dist_median_target", "Clifford distance median (iqp angles)", False)]
+    for ax, (key, lab, logy) in zip(axs.flat, panels):
+        for t, mk, ls in (("iqp", "o", "-"), ("maxent_proj", "^", ":")):
+            q = np.array([iqr([grid[(t, x, s)][key] for s in SEEDS if (t, x, s) in grid]) for x in sg])
+            ax.plot(sg, q[:, 1], marker=mk, ls=ls, color="k", label=t)
+            ax.fill_between(sg, q[:, 0], q[:, 2], color="k", alpha=0.12, lw=0)
+        if key == "D3":
+            ax.axhline(D3_ROOM, color="0.5", lw=0.8, ls="--")
+        ax.set_xscale("log")
+        if logy:
+            ax.set_yscale("log")
+        ax.set_xlabel("σ"); ax.set_title(lab, fontsize=9)
+    axs[0, 0].legend(fontsize=7)
+    save(fig, "room_and_proxies")
+
+    # 3. residual_vs_G
+    fig, axs = plt.subplots(1, 2, figsize=(9.0, 4.2), sharey=True)
+    markers = ["o", "s", "^", "v", "D", "P"]
+    cmap = plt.get_cmap("viridis")
+    corr = residual_G_correlations(grid)
+    for ax, m in zip(axs, ("O", "G")):
+        for i, x in enumerate(sg):
+            r, g = [], []
+            for s in SEEDS:
+                d = grid.get(("iqp", x, s))
+                if d:
+                    r += d[f"{m}_restart_residuals"]; g += d[f"{m}_restart_G"]
+            c = corr[f"{m}/{x:g}"]
+            ax.scatter(np.maximum(r, FLOOR), np.maximum(g, FLOOR), marker=markers[i], s=14,
+                       color=cmap(i / (len(sg) - 1)), facecolors="none" if i % 2 else None,
+                       label=f"σ={x:g} (r={c:.2f})" if c is not None else f"σ={x:g}")
+        ax.set_xscale("log"); ax.set_yscale("log")
+        ax.set_xlabel("training residual (all restarts)")
+        ax.set_title(f"fit {m} on iqp targets", fontsize=9)
+        ax.legend(fontsize=7)
+    axs[0].set_ylabel(f"G_iqp (orders 4-6); values < {FLOOR:g} shown at the floor")
+    save(fig, "residual_vs_G")
+    return corr
+
+
+def report():
+    grid = load_grid()
+    write_table(grid, ROOT / "results" / "step3" / "table.csv")
+    v = verdicts(grid)
+    v["n_instances"] = len(grid)
+    v["residual_G_corr_iqp"] = make_figures(grid, v, ROOT / "figures" / "step3")
+    (ROOT / "results" / "step3" / "verdicts.json").write_text(json.dumps(v, indent=1))
+    print(json.dumps(v, indent=1))
+
+
 # ---------------- CLI ----------------
 def default_out(target: str, sigma: float, seed: int) -> Path:
     return ROOT / "results" / "step3" / target / f"sigma_{sigma:g}" / f"seed_{seed}"
@@ -205,7 +400,12 @@ def main(argv=None):
     ap.add_argument("--fits", default="O,G")
     ap.add_argument("--out", default=None)
     ap.add_argument("--all", action="store_true")
+    ap.add_argument("--report", action="store_true",
+                    help="table.csv, verdicts.json and figures from the metrics.json present")
     a = ap.parse_args(argv)
+    if a.report:
+        report()
+        return
     fits = tuple(x.strip() for x in a.fits.split(",") if x.strip())
     if any(f not in ("O", "G") for f in fits):
         ap.error("--fits takes O and/or G")

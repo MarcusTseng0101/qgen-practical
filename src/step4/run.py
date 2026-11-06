@@ -2,7 +2,8 @@
 
 specs/step4_misspec_finite_n.md (designed after step 3, notes/2026-11-06_step3_findings.md).
 
-  python -m src.step4.run --calibrate                       (delta for mix; D3 only)
+  python -m src.step4.run --calibrate                       (original delta rule; D3 only)
+  python -m src.step4.run --calibrate-amend1                (amendment 1: K x delta; D3 only)
   python -m src.step4.run --target iqp4 --sigma 0.2 --N 10000 --seed 0
   python -m src.step4.run --target mix --N inf --seed 0
   python -m src.step4.run --all        (refuses to start without the budget-approval file)
@@ -33,7 +34,7 @@ from src.step1.versions import versions
 from src.step1.walsh import empirical_distribution, parity_coefficients
 from src.step2.sweep import d3, hi_order_frac, sigma_target
 from src.step3.run import fit_restarts, make_pair
-from src.step4.targets import DELTAS, iqp4_target, mix_target
+from src.step4.targets import DELTAS, DELTAS_AMEND1, KS_AMEND1, iqp4_target, mix_target
 
 N_BITS = 12
 TARGETS = ("iqp", "iqp4", "mix", "maxent_proj")
@@ -54,10 +55,11 @@ def target_p(target: str, sigma, seed: int, delta=None, n: int = N_BITS) -> dict
     if target == "iqp4":
         p, masks, theta, _ = iqp4_target(sigma, seed, n)
         return {"p": p, "masks": masks, "theta": theta}
-    if target == "mix":
-        if delta is None:
-            delta = chosen_delta()
-        return {"p": mix_target(seed, delta, n), "delta": delta}
+    if target == "mix":   # amendment 1: (K, delta) from calibration_amend1.json
+        K, dl = chosen_mix_params()
+        if delta is not None:
+            dl = delta
+        return {"p": mix_target(seed, dl, n, K), "delta": dl, "K": K}
     if target == "maxent_proj":
         pair = make_pair(sigma, seed, n)
         return {"p": pair["p"]["maxent_proj"], "paired_iqp_D3": pair["D3"],
@@ -105,9 +107,55 @@ def calibrate(n: int = N_BITS) -> dict:
 
 
 def chosen_delta() -> float:
+    """The ORIGINAL rule's delta (calibration.json); superseded for the grid by amendment 1."""
     if not CALIB_FILE.exists():
         raise RuntimeError("run the delta calibration first (results/step4/calibration.json)")
     return float(json.loads(CALIB_FILE.read_text())["chosen_delta"])
+
+
+# ---------------- amendment 1 calibration: K x delta (D3 only; no fits of G, no R) ----------------
+# specs/step4_amendment1.md, section 2.1. calibration.json stays as the record of the original rule.
+CALIB_AMEND1_FILE = ROOT / "results" / "step4" / "calibration_amend1.json"
+STEP3_TABLE = ROOT / "results" / "step3" / "table.csv"
+REF_SIGMA_AMEND1 = 0.1
+
+
+def reference_D3_amend1() -> tuple:
+    """Median D3 of iqp at sigma = 0.1 over seeds 0-4, from the step-3 table (as the amendment says)."""
+    lines = STEP3_TABLE.read_text().strip().splitlines()
+    cols = lines[0].split(",")
+    rows = [dict(zip(cols, l.split(","))) for l in lines[1:]]
+    v = [float(r["D3"]) for r in rows if r["target"] == "iqp" and float(r["sigma"]) == REF_SIGMA_AMEND1]
+    assert len(v) == len(SEEDS), v
+    return float(np.median(v)), v
+
+
+def calibrate_amend1(n: int = N_BITS) -> dict:
+    ref, ref_per = reference_D3_amend1()
+    per, med = {}, {}
+    for K in KS_AMEND1:
+        per[f"{K}"], med[f"{K}"] = {}, {}
+        for dl in DELTAS_AMEND1:
+            v = [d3(mix_target(s, dl, n, K), n)[0] for s in SEEDS]
+            per[f"{K}"][f"{dl:g}"] = v
+            med[f"{K}"][f"{dl:g}"] = float(np.median(v))
+    K, dl = min(((K, dl) for K in KS_AMEND1 for dl in DELTAS_AMEND1),
+                key=lambda c: abs(np.log(med[f"{c[0]}"][f"{c[1]:g}"]) - np.log(ref)))
+    return {"chosen_K": K, "chosen_delta": dl, "D3_by_K_delta": med, "D3_by_K_delta_per_seed": per,
+            "reference_D3": ref, "reference_D3_per_seed": ref_per,
+            "reference_source": "median D3 of iqp at sigma = 0.1, seeds 0-4, results/step3/table.csv",
+            "rule": "(K, delta) in {3,6,12,24,48} x {0.8,0.9,0.99} whose median D3 of mix over seeds "
+                    "0-4 is closest to reference_D3 on a log scale (specs/step4_amendment1.md)",
+            "D3_definition": "KL(p || MaxEnt3(p)), src/step2/sweep.d3 (MaxEnt(3) with step 1's ridge)",
+            "seeds": list(SEEDS), "versions": versions()}
+
+
+def chosen_mix_params() -> tuple:
+    """(K, delta) for the grid's mix, from calibration_amend1.json."""
+    if not CALIB_AMEND1_FILE.exists():
+        raise RuntimeError("run the amendment-1 calibration first (results/step4/calibration_amend1.json)")
+    c = json.loads(CALIB_AMEND1_FILE.read_text())
+    return int(c["chosen_K"]), float(c["chosen_delta"])
 
 
 # ---------------- one instance ----------------
@@ -146,6 +194,8 @@ def run_instance(target: str, sigma, N, seed: int, n: int = N_BITS, delta=None,
            "per_level": {"G": b["per_level"], "maxent": G_me["per_level"], "uniform": G_uni["per_level"]}}
     if target == "mix":
         out["delta"] = tp["delta"]
+        out["mix_K"] = tp["K"]
+        out["mix_params_source"] = "results/step4/calibration_amend1.json (specs/step4_amendment1.md)"
     if target == "maxent_proj":
         out["paired_iqp_D3"] = tp["paired_iqp_D3"]
         out["pair_moment_max_abs"] = tp["pair_moment_max_abs"]
@@ -189,10 +239,18 @@ def main(argv=None):
     ap.add_argument("--N", type=parse_N, default=None, help="1000, 10000, 100000 or inf")
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--out", default=None)
-    ap.add_argument("--calibrate", action="store_true")
+    ap.add_argument("--calibrate", action="store_true", help="original delta rule (calibration.json)")
+    ap.add_argument("--calibrate-amend1", action="store_true", help="K x delta (calibration_amend1.json)")
     ap.add_argument("--all", action="store_true")
     a = ap.parse_args(argv)
 
+    if a.calibrate_amend1:
+        c = calibrate_amend1()
+        CALIB_AMEND1_FILE.parent.mkdir(parents=True, exist_ok=True)
+        CALIB_AMEND1_FILE.write_text(json.dumps(c, indent=1))
+        print(CALIB_AMEND1_FILE)
+        print(json.dumps({k: c[k] for k in ("chosen_K", "chosen_delta", "reference_D3", "D3_by_K_delta")}, indent=1))
+        return
     if a.calibrate:
         c = calibrate()
         CALIB_FILE.parent.mkdir(parents=True, exist_ok=True)

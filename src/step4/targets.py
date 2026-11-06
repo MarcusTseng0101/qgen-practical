@@ -4,8 +4,10 @@
   distinct weight-4 supports and z' ~ N(0, 1) are drawn from default_rng(4000 + s), supports
   first; the angles are sigma * z', so z' is reused across sigma. Outside the generic IQP's
   weight-<=3 family.
-- mix(s, delta): a latent-class mixture of K = 3 product-Bernoulli components. From
-  default_rng(5000 + s): weights ~ Dirichlet(1, 1, 1), then u ~ U(-0.5, 0.5) of shape (3, n);
+- mix(s, delta, K): a latent-class mixture of K product-Bernoulli components (K = 3 in the
+  original spec; a parameter since amendment 1, specs/step4_amendment1.md). From
+  default_rng(5000 + s): weights ~ Dirichlet(1, ..., 1), then u ~ U(-0.5, 0.5) of shape (K, n);
+  the draw order is unchanged, so K = 3 is bit-identical to the original construction;
   P(x_j = 1 | k) = 0.5 + delta * u[k, j]. The same (weights, u) are used for every delta, so the
   delta calibration varies only the scale.
 
@@ -23,7 +25,9 @@ from src.step2.sweep import sigma_target
 
 N_BITS = 12
 N_W4 = 6            # spec: 6 weight-4 generators
-K_MIX = 3           # spec: 3 latent classes
+K_MIX = 3           # original spec: 3 latent classes (default; amendment 1 makes K a parameter)
+KS_AMEND1 = (3, 6, 12, 24, 48)
+DELTAS_AMEND1 = (0.8, 0.9, 0.99)
 DELTAS = (0.2, 0.4, 0.6, 0.8)
 
 
@@ -47,16 +51,16 @@ def iqp4_target(sigma: float, seed: int, n: int = N_BITS):
     return p / p.sum(), masks, theta, list(layout3) + supports
 
 
-def mix_params(seed: int, n: int = N_BITS):
+def mix_params(seed: int, n: int = N_BITS, K: int = K_MIX):
     rng = np.random.default_rng(5000 + seed)
-    w = rng.dirichlet(np.ones(K_MIX))
-    u = rng.uniform(-0.5, 0.5, (K_MIX, n))
+    w = rng.dirichlet(np.ones(K))
+    u = rng.uniform(-0.5, 0.5, (K, n))
     return w, u
 
 
-def mix_target(seed: int, delta: float, n: int = N_BITS) -> np.ndarray:
+def mix_target(seed: int, delta: float, n: int = N_BITS, K: int = K_MIX) -> np.ndarray:
     """p(x) = sum_k w_k prod_j q_kj^x_j (1 - q_kj)^(1 - x_j), q = 0.5 + delta * u."""
-    w, u = mix_params(seed, n)
+    w, u = mix_params(seed, n, K)
     q = 0.5 + delta * u                                    # P(x_j = 1 | k)
     X = all_bitstrings(n).astype(np.float64)               # (2^n, n), x_j = (i >> j) & 1
     logp = X @ np.log(q).T + (1.0 - X) @ np.log(1.0 - q).T  # (2^n, K)

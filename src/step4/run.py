@@ -208,40 +208,52 @@ def run_instance(target: str, sigma, N, seed: int, n: int = N_BITS, delta=None,
 
 
 # ---------------- budget projection (build order item 3) ----------------
-TIMED = (("iqp4", 0.2, 10000, 0), ("mix", None, 10000, 0))
+# One timed instance per target (user decision A, 2026-11-06): iqp4 and mix as the spec says,
+# plus iqp and maxent_proj, each by the production run_instance.
+TIMED = {"iqp4": ("iqp4", 0.2, 10000, 0), "mix": ("mix", None, 10000, 0),
+         "iqp": ("iqp", 0.1, None, 0), "maxent_proj": ("maxent_proj", 0.1, 10000, 0)}
+SPEC_RULE_TIMED = ("iqp4", "mix")
 STEP3_SLOWDOWN = 118.0 / (1.38 * 60)    # step 3: 118 min actual vs 1.38 h projected (~1.4x)
+STEP3_CUTS = ("drop N = 1e3", "drop sigma = 0.1")
+
+
+def _cell(t, sg, N, s):
+    return f"{t}/{'none' if sg is None else f'sigma_{sg:g}'}/N_{'inf' if N is None else N}/seed_{s}"
 
 
 def projection() -> dict:
-    per = {}
-    for t, sg, N, s in TIMED:
-        d = json.loads((default_out(t, sg, N, s) / "metrics.json").read_text())
-        per[f"{t}/{'none' if sg is None else f'sigma_{sg:g}'}/N_{N}/seed_{s}"] = {
-            "total_seconds": d["total_seconds"], "G_fit_seconds": d["G_fit_seconds"],
-            "G_train_residual": d["G_train_residual"]}
-    slow = max(v["total_seconds"] for v in per.values())
-    n_inst = sum(1 for _ in grid())
-    out = {"projected_hours": n_inst * slow / 3600.0, "instances": n_inst,
-           "basis": "spec rule: the slower of the two timed instances (iqp4 sigma=0.2 N=1e4 seed 0; "
-                    "mix amend-1 parameters N=1e4 seed 0) x 140",
-           "slowest_instance_seconds": slow, "per_instance": per,
+    per, sec = {}, {}
+    for t, (tt, sg, N, s) in TIMED.items():
+        d = json.loads((default_out(tt, sg, N, s) / "metrics.json").read_text())
+        per[_cell(tt, sg, N, s)] = {"total_seconds": d["total_seconds"], "G_fit_seconds": d["G_fit_seconds"],
+                                    "G_train_residual": d["G_train_residual"]}
+        sec[t] = d["total_seconds"]
+    cells = list(grid())
+    count = {t: sum(1 for c in cells if c[0] == t) for t in TARGETS}
+    hours = sum(count[t] * sec[t] for t in TARGETS) / 3600.0
+    slow = max(sec[t] for t in SPEC_RULE_TIMED)
+    out = {"projected_hours": hours, "instances": len(cells),
+           "basis": "per target: its own timed instance's total_seconds x its instance count "
+                    "(user decision A, 2026-11-06)",
+           "seconds_by_target": sec, "instances_by_target": count,
+           "hours_by_target": {t: count[t] * sec[t] / 3600.0 for t in TARGETS},
+           "per_instance": per,
+           "projected_hours_spec_rule": len(cells) * slow / 3600.0,
+           "spec_rule_basis": "the slower of iqp4 (sigma=0.2, N=1e4) and mix (N=1e4), x 140",
            "step3_underestimate": f"step 3 ran {STEP3_SLOWDOWN:.2f}x slower than its projection "
                                   "(118 min actual vs 1.38 h projected)",
-           "projected_hours_x_step3_slowdown": n_inst * slow / 3600.0 * STEP3_SLOWDOWN}
-    # Not the spec's basis (a caution): the two timed instances are fast (moments with a high
-    # residual floor). In step 3 the same G (3 restarts) on iqp / maxent_proj at sigma = 0.1-0.2,
-    # N = inf, took ~145 s per instance (median total, results/step3/table.csv). If the 80
-    # iqp / maxent_proj instances cost that and the other 60 cost the slower timed instance:
-    s3 = STEP3_TABLE.read_text().strip().splitlines()
-    cols = s3[0].split(",")
-    rows = [dict(zip(cols, l.split(","))) for l in s3[1:]]
-    t3 = [float(r["total_seconds"]) for r in rows if float(r["sigma"]) in SIGMAS]
-    med3 = float(np.median(t3))
-    n_like3 = sum(1 for t, *_ in grid() if t in ("iqp", "maxent_proj"))
-    out["caution_step3_based_hours"] = (n_like3 * med3 + (n_inst - n_like3) * slow) / 3600.0
-    out["caution_basis"] = (f"{n_like3} iqp/maxent_proj instances x {med3:.0f} s (median step-3 instance "
-                            f"time at sigma 0.1/0.2, which also includes 10 O restarts) + the rest x {slow:.1f} s; "
-                            "untimed in step 4, an assumption")
+           "projected_hours_x_step3_slowdown": hours * STEP3_SLOWDOWN,
+           "note": "one seed per target, one (sigma, N) per target; fit times vary with sigma and N. "
+                   "The step-3 grid's per-instance times are not used: the identical iqp sigma=0.1 seed-0 "
+                   "G fit took 193 s there and 23.5 s here (same residuals)."}
+    # what the spec's cut order would leave (reported, not applied)
+    after = []
+    keep = cells
+    for name in STEP3_CUTS:
+        keep = [c for c in keep if not (c[2] == 1000 if "1e3" in name else c[1] == 0.1)]
+        after.append({"cut": name, "instances": len(keep),
+                      "hours": sum(sec[c[0]] for c in keep) / 3600.0})
+    out["if_cut_in_spec_order"] = after
     return out
 
 

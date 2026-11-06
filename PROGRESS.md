@@ -296,5 +296,16 @@ and harness unchanged.
   ~145 s each; if the 80 iqp/maxent_proj instances cost that, 3.3 h (over the 3 h cut line).
 - `python -m src.step4.run --projection` writes PROJECTION.json; check.sh --stage 11 passes.
 
+- User chose A: two more timed instances (production run_instance):
+  - iqp sigma=0.1 N=inf seed 0: 27.4 s (G fit 23.5 s); G residual 4.9e-7 (restarts 4.7e-5,
+    4.9e-7, 4.3e-6), identical to step 3's G fit for this instance; MaxEnt residual 7.1e-14.
+  - maxent_proj sigma=0.1 N=1e4 seed 0: 25.3 s (G fit 5.0 s; most of the rest is the
+    projection pair); G residual 3.3e-4 (restarts 5.0e-4, 3.3e-4, 3.5e-4); MaxEnt residual
+    2.1e-13 but nit 15311 of maxiter 20000 (close to FM-N1's symptom; not hit).
+  - Step 3's per-instance times were inflated: the same G fit took 193 s there vs 23.5 s now.
+- PROJECTION.json: projected_hours = sum over targets of own time x count =
+  40x27.4 + 40x7.0 + 40x25.3 + 20x1.9 s = **0.67 h** (x1.43 step-3 slowdown: 0.96 h). Spec rule
+  kept as projected_hours_spec_rule = 0.27 h. Under 3 h: no cut needed.
+
 ## Next
 - Waiting for the budget-approval file. The grid has not been run.

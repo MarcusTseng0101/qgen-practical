@@ -1,8 +1,25 @@
 {
- "projected_hours": 0.27310657898585,
+ "projected_hours": 0.6732676174905565,
  "instances": 140,
- "basis": "spec rule: the slower of the two timed instances (iqp4 sigma=0.2 N=1e4 seed 0; mix amend-1 parameters N=1e4 seed 0) x 140",
- "slowest_instance_seconds": 7.022740602493286,
+ "basis": "per target: its own timed instance's total_seconds x its instance count (user decision A, 2026-11-06)",
+ "seconds_by_target": {
+  "iqp4": 7.022740602493286,
+  "mix": 1.9172852039337158,
+  "iqp": 27.357600212097168,
+  "maxent_proj": 25.255102157592773
+ },
+ "instances_by_target": {
+  "iqp": 40,
+  "iqp4": 40,
+  "mix": 20,
+  "maxent_proj": 40
+ },
+ "hours_by_target": {
+  "iqp": 0.30397333568996854,
+  "iqp4": 0.0780304511388143,
+  "mix": 0.01065158446629842,
+  "maxent_proj": 0.28061224619547526
+ },
  "per_instance": {
   "iqp4/sigma_0.2/N_10000/seed_0": {
    "total_seconds": 7.022740602493286,
@@ -13,10 +30,33 @@
    "total_seconds": 1.9172852039337158,
    "G_fit_seconds": 1.6187984943389893,
    "G_train_residual": 0.02356015725592716
+  },
+  "iqp/sigma_0.1/N_inf/seed_0": {
+   "total_seconds": 27.357600212097168,
+   "G_fit_seconds": 23.50729775428772,
+   "G_train_residual": 4.867472527005078e-07
+  },
+  "maxent_proj/sigma_0.1/N_10000/seed_0": {
+   "total_seconds": 25.255102157592773,
+   "G_fit_seconds": 4.996081829071045,
+   "G_train_residual": 0.0003336075942353756
   }
  },
+ "projected_hours_spec_rule": 0.27310657898585,
+ "spec_rule_basis": "the slower of iqp4 (sigma=0.2, N=1e4) and mix (N=1e4), x 140",
  "step3_underestimate": "step 3 ran 1.43x slower than its projection (118 min actual vs 1.38 h projected)",
- "projected_hours_x_step3_slowdown": 0.3892098589411872,
- "caution_step3_based_hours": 3.34947352276908,
- "caution_basis": "80 iqp/maxent_proj instances x 145 s (median step-3 instance time at sigma 0.1/0.2, which also includes 10 O restarts) + the rest x 7.0 s; untimed in step 4, an assumption"
+ "projected_hours_x_step3_slowdown": 0.9594876674382328,
+ "note": "one seed per target, one (sigma, N) per target; fit times vary with sigma and N. The step-3 grid's per-instance times are not used: the identical iqp sigma=0.1 seed-0 G fit took 193 s there and 23.5 s here (same residuals).",
+ "if_cut_in_spec_order": [
+  {
+   "cut": "drop N = 1e3",
+   "instances": 105,
+   "hours": 0.5049507131179174
+  },
+  {
+   "cut": "drop sigma = 0.1",
+   "instances": 60,
+   "hours": 0.2564697007338206
+  }
+ ]
 }

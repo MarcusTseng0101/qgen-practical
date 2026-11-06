@@ -1,13 +1,23 @@
-"""PreToolUse guard for qgen-practical: keep the harness and prereg intact, gate the grid.
+"""PreToolUse guard for qgen-practical: keep the harness and prereg intact, gate the grids.
 
 Paths are matched relative to the project root, so files outside the repo (for example
-~/.claude/projects/.../memory/) are never blocked. qgen-iqp-A's guard matched any '.claude/'
-substring and blocked memory writes; that was a false positive and is fixed here.
+~/.claude/projects/.../memory/) are never blocked.
 
 Shell commands are checked per segment (split on && || ; | and newlines), after heredoc
 bodies are removed. Read-only or index-only git segments (add, commit, status, diff, log,
-show) are exempt from the harness-write rule: they do not change file contents, and their
-commit messages (e.g. "<noreply@...>") used to trip the '>' redirect pattern.
+show) are exempt from the harness-write rule.
+
+v5 (2026-11-06), two false positives fixed:
+- A redirect only counts as a harness write when its *target* is protected (`printf 8 >
+  .harness/STAGE`), not when a protected name merely appears in the same segment (`grep -v
+  BUDGET_OK > list.txt`, or a `<target>` placeholder in prompt text). The other write verbs
+  (rm, mv, cp, touch, tee, sed -i, git checkout/restore/...) still block on any protected
+  name in the segment.
+- `herdr agent prompt` segments are text sent to another agent (whose own guard applies), so
+  they are not scanned for writes.
+- Grid gates (`--all` without BUDGET_OK) apply per segment, after the git-safe and prompt-text
+  exemptions, so commit messages and prompt text that mention the flag are no longer blocked.
+- Step-4 grid gate added.
 """
 import json, os, re, sys
 
@@ -22,10 +32,17 @@ def block(msg):
 
 
 PROTECTED = ("scripts/check.sh", ".claude/settings.json", ".claude/hooks/", ".harness/", "prereg/", "BUDGET_OK")
-REDIR = r"(?<![0-9&])>(?!&)"  # real redirects; not 2>&1 or 2>/dev/null
-WRITES = re.compile(REDIR + r"|(sed -i|\brm |\bmv |\bcp |touch |\btee |New-Item|Set-Content|Out-File|Remove-Item|"
-                    r"git (checkout|restore|rm|mv|reset|stash|apply)\b)")
+VERBS = re.compile(r"(sed -i|\brm |\bmv |\bcp |touch |\btee |New-Item|Set-Content|Out-File|Remove-Item|"
+                   r"git (checkout|restore|rm|mv|reset|stash|apply)\b)")
+REDIR_TARGET = re.compile(r"(?<![0-9&<>-])>{1,2}\|?\s*['\"]?([^\s'\";|&<>]+)")
 GIT_SAFE = re.compile(r"^\s*git\s+(add|commit|status|diff|log|show)\b")
+PROMPT_TEXT = re.compile(r"^\s*herdr\s+agent\s+prompt\b")
+GATES = [
+    (r"step4[./\\]run(\.py)?\b.*--all", "Step-4 grid blocked: no BUDGET_OK. Write results/step4/PROJECTION.json, report it, and wait for the user."),
+    (r"step3[./\\]run(\.py)?\b.*--all", "Step-3 grid blocked: no BUDGET_OK. Write results/step3/PROJECTION.json, report it, and wait for the user."),
+    (r"step2[./\\]sweep(\.py)?\b.*--all", "Step-2 sweep blocked: no BUDGET_OK. Write results/step2/PROJECTION.json, report it, and wait for the user."),
+    (r"step1[./\\]run(\.py)?\b.*--all", "Full grid blocked: no BUDGET_OK. Write PROJECTION.json, report it in PROGRESS.md, and wait for the user."),
+]
 
 
 def rel_in_repo(p):
@@ -40,13 +57,17 @@ def rel_in_repo(p):
     return os.path.relpath(ap, root).replace("\\", "/")
 
 
+def is_protected(rel):
+    return bool(rel) and any(rel == p.rstrip("/") or rel.startswith(p) for p in PROTECTED)
+
+
 def strip_heredocs(cmd):
     return re.sub(r"<<-?\s*['\"]?(\w+)['\"]?[^\n]*\n.*?\n\s*\1\s*(\n|$)", "\n", cmd, flags=re.S)
 
 
 if tool in ("Edit", "Write", "NotebookEdit"):
     r = rel_in_repo(str(args.get("file_path", "")))
-    if r and any(r == p.rstrip("/") or r.startswith(p) for p in PROTECTED):
+    if is_protected(r):
         block(f"{r} is part of the harness / frozen prereg (or the user-only BUDGET_OK). "
               "If a check is wrong, stop and tell the user which one and why.")
 
@@ -56,18 +77,24 @@ if tool in ("Bash", "PowerShell"):
     for seg in segments:
         if re.search(r"^\s*git\s+push\b", seg):
             block("git push is not allowed in this project. Commit locally and report.")
-        if "qgen-iqp-A" in cmd and re.search(REDIR + r"|sed -i|\brm |\bmv |\bcp |touch |git |python|pytest", seg) \
+        if PROMPT_TEXT.search(seg):
+            continue
+        if "qgen-iqp-A" in cmd and re.search(r"(?<![0-9&])>(?!&)|sed -i|\brm |\bmv |\bcp |touch |git |python|pytest", seg) \
                 and not re.search(r"^\s*(cat|head|tail|grep|sed -n|ls|cd)\b", seg):
             block("qgen-iqp-A is read-only for this task (live jobs). Read its files; do not write to or run code from it.")
         if GIT_SAFE.search(seg):
             continue
-        if any(p in seg for p in PROTECTED) and WRITES.search(seg):
+        for t in REDIR_TARGET.findall(seg):
+            if t.startswith("/dev/") or t.startswith("&"):
+                continue
+            # any protected name in the target counts, even outside this root (another checkout)
+            if is_protected(rel_in_repo(t)) or any(p in t.replace("\\", "/") for p in PROTECTED):
+                block("Shell write into the harness, prereg/ or BUDGET_OK. If a check is wrong, stop and report it.")
+        if any(p in seg for p in PROTECTED) and VERBS.search(seg):
             block("Shell write into the harness, prereg/ or BUDGET_OK. If a check is wrong, stop and report it.")
-    if re.search(r"step3[./\\]run(\.py)?\b.*--all", cmd) and not os.path.exists(os.path.join(root, "BUDGET_OK")):
-        block("Step-3 grid blocked: no BUDGET_OK. Write results/step3/PROJECTION.json, report it, and wait for the user.")
-    if re.search(r"step2[./\\]sweep(\.py)?\b.*--all", cmd) and not os.path.exists(os.path.join(root, "BUDGET_OK")):
-        block("Step-2 sweep blocked: no BUDGET_OK. Write results/step2/PROJECTION.json, report it, and wait for the user.")
-    if re.search(r"step1[./\\]run(\.py)?\b.*--all", cmd) and not os.path.exists(os.path.join(root, "BUDGET_OK")):
-        block("Full grid blocked: no BUDGET_OK. Write PROJECTION.json, report it in PROGRESS.md, and wait for the user.")
+        if "python" in seg and not os.path.exists(os.path.join(root, "BUDGET_OK")):
+            for pat, msg in GATES:
+                if re.search(pat, seg):
+                    block(msg)
 
 sys.exit(0)

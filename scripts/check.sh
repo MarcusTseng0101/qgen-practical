@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 # Definition of done for step 1 (specs/step1_synthetic_completion_gap.md + specs/step1_amendment1.md).
-# Usage: bash scripts/check.sh --stage N   (step 1: N in 0..3, cumulative; step 2: N in 4..6; step 3: N in 7..9)
+# Usage: bash scripts/check.sh --stage N   (step 1: N in 0..3, cumulative; step 2: N in 4..6; step 3: N in 7..9; step 4: N in 10..12)
 # Exit 0 = every criterion up to stage N holds. Do not edit to make it pass;
 # if a check is wrong, stop and tell the user which one and why.
+# v5 (2026-11-06): stages 10..12 = step 4 track (specs/step4_misspec_finite_n.md); step-3 checks only at 7..9.
 # v4 (2026-11-06): stages 7..9 = step 3 track (specs/step3_completion_vs_sigma.md).
 # v3 (2026-11-06): stages 4..6 = step 2 track (specs/step2_sigma_boundary.md).
 # v2 (2026-11-06, amendment 1): sparse IQP (n_params_iqp <= n_params_maxent), maxent_proj control,
@@ -17,7 +18,7 @@ PY=python; [ -x .venv/Scripts/python ] && PY=.venv/Scripts/python; [ -x .venv/bi
 TARGETS="biased maxent_proj random"
 
 # ---- stage 0: harness and frozen predictions in place
-for f in specs/step1_synthetic_completion_gap.md specs/step1_amendment1.md specs/step2_sigma_boundary.md specs/step3_completion_vs_sigma.md prereg/step1.md \
+for f in specs/step1_synthetic_completion_gap.md specs/step1_amendment1.md specs/step2_sigma_boundary.md specs/step3_completion_vs_sigma.md specs/step4_misspec_finite_n.md prereg/step1.md \
          .claude/settings.json .claude/hooks/guard.py .claude/hooks/stop_check.sh PROGRESS.md; do
   [ -f "$f" ] || die "harness" "missing $f"
 done
@@ -201,7 +202,80 @@ EOF
 }
 
 [ "$stage" -ge 4 ] && [ "$stage" -le 6 ] && step2_checks "$stage"
-[ "$stage" -ge 7 ] && step3_checks "$stage"
+
+# ==== step 4 track (stages 10..12): specs/step4_misspec_finite_n.md. Stage-0 checks still apply;
+# steps 1-3 are closed records (step 3 closed at 372ad38).
+S4_SENT="Step 4 was designed after step 3; R1 replicates data already seen; G is the generic IQP (no oracle); n = 12 proxies are not hardness evidence."
+step4_checks() {
+  local st=$1
+  f=specs/step4_misspec_finite_n.md
+  git ls-files --error-unmatch "$f" >/dev/null 2>&1 || die "s4-spec" "$f is not committed"
+  git diff --quiet HEAD -- "$f" 2>/dev/null || die "s4-spec" "$f modified after commit (hypotheses are frozen)"
+  for p in src/step4/run.py src/step4/targets.py tests/test_step4.py; do [ -f $p ] || die "s4-layout" "missing $p"; done
+  git diff --quiet HEAD -- src/step1/ src/step2/ src/step3/ 2>/dev/null || die "s4-closed" "src/step1..3 has uncommitted edits (closed records)"
+  git cat-file -e 372ad38 2>/dev/null || die "s4-closed" "commit 372ad38 (step 3 close) not in history; branch step4 from step3-ratio"
+  [ -z "$(git diff --name-only 372ad38 HEAD -- src/step1/ src/step2/ src/step3/ 2>/dev/null)" ] || die "s4-closed" "src/step1..3 changed after step 3 closed (372ad38)"
+  "$PY" -m pytest -q tests/test_step4.py >/tmp/step4_pytest.txt 2>&1 || { die "s4-tests" "tests/test_step4.py fails"; tail -5 /tmp/step4_pytest.txt >&2; }
+  C=results/step4/calibration.json
+  if [ -f $C ]; then
+    "$PY" - $C <<'EOF' || die "s4-calib" "$C must record D3 for every delta in {0.2,0.4,0.6,0.8} and chosen_delta"
+import json, sys
+d = json.load(open(sys.argv[1]))
+assert d.get("chosen_delta") in (0.2, 0.4, 0.6, 0.8), "chosen_delta"
+c = {float(k): v for k, v in d["D3_by_delta"].items()}
+assert set(c) == {0.2, 0.4, 0.6, 0.8}, "D3_by_delta keys"
+assert not any(k.startswith("R") or "G_" in k for k in d), "calibration must not compute R or G"
+EOF
+  else die "s4-calib" "missing $C"; fi
+  s4_json() {  # $1 metrics.json
+    "$PY" - "$1" <<'EOF' || die "s4-metrics" "$1 lacks required step-4 keys"
+import json, sys
+d = json.load(open(sys.argv[1]))
+need = ["G_iqp", "G_maxent", "G_uniform", "R", "G_train_residual", "G_restart_residuals", "G_restart_G",
+        "maxent_train_residual", "D3", "noise_floor", "hi_order_frac", "collision_ratio_target",
+        "versions", "total_seconds"]
+miss = [k for k in need if k not in d]
+if miss: print("missing:", miss, file=sys.stderr); sys.exit(1)
+if len(d["G_restart_residuals"]) < 3: print("fewer than 3 G restarts (never cut)", file=sys.stderr); sys.exit(1)
+EOF
+  }
+  cell() { [ "$1" = mix ] && echo "results/step4/mix/none/N_$2" || echo "results/step4/$1/sigma_$3/N_$2"; }
+  if [ "$st" -ge 11 ]; then
+    for p in results/step4/iqp4/sigma_0.2/N_10000/seed_0/metrics.json results/step4/mix/none/N_10000/seed_0/metrics.json; do
+      if [ -f "$p" ]; then s4_json "$p"; else die "s4-first" "missing $p"; fi
+    done
+    [ -f results/step4/PROJECTION.json ] || die "s4-budget" "missing results/step4/PROJECTION.json"
+  fi
+  if [ "$st" -ge 12 ]; then
+    n=0
+    for t in iqp iqp4 maxent_proj mix; do for N in inf 1000 10000 100000; do for sg in 0.1 0.2; do
+      [ $t = mix ] && [ $sg = 0.1 ] && continue
+      c=$(cell $t $N $sg); k=0
+      for s in 0 1 2 3 4; do p=$c/seed_$s/metrics.json; [ -f $p ] && { k=$((k+1)); s4_json $p; }; done
+      n=$((n+k))
+      [ $k -eq 0 ] || [ $k -eq 5 ] || die "s4-grid" "$c has $k/5 seeds (seeds are never cut)"
+    done; done; done
+    [ "$n" -ge 60 ] || die "s4-grid" "only $n/140 instances (fewer than the two named cuts allow)"
+    for N in 10000 100000; do for s in 0 1 2 3 4; do
+      [ -f results/step4/maxent_proj/sigma_0.2/N_$N/seed_$s/metrics.json ] || die "s4-grid" "maxent_proj sigma=0.2 N=$N seed $s missing (K is never cut)"
+    done; done
+    for N in inf 100000; do for s in 0 1 2 3 4; do
+      [ -f results/step4/iqp4/sigma_0.2/N_$N/seed_$s/metrics.json ] || die "s4-grid" "iqp4 sigma=0.2 N=$N seed $s missing (P1/F2 are never cut)"
+    done; done
+    for fig in ratio_vs_N ratio_at_inf noise_floor; do
+      [ -f figures/step4/$fig.png ] && [ -f figures/step4/$fig.pdf ] || die "s4-figures" "missing figures/step4/$fig.{png,pdf}"
+    done
+    [ -f results/step4/table.csv ] || die "s4-artifacts" "missing results/step4/table.csv"
+    S=results/step4/SUMMARY.md
+    if [ -f $S ]; then
+      grep -qF "$S4_SENT" $S || die "s4-summary" "SUMMARY lacks the required designed-after sentence"
+      for h in K R1 P1 P2 F1 F2; do grep -qE "(^|[^A-Za-z0-9])$h([^A-Za-z0-9]).*(PASS|FAIL)" $S || die "s4-summary" "SUMMARY does not mark $h PASS/FAIL"; done
+    else die "s4-summary" "missing $S"; fi
+  fi
+}
+
+[ "$stage" -ge 7 ] && [ "$stage" -le 9 ] && step3_checks "$stage"
+[ "$stage" -ge 10 ] && step4_checks "$stage"
 
 [ $fail -eq 0 ] && echo "ALL CHECKS PASS (stage $stage)"
 exit $fail

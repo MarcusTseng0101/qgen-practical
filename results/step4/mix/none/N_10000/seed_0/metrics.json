@@ -39,7 +39,7 @@
   "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH"
  ],
  "G_n_restarts": 3,
- "G_fit_seconds": 1.6187984943389893,
+ "G_fit_seconds": 1.6388256549835205,
  "G_best_params": [
   -0.12636917609891563,
   -0.24900242394290698,
@@ -367,5 +367,5 @@
  "delta": 0.99,
  "mix_K": 48,
  "mix_params_source": "results/step4/calibration_amend1.json (specs/step4_amendment1.md)",
- "total_seconds": 1.9172852039337158
+ "total_seconds": 1.9434432983398438
 }

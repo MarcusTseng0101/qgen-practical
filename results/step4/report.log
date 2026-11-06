@@ -1,0 +1,32 @@
+{
+ "K": {
+  "PASS": true,
+  "cells": {
+   "maxent_proj/sigma_0.1/N_1000": ">=1",
+   "maxent_proj/sigma_0.1/N_10000": ">=1",
+   "maxent_proj/sigma_0.1/N_100000": ">=1",
+   "maxent_proj/sigma_0.2/N_1000": ">=1",
+   "maxent_proj/sigma_0.2/N_10000": ">=1",
+   "maxent_proj/sigma_0.2/N_100000": ">=1"
+  }
+ },
+ "R1": {
+  "PASS": true,
+  "cells": {
+   "iqp/sigma_0.1/N_inf": "<1",
+   "iqp/sigma_0.2/N_inf": "<1"
+  }
+ },
+ "P1": {
+  "PASS": true
+ },
+ "P2": {
+  "PASS": true
+ },
+ "F1": {
+  "PASS": true
+ },
+ "F2": {
+  "PASS": true
+ }
+}

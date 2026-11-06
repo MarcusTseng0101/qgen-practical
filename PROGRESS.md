@@ -307,5 +307,16 @@ and harness unchanged.
   40x27.4 + 40x7.0 + 40x25.3 + 20x1.9 s = **0.67 h** (x1.43 step-3 slowdown: 0.96 h). Spec rule
   kept as projected_hours_spec_rule = 0.27 h. Under 3 h: no cut needed.
 
+## Build item 4 (2026-11-07): DONE, `check.sh --stage 12` passes
+- Full grid 140/140 (80 min wall clock; machine shared). `python -m src.step4.run --report`
+  → table.csv, verdicts.json, figures/step4/{ratio_vs_N, ratio_at_inf, noise_floor}.
+- `results/step4/SUMMARY.md`: K PASS (maxent_proj finite N, R >= 1 in all 6 cells), R1 PASS
+  (identical to step 3's R_G), P1 PASS (iqp4 sigma=0.2 N=inf R 0.58 [0.45, 0.58], G residual
+  2.1e-3 = family floor, D1), P2 PASS (mix R 5.0 [4.6, 5.6]; room level sigma = 0.1, K=48,
+  delta=0.99; latent-class baseline out of scope), F1 PASS, F2 PASS (0.55 [0.47, 0.72]).
+- Not a hypothesis, reported: iqp4 at sigma = 0.1 gives R >= 1 at every N (7.9 at N = inf).
+- FM-N1: MaxEnt hit maxiter on 19/140 (finite N), residual still <= 1.4e-8. FM-N2: G fits the
+  sampling noise at N = 1e3 (residual << 298 x noise floor).
+
 ## Next
-- Waiting for the budget-approval file. The grid has not been run.
+- Step 4 is complete. Waiting for the user.

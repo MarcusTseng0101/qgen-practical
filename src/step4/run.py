@@ -257,6 +257,176 @@ def projection() -> dict:
     return out
 
 
+# ---------------- report (build order item 4) ----------------
+N_PLOT_INF = 1e6        # where N = inf is drawn (right edge), labelled "inf"
+FLOOR = 1e-30
+
+
+def cell_key(t, sg):
+    return "mix" if t == "mix" else f"{t}/sigma_{sg:g}"
+
+
+def load_grid() -> dict:
+    out = {}
+    for t, sg, N, s in grid():
+        f = default_out(t, sg, N, s) / "metrics.json"
+        if f.exists():
+            out[(t, sg, N, s)] = json.loads(f.read_text())
+    return out
+
+
+def iqr(x):
+    q1, med, q3 = np.percentile(np.asarray(x, dtype=np.float64), [25, 50, 75])
+    return float(q1), float(med), float(q3)
+
+
+def verdict_at(x) -> str:
+    """Spec Statistics: "<1" = IQR entirely below 1; ">=1" = entirely at or above 1."""
+    q1, _, q3 = iqr(x)
+    return "<1" if q3 < 1 else (">=1" if q1 >= 1 else "undecided")
+
+
+def cells():
+    for t in TARGETS:
+        for sg in ((None,) if t == "mix" else SIGMAS):
+            yield t, sg
+
+
+def stats(grid_: dict) -> dict:
+    st = {}
+    for t, sg in cells():
+        for N in NS:
+            ds = [grid_[(t, sg, N, s)] for s in SEEDS if (t, sg, N, s) in grid_]
+            if not ds:
+                continue
+            k = f"{cell_key(t, sg)}/N_{'inf' if N is None else N}"
+            R = [d["R"] for d in ds]
+            st[k] = {"n": len(ds), "R": R, "R_iqr": iqr(R), "R_verdict": verdict_at(R),
+                     "G_train_residual": [d["G_train_residual"] for d in ds],
+                     "G_train_residual_iqr": iqr([d["G_train_residual"] for d in ds]),
+                     "G_iqp_iqr": iqr([d["G_iqp"] for d in ds]),
+                     "G_maxent_iqr": iqr([d["G_maxent"] for d in ds]),
+                     "maxent_train_residual_iqr": iqr([d["maxent_train_residual"] for d in ds]),
+                     "maxent_nit_max": max(d["maxent_nit"] for d in ds),
+                     "maxent_messages": sorted({d["maxent_message"] for d in ds}),
+                     "noise_floor_iqr": iqr([d["noise_floor"] for d in ds]),
+                     "D3_iqr": iqr([d["D3"] for d in ds])}
+    return st
+
+
+def verdicts(st: dict) -> dict:
+    v = {}
+    k = [f"maxent_proj/sigma_{sg:g}/N_{N}" for sg in SIGMAS for N in NS if N is not None]
+    v["K"] = {"PASS": all(st[x]["R_verdict"] != "<1" for x in k), "cells": {x: st[x]["R_verdict"] for x in k}}
+    r1 = [f"iqp/sigma_{sg:g}/N_inf" for sg in SIGMAS]
+    v["R1"] = {"PASS": all(st[x]["R_verdict"] == "<1" for x in r1), "cells": {x: st[x]["R_verdict"] for x in r1}}
+    v["P1"] = {"PASS": st["iqp4/sigma_0.2/N_inf"]["R_verdict"] == "<1"}
+    v["P2"] = {"PASS": st["mix/N_inf"]["R_verdict"] != "<1"}
+    v["F1"] = {"PASS": st["iqp/sigma_0.2/N_100000"]["R_verdict"] == "<1"
+                       and st["iqp/sigma_0.2/N_1000"]["R_verdict"] != "<1"}
+    v["F2"] = {"PASS": st["iqp4/sigma_0.2/N_100000"]["R_verdict"] == "<1"}
+    return v
+
+
+def write_table(grid_: dict, path: Path):
+    cols = ["target", "sigma", "N", "seed", "R", "G_iqp", "G_maxent", "G_uniform", "G_train_residual",
+            "G_best_restart", "G_n_restarts", "maxent_train_residual", "maxent_nit", "noise_floor", "D3",
+            "hi_order_frac", "collision_ratio_target", "clifford_dist_median_target", "mix_K", "delta",
+            "total_seconds"]
+    lines = [",".join(cols)]
+    for key in grid():
+        if key in grid_:
+            d = grid_[key]
+            lines.append(",".join("" if d.get(c) is None else str(d.get(c)) for c in cols))
+    path.write_text("\n".join(lines) + "\n")
+
+
+def make_figures(grid_: dict, st: dict, fig_dir: Path):
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    from matplotlib.ticker import FixedFormatter, FixedLocator, NullLocator
+    fig_dir.mkdir(parents=True, exist_ok=True)
+    xs = [1e3, 1e4, 1e5, N_PLOT_INF]
+    xlab = ["1e3", "1e4", "1e5", "∞"]
+    style = {"iqp": ("o", "-", "k"), "iqp4": ("s", "--", "0.3"), "maxent_proj": ("^", ":", "k"),
+             "mix": ("D", "-.", "0.45")}
+
+    def nax(ax):
+        ax.set_xscale("log")
+        ax.xaxis.set_major_locator(FixedLocator(xs))
+        ax.xaxis.set_major_formatter(FixedFormatter(xlab))
+        ax.xaxis.set_minor_locator(NullLocator())
+        ax.set_xlabel("N (samples)")
+
+    def save(fig, name):
+        fig.tight_layout()
+        fig.savefig(fig_dir / f"{name}.png", dpi=150)
+        fig.savefig(fig_dir / f"{name}.pdf")
+        plt.close(fig)
+
+    def series(t, sg, key):
+        return np.array([st[f"{cell_key(t, sg)}/N_{'inf' if N is None else N}"][key] for N in NS])
+
+    # 1. ratio_vs_N
+    fig, axs = plt.subplots(1, 2, figsize=(10, 4.4), sharey=True)
+    for ax, sg in zip(axs, SIGMAS):
+        for t in ("iqp", "iqp4", "maxent_proj", "mix"):
+            mk, ls, c = style[t]
+            q = series(t, None if t == "mix" else sg, "R_iqr")
+            lab = "mix (K=48, δ=0.99; no σ)" if t == "mix" else t
+            ax.plot(xs, q[:, 1], marker=mk, ls=ls, color=c, label=lab)
+            ax.fill_between(xs, q[:, 0], q[:, 2], color=c, alpha=0.15, lw=0)
+        ax.axhline(1.0, color="k", lw=0.8)
+        ax.set_yscale("log"); nax(ax)
+        ax.set_title(f"σ = {sg:g} (median R, IQR band; 5 seeds)", fontsize=9)
+    axs[0].set_ylabel("R = G_iqp / G_maxent3")
+    axs[0].legend(fontsize=8)
+    save(fig, "ratio_vs_N")
+
+    # 2. ratio_at_inf
+    fig, ax = plt.subplots(figsize=(8.5, 4.6))
+    labels, markers = [], ["o", "s", "^", "v", "D", "P", "X"]
+    for i, (t, sg) in enumerate(cells()):
+        key = f"{cell_key(t, sg)}/N_inf"
+        R = st[key]["R"]
+        ax.scatter(np.full(len(R), i) + np.linspace(-0.15, 0.15, len(R)), R, marker=markers[i],
+                   edgecolors="k", facecolors="none" if i % 2 else "k", s=30)
+        ax.plot([i - 0.25, i + 0.25], [st[key]["R_iqr"][1]] * 2, color="0.4", lw=2)
+        labels.append(cell_key(t, sg).replace("/sigma_", "\nσ=") + ("\nK=48, δ=0.99" if t == "mix" else ""))
+    ax.axhline(1.0, color="k", lw=0.8)
+    ax.set_xticks(range(len(labels))); ax.set_xticklabels(labels, fontsize=8)
+    ax.set_yscale("log"); ax.set_ylabel("R per seed at N = ∞ (bar = median)")
+    ax.set_title("R at N = ∞ (maxent_proj at N = ∞ is vacuous by construction, step 3)", fontsize=9)
+    save(fig, "ratio_at_inf")
+
+    # 3. noise_floor
+    fig, axs = plt.subplots(2, 4, figsize=(13, 6.2))
+    for ax, (t, sg) in zip(axs.flat, list(cells())):
+        gi, gm, nf = series(t, sg, "G_iqp_iqr"), series(t, sg, "G_maxent_iqr"), series(t, sg, "noise_floor_iqr")
+        ax.plot(xs, np.maximum(gi[:, 1], FLOOR), marker="o", ls="-", color="k", label="G_iqp")
+        ax.plot(xs, np.maximum(gm[:, 1], FLOOR), marker="s", ls="--", color="0.4", label="G_maxent3")
+        ax.plot(xs[:3], nf[:3, 1], marker="x", ls=":", color="k", label="noise floor (orders 1-3)")
+        ax.set_yscale("log"); nax(ax)
+        ax.set_title(cell_key(t, sg) + (" (K=48, δ=0.99)" if t == "mix" else ""), fontsize=9)
+    axs.flat[-1].axis("off")
+    axs.flat[0].legend(fontsize=7)
+    for ax in axs[:, 0]:
+        ax.set_ylabel("median over 5 seeds")
+    save(fig, "noise_floor")
+
+
+def report():
+    g = load_grid()
+    write_table(g, ROOT / "results" / "step4" / "table.csv")
+    st = stats(g)
+    v = verdicts(st)
+    out = {"n_instances": len(g), "verdicts": v, "stats": st}
+    (ROOT / "results" / "step4" / "verdicts.json").write_text(json.dumps(out, indent=1))
+    make_figures(g, st, ROOT / "figures" / "step4")
+    print(json.dumps(v, indent=1))
+
+
 # ---------------- CLI ----------------
 def default_out(target: str, sigma, N, seed: int) -> Path:
     cell = "none" if target == "mix" else f"sigma_{sigma:g}"
@@ -293,6 +463,7 @@ def main(argv=None):
     ap.add_argument("--calibrate-amend1", action="store_true", help="K x delta (calibration_amend1.json)")
     ap.add_argument("--all", action="store_true")
     ap.add_argument("--projection", action="store_true", help="results/step4/PROJECTION.json from the timed pair")
+    ap.add_argument("--report", action="store_true", help="table.csv, verdicts.json, figures/step4/*")
     a = ap.parse_args(argv)
 
     if a.calibrate_amend1:
@@ -301,6 +472,9 @@ def main(argv=None):
         CALIB_AMEND1_FILE.write_text(json.dumps(c, indent=1))
         print(CALIB_AMEND1_FILE)
         print(json.dumps({k: c[k] for k in ("chosen_K", "chosen_delta", "reference_D3", "D3_by_K_delta")}, indent=1))
+        return
+    if a.report:
+        report()
         return
     if a.projection:
         pr = projection()

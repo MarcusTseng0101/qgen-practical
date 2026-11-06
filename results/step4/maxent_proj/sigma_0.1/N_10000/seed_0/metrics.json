@@ -39,7 +39,7 @@
   "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH"
  ],
  "G_n_restarts": 3,
- "G_fit_seconds": 4.996081829071045,
+ "G_fit_seconds": 25.01900291442871,
  "G_best_params": [
   -0.05684905497829297,
   0.16626110016932155,
@@ -366,5 +366,5 @@
  },
  "paired_iqp_D3": 0.072754669982373,
  "pair_moment_max_abs": 3.9968028886505635e-15,
- "total_seconds": 25.255102157592773
+ "total_seconds": 137.5535182952881
 }

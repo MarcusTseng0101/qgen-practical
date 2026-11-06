@@ -64,6 +64,7 @@ advantage will be crucial."
 | Note: [notes/2026-11-05_iqp-from-limits.md](notes/2026-11-05_iqp-from-limits.md) | Design note: reverse-derive an IQP from known limits; the "completion gap" reframing; kill gates S1–S5 |
 | Note: [notes/2026-11-06_steps1-2_findings.md](notes/2026-11-06_steps1-2_findings.md) | Steps 1–2 (both killed): generic IQP not identifiable from order-≤3 moments; sign ambiguity at small σ but completion stable; exact recovery was the wrong criterion |
 | Note: [notes/2026-11-06_step3_findings.md](notes/2026-11-06_step3_findings.md) | Step 3: generic IQP completes orders 4–6 ~5× better than MaxEnt(3) at σ = 0.1–0.2 (exploratory; well-specified, N = ∞, peaked regime); fails to train at σ ≥ 0.3; paired control vacuous at N = ∞ |
+| Note: [notes/2026-11-07_step4_findings.md](notes/2026-11-07_step4_findings.md) | Step 4: all six frozen hypotheses PASS; IQP advantage survives IQP-like misspecification at σ = 0.2 (R ≈ 0.55–0.66, N ≥ 1e4) but reverses at σ = 0.1; none on a classical mixture (R ≈ 3–6, no fitted-mixture baseline); N = 1e3 is noise-dominated |
 | Note: [notes/2026-11-05_quantum-opt-community-recsys.md](notes/2026-11-05_quantum-opt-community-recsys.md) | Quantum optimization / QMC for community-based recommendation: no proven advantage (dequantized or weak baselines); supports "fair baseline decides the claim" |
 
 ## Not yet decided

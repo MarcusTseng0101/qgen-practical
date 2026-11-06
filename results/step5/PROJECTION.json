@@ -1,0 +1,29 @@
+{
+ "projected_hours": 0.19429916540781658,
+ "instances": 120,
+ "basis": "spec section 6: per-target time of the timed instance (sigma = 0.25, N = 1e4, seed 0) x its 60 instances",
+ "seconds_by_target": {
+  "iqp4": 5.386214017868042,
+  "iqp4f": 6.271735906600952
+ },
+ "instances_by_target": {
+  "iqp4": 60,
+  "iqp4f": 60
+ },
+ "per_instance": {
+  "iqp4/sigma_0.25/N_10000/seed_0": {
+   "total_seconds": 5.386214017868042,
+   "G_fit_seconds": 4.921942472457886,
+   "G_train_residual": 0.002625225354604991
+  },
+  "iqp4f/sigma_0.25/N_10000/seed_0": {
+   "total_seconds": 6.271735906600952,
+   "G_fit_seconds": 5.77594256401062,
+   "G_train_residual": 0.001882874379681256
+  }
+ },
+ "budget_hours": 1.0,
+ "over_budget": false,
+ "note": "one timed instance per target; N = inf and smaller sigma may be slower or faster. Steps 3-4 ran 1.4x-2x slower than projected on a shared machine.",
+ "projected_hours_x2_shared_machine": 0.38859833081563316
+}

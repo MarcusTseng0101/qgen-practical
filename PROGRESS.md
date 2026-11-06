@@ -318,5 +318,23 @@ and harness unchanged.
 - FM-N1: MaxEnt hit maxiter on 19/140 (finite N), residual still <= 1.4e-8. FM-N2: G fits the
   sampling noise at N = 1e3 (residual << 298 x noise floor).
 
+# Step 5 (specs/step5_iqp4_sigma_scan.md, master 53d28cf + harness v6 cbacddc; branch step5-sigma)
+
+## Build items 1-2 (2026-11-07): DONE, `check.sh --stage 14` passes; waiting for BUDGET_OK
+- Branch step5-sigma from step4-misspec, master merged (cbd0cfd). src/step1..4 untouched.
+- `src/step5/targets.py`: iqp4f (weight-<=3 angles sigma*z, the 6 weight-4 angles fixed at
+  tau*z' with tau = 0.2); iqp4 re-exported from step 4.
+- `src/step5/run.py`: one instance path (fit_instance) for both targets, mirroring step 4's
+  run_instance with its pieces imported; sigma* (log-log interpolation), sign changes, Q5 rule
+  (unnamed cases: FAIL with the reason; my reading), projection, BUDGET_OK-gated grid.
+- `tests/test_step5.py`: 14 tests (identity iqp4f(0.2) == iqp4(0.2) for 5 seeds; weight-4
+  angles = 0.2 z' at all 6 sigma; sigma* on synthetic series; Q5 undefined rule; paths).
+- Reproduction: iqp4 sigma=0.2 N=inf seed 0 equals step 4 bit for bit (R 0.4496178750620470,
+  relative difference 0; same 3 restart residuals).
+- Timing (sigma=0.25, N=1e4, seed 0): iqp4 5.4 s (G residual 2.6e-3; restarts 2.9e-3, 6.4e-3,
+  2.6e-3), iqp4f 6.3 s (G residual 1.9e-3; restarts 1.9e-3, 5.4e-3, 2.4e-3).
+- PROJECTION.json: 60 x 5.4 s + 60 x 6.3 s = 0.19 h (x2 shared machine: 0.39 h); budget 1 h,
+  no cut.
+
 ## Next
-- Step 4 is complete. Waiting for the user.
+- Waiting for BUDGET_OK (only the user creates it). The grid has not been run.

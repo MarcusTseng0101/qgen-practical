@@ -1,0 +1,4 @@
+C:\Users\tseng\qgen-practical-step1\results\step5\iqp4\sigma_0.25\N_10000\seed_0\metrics.json
+  total 5.4 s  G fit 4.9 s  G residual 2.625e-03  restarts ['2.88e-03', '6.38e-03', '2.63e-03']  maxent residual 5.82e-15 (nit 91)
+C:\Users\tseng\qgen-practical-step1\results\step5\iqp4f\sigma_0.25\N_10000\seed_0\metrics.json
+  total 6.3 s  G fit 5.8 s  G residual 1.883e-03  restarts ['1.88e-03', '5.39e-03', '2.41e-03']  maxent residual 2.05e-15 (nit 106)

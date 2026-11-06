@@ -18,6 +18,8 @@ v5 (2026-11-06), two false positives fixed:
 - Grid gates (`--all` without BUDGET_OK) apply per segment, after the git-safe and prompt-text
   exemptions, so commit messages and prompt text that mention the flag are no longer blocked.
 - Step-4 grid gate added.
+
+v6 (2026-11-07): step-5 grid gate added.
 """
 import json, os, re, sys
 
@@ -38,6 +40,7 @@ REDIR_TARGET = re.compile(r"(?<![0-9&<>-])>{1,2}\|?\s*['\"]?([^\s'\";|&<>]+)")
 GIT_SAFE = re.compile(r"^\s*git\s+(add|commit|status|diff|log|show)\b")
 PROMPT_TEXT = re.compile(r"^\s*herdr\s+agent\s+prompt\b")
 GATES = [
+    (r"step5[./\\]run(\.py)?\b.*--all", "Step-5 grid blocked: no BUDGET_OK. Write results/step5/PROJECTION.json, report it, and wait for the user."),
     (r"step4[./\\]run(\.py)?\b.*--all", "Step-4 grid blocked: no BUDGET_OK. Write results/step4/PROJECTION.json, report it, and wait for the user."),
     (r"step3[./\\]run(\.py)?\b.*--all", "Step-3 grid blocked: no BUDGET_OK. Write results/step3/PROJECTION.json, report it, and wait for the user."),
     (r"step2[./\\]sweep(\.py)?\b.*--all", "Step-2 sweep blocked: no BUDGET_OK. Write results/step2/PROJECTION.json, report it, and wait for the user."),

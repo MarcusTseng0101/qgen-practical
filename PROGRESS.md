@@ -267,5 +267,16 @@ Designed after the step 1–2 diagnostics (notes/2026-11-06_steps1-2_findings.md
   sigma=0.2 in step 3. The test (> 1e-8) passes, but at this level P1 would test training
   failure, not completion.
 
+## Pre-amendment diagnostics D1, D2 (user chose A; 2026-11-06), `diagnostics/step4_pre/SUMMARY.md`
+Blind: no G_iqp / G_maxent / R / order-4..6 error computed. src/step4, spec, calibration.json
+and harness unchanged.
+- D1 (iqp4, sigma = 0.2, seeds 0-4): truth weight-<=3 angles alone give residual 0.6-3.1;
+  warm start from them ends at 1.4e-3-5.0e-3, the same level as the best of 10 random
+  restarts (ratio 0.98-1.68; 44/50 restarts within 2x of warm). sigma_min(J) 3e-10-4e-8 at every
+  solution. The ~1e-3 floor is reached from every start; misspecification floor vs FM2 not
+  separable from these numbers.
+- D2 (mix): median D3 at delta 0.9 / 0.95 / 0.99 = 6.0e-3 / 8.3e-3 / 1.07e-2, vs the iqp
+  sigma = 0.2 reference 0.187 (~17x below even at 0.99).
+
 ## Next
-- Item 3 (two timed instances → PROJECTION.json) not started; waiting for the user.
+- Waiting for step 4 amendment 1 from the user. Item 3 not started.

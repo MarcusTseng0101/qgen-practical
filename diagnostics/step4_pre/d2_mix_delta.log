@@ -1,0 +1,8 @@
+delta  0.2: median 1.147e-07  per seed 1.08e-08 4.93e-08 3.46e-07 1.15e-07 2.17e-06   (calibration.json)
+delta  0.4: median 2.349e-05  per seed 6.20e-06 1.10e-05 8.15e-05 2.35e-05 3.06e-04   (calibration.json)
+delta  0.6: median 4.347e-04  per seed 1.96e-04 1.67e-04 1.45e-03 4.35e-04 3.57e-03   (calibration.json)
+delta  0.8: median 2.924e-03  per seed 1.64e-03 6.84e-04 8.18e-03 2.92e-03 1.45e-02   (calibration.json)
+delta  0.9: median 6.042e-03  per seed 3.47e-03 1.48e-03 1.46e-02 6.04e-03 2.22e-02
+delta 0.95: median 8.347e-03  per seed 4.73e-03 2.35e-03 1.82e-02 8.35e-03 2.54e-02
+delta 0.99: median 1.068e-02  per seed 5.88e-03 3.42e-03 2.09e-02 1.07e-02 2.68e-02
+iqp sigma=0.2 median D3 = 0.187

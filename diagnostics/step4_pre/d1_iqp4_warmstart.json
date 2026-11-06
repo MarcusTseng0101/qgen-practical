@@ -1,0 +1,425 @@
+{
+ "sigma": 0.2,
+ "seeds": [
+  {
+   "seed": 0,
+   "a_truth_w3_residual": 0.6885724378308896,
+   "b_warm_residual": 0.002488563614056585,
+   "b_warm_nit": 1384,
+   "b_warm_message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+   "b_warm_sv_min": 6.436304306228061e-09,
+   "c_restarts": [
+    {
+     "restart": 0,
+     "residual": 0.0031295315955072456,
+     "nit": 1452,
+     "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+     "sv_min": 2.042408346977342e-09
+    },
+    {
+     "restart": 1,
+     "residual": 0.0021293891959007242,
+     "nit": 1097,
+     "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+     "sv_min": 2.2860960527778278e-08
+    },
+    {
+     "restart": 2,
+     "residual": 0.0026825876739312304,
+     "nit": 1025,
+     "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+     "sv_min": 3.4947773198303414e-09
+    },
+    {
+     "restart": 3,
+     "residual": 0.0031132961432515944,
+     "nit": 1809,
+     "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+     "sv_min": 3.5627033686347992e-09
+    },
+    {
+     "restart": 4,
+     "residual": 0.0020594468621466036,
+     "nit": 1862,
+     "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+     "sv_min": 1.591664920691624e-08
+    },
+    {
+     "restart": 5,
+     "residual": 0.0019758835270559027,
+     "nit": 1847,
+     "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+     "sv_min": 2.3768661316773236e-09
+    },
+    {
+     "restart": 6,
+     "residual": 0.002537830411162879,
+     "nit": 2470,
+     "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+     "sv_min": 4.236513591551915e-09
+    },
+    {
+     "restart": 7,
+     "residual": 0.0032925689584592343,
+     "nit": 1571,
+     "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+     "sv_min": 1.2863249153833952e-08
+    },
+    {
+     "restart": 8,
+     "residual": 0.002567341916170088,
+     "nit": 1217,
+     "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+     "sv_min": 2.6910851472539272e-09
+    },
+    {
+     "restart": 9,
+     "residual": 0.00250532681093356,
+     "nit": 2338,
+     "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+     "sv_min": 6.527899522538876e-10
+    }
+   ],
+   "c_best_residual": 0.0019758835270559027,
+   "ratio_warm_over_best_random": 1.2594687793994537,
+   "n_restarts_within_2x_warm": 10,
+   "seconds": 29.933240175247192
+  },
+  {
+   "seed": 1,
+   "a_truth_w3_residual": 3.128529047680272,
+   "b_warm_residual": 0.0014382093177640065,
+   "b_warm_nit": 2838,
+   "b_warm_message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+   "b_warm_sv_min": 1.8116537790559888e-08,
+   "c_restarts": [
+    {
+     "restart": 0,
+     "residual": 0.0034936794868952016,
+     "nit": 1188,
+     "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+     "sv_min": 4.68739678242764e-09
+    },
+    {
+     "restart": 1,
+     "residual": 0.003250422247335976,
+     "nit": 1148,
+     "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+     "sv_min": 1.4238216335462776e-08
+    },
+    {
+     "restart": 2,
+     "residual": 0.0013435395356259476,
+     "nit": 2344,
+     "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+     "sv_min": 2.4949842198838913e-09
+    },
+    {
+     "restart": 3,
+     "residual": 0.0008577221554444246,
+     "nit": 2531,
+     "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+     "sv_min": 1.2159513411542612e-08
+    },
+    {
+     "restart": 4,
+     "residual": 0.0015307413460793752,
+     "nit": 1874,
+     "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+     "sv_min": 2.84165625457691e-09
+    },
+    {
+     "restart": 5,
+     "residual": 0.0023357237338101676,
+     "nit": 1319,
+     "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+     "sv_min": 8.546373727050513e-09
+    },
+    {
+     "restart": 6,
+     "residual": 0.0013785705159387515,
+     "nit": 1500,
+     "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+     "sv_min": 3.5804761756578704e-08
+    },
+    {
+     "restart": 7,
+     "residual": 0.0015154166274420479,
+     "nit": 1281,
+     "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+     "sv_min": 8.534016416448024e-09
+    },
+    {
+     "restart": 8,
+     "residual": 0.0020540933622811286,
+     "nit": 1828,
+     "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+     "sv_min": 1.3247925619712966e-08
+    },
+    {
+     "restart": 9,
+     "residual": 0.0023631115640754203,
+     "nit": 1574,
+     "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+     "sv_min": 6.109974593985477e-09
+    }
+   ],
+   "c_best_residual": 0.0008577221554444246,
+   "ratio_warm_over_best_random": 1.6767776238901109,
+   "n_restarts_within_2x_warm": 8,
+   "seconds": 29.44451904296875
+  },
+  {
+   "seed": 2,
+   "a_truth_w3_residual": 0.6409182448156568,
+   "b_warm_residual": 0.0016232900727592126,
+   "b_warm_nit": 1427,
+   "b_warm_message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+   "b_warm_sv_min": 1.169954875572133e-09,
+   "c_restarts": [
+    {
+     "restart": 0,
+     "residual": 0.0015203953554604101,
+     "nit": 2462,
+     "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+     "sv_min": 1.5661884711321194e-08
+    },
+    {
+     "restart": 1,
+     "residual": 0.0037088116078911122,
+     "nit": 1329,
+     "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+     "sv_min": 3.6762668276835017e-10
+    },
+    {
+     "restart": 2,
+     "residual": 0.0016075896415278328,
+     "nit": 1715,
+     "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+     "sv_min": 8.089938120557971e-09
+    },
+    {
+     "restart": 3,
+     "residual": 0.0021681142911738477,
+     "nit": 2018,
+     "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+     "sv_min": 2.2058523271524252e-08
+    },
+    {
+     "restart": 4,
+     "residual": 0.0012498146988220895,
+     "nit": 2231,
+     "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+     "sv_min": 9.636082040666302e-09
+    },
+    {
+     "restart": 5,
+     "residual": 0.003934359343536055,
+     "nit": 1094,
+     "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+     "sv_min": 1.4326808588779363e-09
+    },
+    {
+     "restart": 6,
+     "residual": 0.004285862619129695,
+     "nit": 968,
+     "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+     "sv_min": 3.605931328800011e-09
+    },
+    {
+     "restart": 7,
+     "residual": 0.0023521398376197167,
+     "nit": 1333,
+     "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+     "sv_min": 7.49219396179685e-09
+    },
+    {
+     "restart": 8,
+     "residual": 0.002306180470041537,
+     "nit": 2060,
+     "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+     "sv_min": 3.977338645213905e-08
+    },
+    {
+     "restart": 9,
+     "residual": 0.0016919846287945378,
+     "nit": 1844,
+     "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+     "sv_min": 3.0359832064012246e-08
+    }
+   ],
+   "c_best_residual": 0.0012498146988220895,
+   "ratio_warm_over_best_random": 1.2988245971895767,
+   "n_restarts_within_2x_warm": 7,
+   "seconds": 27.974098682403564
+  },
+  {
+   "seed": 3,
+   "a_truth_w3_residual": 1.2553553691948236,
+   "b_warm_residual": 0.0049605046750817875,
+   "b_warm_nit": 973,
+   "b_warm_message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+   "b_warm_sv_min": 9.609924650482714e-09,
+   "c_restarts": [
+    {
+     "restart": 0,
+     "residual": 0.004438951871915945,
+     "nit": 2078,
+     "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+     "sv_min": 1.1648979858510568e-08
+    },
+    {
+     "restart": 1,
+     "residual": 0.005286795826119495,
+     "nit": 1539,
+     "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+     "sv_min": 1.1919728584734623e-09
+    },
+    {
+     "restart": 2,
+     "residual": 0.005266244433138699,
+     "nit": 1300,
+     "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+     "sv_min": 1.2168076870689924e-08
+    },
+    {
+     "restart": 3,
+     "residual": 0.004769984397650062,
+     "nit": 1329,
+     "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+     "sv_min": 2.0537179860122728e-08
+    },
+    {
+     "restart": 4,
+     "residual": 0.004718222737013219,
+     "nit": 1662,
+     "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+     "sv_min": 5.606100597291001e-09
+    },
+    {
+     "restart": 5,
+     "residual": 0.004121408039792633,
+     "nit": 1772,
+     "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+     "sv_min": 2.42160333248244e-08
+    },
+    {
+     "restart": 6,
+     "residual": 0.004024883060122174,
+     "nit": 1006,
+     "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+     "sv_min": 8.999785722990523e-09
+    },
+    {
+     "restart": 7,
+     "residual": 0.0051350867979102245,
+     "nit": 1405,
+     "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+     "sv_min": 1.1019585833710051e-08
+    },
+    {
+     "restart": 8,
+     "residual": 0.004090162791799877,
+     "nit": 1867,
+     "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+     "sv_min": 1.864824613690839e-08
+    },
+    {
+     "restart": 9,
+     "residual": 0.004632087719880563,
+     "nit": 1334,
+     "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+     "sv_min": 7.18183545703291e-09
+    }
+   ],
+   "c_best_residual": 0.004024883060122174,
+   "ratio_warm_over_best_random": 1.2324593288758092,
+   "n_restarts_within_2x_warm": 10,
+   "seconds": 25.334440231323242
+  },
+  {
+   "seed": 4,
+   "a_truth_w3_residual": 0.7982762138996911,
+   "b_warm_residual": 0.00208043053105632,
+   "b_warm_nit": 1178,
+   "b_warm_message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+   "b_warm_sv_min": 2.9748231900747654e-09,
+   "c_restarts": [
+    {
+     "restart": 0,
+     "residual": 0.005931191158871263,
+     "nit": 1271,
+     "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+     "sv_min": 5.503628458238832e-09
+    },
+    {
+     "restart": 1,
+     "residual": 0.002392157035303239,
+     "nit": 2191,
+     "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+     "sv_min": 2.6047297655429932e-09
+    },
+    {
+     "restart": 2,
+     "residual": 0.003493652524944699,
+     "nit": 1251,
+     "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+     "sv_min": 8.963212631117974e-09
+    },
+    {
+     "restart": 3,
+     "residual": 0.0034221401929222448,
+     "nit": 1936,
+     "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+     "sv_min": 1.716455735180504e-08
+    },
+    {
+     "restart": 4,
+     "residual": 0.003601935978414514,
+     "nit": 1997,
+     "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+     "sv_min": 9.804227919494683e-09
+    },
+    {
+     "restart": 5,
+     "residual": 0.0033215891360520032,
+     "nit": 1565,
+     "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+     "sv_min": 1.1434145216961689e-08
+    },
+    {
+     "restart": 6,
+     "residual": 0.002120147128538802,
+     "nit": 2568,
+     "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+     "sv_min": 8.306848209487392e-09
+    },
+    {
+     "restart": 7,
+     "residual": 0.003531102762509763,
+     "nit": 1174,
+     "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+     "sv_min": 1.2121090636878247e-08
+    },
+    {
+     "restart": 8,
+     "residual": 0.002120147128547747,
+     "nit": 2392,
+     "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+     "sv_min": 1.6111389596830114e-08
+    },
+    {
+     "restart": 9,
+     "residual": 0.0040338811802196955,
+     "nit": 1439,
+     "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+     "sv_min": 3.2984960084877497e-10
+    }
+   ],
+   "c_best_residual": 0.002120147128538802,
+   "ratio_warm_over_best_random": 0.9812670559755657,
+   "n_restarts_within_2x_warm": 9,
+   "seconds": 28.378199100494385
+  }
+ ]
+}

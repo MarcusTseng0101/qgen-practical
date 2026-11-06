@@ -336,5 +336,11 @@ and harness unchanged.
 - PROJECTION.json: 60 x 5.4 s + 60 x 6.3 s = 0.19 h (x2 shared machine: 0.39 h); budget 1 h,
   no cut.
 
+- Step 5 amendment 1 (master f6a3ca7, merged): Q5's two unnamed cases are FAIL. run.py's
+  q5_verdict now follows it, with case 1 (sigma*(inf) undefined) checked FIRST, so it FAILs even
+  when R >= 1 everywhere at 1e4 (my earlier order would have PASSed that). Each verdict records
+  the rule it used (spec section 3 or amendment 1 case 1/2); the SUMMARY must cite the amendment
+  next to Q5. 14 tests pass.
+
 ## Next
 - Waiting for BUDGET_OK (only the user creates it). The grid has not been run.

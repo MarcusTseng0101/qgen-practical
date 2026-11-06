@@ -64,12 +64,16 @@ def test_q5_undefined_sigma_star_rule():
     assert q5_verdict(0.16, 0.18, [])["PASS"] is True
     assert q5_verdict(0.16, 0.15, [])["PASS"] is False
     assert q5_verdict(0.16, 0.16, [])["PASS"] is True
-    # cases the spec does not name: FAIL with a reason
-    r = q5_verdict(None, 0.18, [])
-    assert r["PASS"] is False and "not named" in r["reason"]
-    r = q5_verdict(0.16, None, [0.5, 0.6, 1.2, 2, 3, 4])
-    assert r["PASS"] is False and "not named" in r["reason"]
-    assert sigma_star(sig, [0.5, 0.6, 1.2, 2, 3, 4]) is None
+    # specs/step5_amendment1.md case 1: sigma*(inf) undefined -> FAIL whatever sigma*(1e4) is,
+    # including when R >= 1 everywhere at 1e4 (case 1 takes precedence)
+    for star_1e4, meds in ((0.18, []), (None, [3, 2, 1.5, 1.2, 1.1, 1.0]), (None, [0.5] * 6)):
+        r = q5_verdict(None, star_1e4, meds)
+        assert r["PASS"] is False and "amendment1" in r["rule"] and "case 1" in r["rule"]
+    # amendment 1 case 2: sigma*(1e4) undefined with a sign change (upward crossing only) -> FAIL
+    up = [0.5, 0.6, 1.2, 2, 3, 4]
+    assert sigma_star(sig, up) is None and sign_changes(up) == 1
+    r = q5_verdict(0.16, None, up)
+    assert r["PASS"] is False and "case 2" in r["rule"]
 
 
 def test_paths():

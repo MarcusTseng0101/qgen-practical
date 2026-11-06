@@ -104,20 +104,29 @@ def sigma_star(sigmas, meds):
     return None
 
 
+AMEND1 = "specs/step5_amendment1.md"
+
+
 def q5_verdict(star_inf, star_1e4, meds_1e4) -> dict:
-    """Q5: sigma*(N = 1e4) >= sigma*(N = inf). If sigma*(1e4) is undefined because R >= 1
-    everywhere, PASS; because R < 1 everywhere, FAIL. Cases the spec does not name (my reading,
-    reported as such): sigma*(inf) undefined while sigma*(1e4) is defined, or sigma*(1e4)
-    undefined with a mixed sign pattern -> FAIL with the reason."""
+    """Q5: sigma*(iqp4, N = 1e4) >= sigma*(iqp4, N = inf). Spec section 3 plus
+    specs/step5_amendment1.md (approved before the grid ran), in this order:
+      1. sigma*(N = inf) undefined -> FAIL, whatever sigma*(1e4) is (amendment 1, case 1);
+      2. sigma*(1e4) undefined, R >= 1 everywhere at 1e4 -> PASS (spec);
+      3. sigma*(1e4) undefined, R < 1 everywhere at 1e4 -> FAIL (spec);
+      4. sigma*(1e4) undefined, median R - 1 changes sign on the grid -> FAIL (amendment 1, case 2);
+      5. both defined -> PASS iff sigma*(1e4) >= sigma*(inf) (spec)."""
+    if star_inf is None:
+        return {"PASS": False, "rule": f"{AMEND1}, case 1",
+                "reason": "sigma*(N = inf) undefined: no reference for the comparison"}
     if star_1e4 is None:
         if all(m >= 1 for m in meds_1e4):
-            return {"PASS": True, "reason": "sigma*(1e4) undefined: R >= 1 everywhere"}
+            return {"PASS": True, "rule": "spec section 3", "reason": "sigma*(1e4) undefined: R >= 1 everywhere"}
         if all(m < 1 for m in meds_1e4):
-            return {"PASS": False, "reason": "sigma*(1e4) undefined: R < 1 everywhere"}
-        return {"PASS": False, "reason": "sigma*(1e4) undefined with mixed signs (case not named in the spec)"}
-    if star_inf is None:
-        return {"PASS": False, "reason": "sigma*(inf) undefined (case not named in the spec)"}
-    return {"PASS": star_1e4 >= star_inf, "reason": f"sigma*(1e4) = {star_1e4:.4g} vs sigma*(inf) = {star_inf:.4g}"}
+            return {"PASS": False, "rule": "spec section 3", "reason": "sigma*(1e4) undefined: R < 1 everywhere"}
+        return {"PASS": False, "rule": f"{AMEND1}, case 2",
+                "reason": "sigma*(1e4) undefined but median R - 1 changes sign on the grid"}
+    return {"PASS": star_1e4 >= star_inf, "rule": "spec section 3",
+            "reason": f"sigma*(1e4) = {star_1e4:.4g} vs sigma*(inf) = {star_inf:.4g}"}
 
 
 # ---------------- CLI / IO ----------------

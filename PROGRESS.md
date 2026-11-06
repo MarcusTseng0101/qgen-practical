@@ -342,5 +342,15 @@ and harness unchanged.
   the rule it used (spec section 3 or amendment 1 case 1/2); the SUMMARY must cite the amendment
   next to Q5. 14 tests pass.
 
+## Build item 3 (2026-11-07): DONE, `check.sh --stage 15` passes
+- Full grid 120/120, no cut (13.7 min; projection 0.19 h). `python -m src.step5.run --report`
+  → table.csv, verdicts.json (sigma* and sign changes per target x N), figures/step5/{R_vs_sigma, G_vs_sigma}.
+- `results/step5/SUMMARY.md`: Q0 PASS; Q1 PASS (sigma*(iqp4, inf) = 0.160, 1 sign change);
+  Q2 PASS (G_iqp max/min 2.30, G_maxent 0.25/0.1 = 21.5); Q3 FAIL (sigma = 0.25: R 0.891
+  [0.836, 1.14], undecided; no FM2); Q4 PASS (low confidence; margins 5-6% at 0.15/0.175);
+  Q5 FAIL (sigma*(1e4) = 0.151 < 0.160; spec rule, amendment 1 cited, its cases not triggered).
+- MaxEnt maxiter: 0/120. Reproduction of step 4 (sigma 0.1/0.2, N = inf, 5 seeds) checked by stage 15.
+- Exploratory: R is lowest at sigma = 0.2 and rises again at 0.25 for every target x N.
+
 ## Next
-- Waiting for BUDGET_OK (only the user creates it). The grid has not been run.
+- Step 5 is complete. Waiting for the user.

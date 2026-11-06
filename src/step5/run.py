@@ -5,6 +5,7 @@ Designed after step 4 (notes/2026-11-07_step4_findings.md).
   python -m src.step5.run --target iqp4 --sigma 0.2 --N inf --seed 0
   python -m src.step5.run --projection      (results/step5/PROJECTION.json from the timed pair)
   python -m src.step5.run --all             (refuses to start without BUDGET_OK)
+  python -m src.step5.run --report          (table.csv, verdicts.json, figures/step5/*)
 
 Both targets go through ONE code path (fit_instance), which mirrors step 4's run_instance and
 reuses its pieces by import: training_moments, noise_floor (src/step4/run), fit_restarts
@@ -175,6 +176,184 @@ def projection() -> dict:
     return out
 
 
+# ---------------- report (build order item 3) ----------------
+Q1_BAND = (0.15, 0.20)
+POWER_K = 3.8          # spec section 1: the reference power law R ~ sigma^-k through sigma = 0.1
+
+
+def load_grid() -> dict:
+    out = {}
+    for t, sg, N, s in grid():
+        f = default_out(t, sg, N, s) / "metrics.json"
+        if f.exists():
+            out[(t, sg, N, s)] = json.loads(f.read_text())
+    return out
+
+
+def iqr(x):
+    q1, med, q3 = np.percentile(np.asarray(x, dtype=np.float64), [25, 50, 75])
+    return float(q1), float(med), float(q3)
+
+
+def verdict_at(x) -> str:
+    """Spec section 2: "<1" = IQR entirely below 1; ">=1" = entirely at or above 1."""
+    q1, _, q3 = iqr(x)
+    return "<1" if q3 < 1 else (">=1" if q1 >= 1 else "undecided")
+
+
+def nkey(N):
+    return "inf" if N is None else str(int(N))
+
+
+def stats(g: dict) -> dict:
+    st = {}
+    for t in TARGETS:
+        for N in NS:
+            for sg in SIGMAS:
+                ds = [g[(t, sg, N, s)] for s in SEEDS if (t, sg, N, s) in g]
+                if not ds:
+                    continue
+                st[f"{t}/N_{nkey(N)}/sigma_{sg:g}"] = {
+                    "n": len(ds), "R": [d["R"] for d in ds], "R_iqr": iqr([d["R"] for d in ds]),
+                    "R_verdict": verdict_at([d["R"] for d in ds]),
+                    "G_train_residual": [d["G_train_residual"] for d in ds],
+                    "G_train_residual_iqr": iqr([d["G_train_residual"] for d in ds]),
+                    "G_restart_residual_max": max(max(d["G_restart_residuals"]) for d in ds),
+                    "G_iqp_iqr": iqr([d["G_iqp"] for d in ds]),
+                    "G_maxent_iqr": iqr([d["G_maxent"] for d in ds]),
+                    "D3_iqr": iqr([d["D3"] for d in ds]),
+                    "maxent_train_residual_max": max(d["maxent_train_residual"] for d in ds),
+                    "maxent_maxiter_hits": sum(1 for d in ds if d["maxent_nit"] >= 20000),
+                    "maxent_messages": sorted({d["maxent_message"] for d in ds})}
+    return st
+
+
+def crossings(st: dict) -> dict:
+    out = {}
+    for t in TARGETS:
+        for N in NS:
+            meds = [st[f"{t}/N_{nkey(N)}/sigma_{sg:g}"]["R_iqr"][1] for sg in SIGMAS
+                    if f"{t}/N_{nkey(N)}/sigma_{sg:g}" in st]
+            if len(meds) != len(SIGMAS):
+                continue
+            out[f"{t}/N_{nkey(N)}"] = {"sigma_star": sigma_star(list(SIGMAS), meds),
+                                       "sign_changes": sign_changes(meds), "median_R": meds}
+    return out
+
+
+def verdicts(st: dict, cr: dict) -> dict:
+    v = {}
+    a, b = st["iqp4/N_inf/sigma_0.1"], st["iqp4/N_inf/sigma_0.2"]
+    v["Q0"] = {"PASS": a["R_verdict"] == ">=1" and b["R_verdict"] == "<1",
+               "sigma_0.1": a["R_verdict"], "sigma_0.2": b["R_verdict"]}
+    c = cr["iqp4/N_inf"]
+    s = c["sigma_star"]
+    v["Q1"] = {"PASS": s is not None and c["sign_changes"] == 1 and Q1_BAND[0] <= s < Q1_BAND[1],
+               "sigma_star": s, "sign_changes": c["sign_changes"]}
+    gi = [st[f"iqp4/N_inf/sigma_{sg:g}"]["G_iqp_iqr"][1] for sg in SIGMAS]
+    gm01 = st["iqp4/N_inf/sigma_0.1"]["G_maxent_iqr"][1]
+    gm25 = st["iqp4/N_inf/sigma_0.25"]["G_maxent_iqr"][1]
+    v["Q2"] = {"PASS": max(gi) / min(gi) <= 3 and gm25 / gm01 >= 10,
+               "G_iqp_max_over_min": max(gi) / min(gi), "G_maxent_0.25_over_0.1": gm25 / gm01}
+    v["Q3"] = {"PASS": st["iqp4/N_inf/sigma_0.25"]["R_verdict"] == "<1",
+               "verdict": st["iqp4/N_inf/sigma_0.25"]["R_verdict"]}
+    cmp = {f"{sg:g}": (st[f"iqp4f/N_inf/sigma_{sg:g}"]["R_iqr"][1], st[f"iqp4/N_inf/sigma_{sg:g}"]["R_iqr"][1])
+           for sg in (0.1, 0.125, 0.15, 0.175)}
+    v["Q4"] = {"PASS": all(f >= i for f, i in cmp.values()), "median_R_iqp4f_vs_iqp4": cmp}
+    if "iqp4/N_10000" in cr:
+        q5 = q5_verdict(c["sigma_star"], cr["iqp4/N_10000"]["sigma_star"], cr["iqp4/N_10000"]["median_R"])
+    else:
+        q5 = {"PASS": False, "rule": "spec section 6", "reason": "FAIL-untested: N = 1e4 cut"}
+    v["Q5"] = q5
+    return v
+
+
+def write_table(g: dict, path: Path):
+    cols = ["target", "sigma", "N", "seed", "tau", "R", "G_iqp", "G_maxent", "G_uniform", "G_train_residual",
+            "G_best_restart", "G_n_restarts", "maxent_train_residual", "maxent_nit", "noise_floor", "D3",
+            "hi_order_frac", "collision_ratio_target", "clifford_dist_median_target", "total_seconds"]
+    lines = [",".join(cols)]
+    for key in grid():
+        if key in g:
+            d = g[key]
+            lines.append(",".join("" if d.get(c) is None else str(d.get(c)) for c in cols))
+    path.write_text("\n".join(lines) + "\n")
+
+
+def make_figures(st: dict, fig_dir: Path):
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    from matplotlib.ticker import FixedFormatter, FixedLocator, NullLocator
+    fig_dir.mkdir(parents=True, exist_ok=True)
+    sg = np.array(SIGMAS)
+
+    def sax(ax):
+        ax.set_xscale("log")
+        ax.xaxis.set_major_locator(FixedLocator(SIGMAS))
+        ax.xaxis.set_major_formatter(FixedFormatter([f"{x:g}" for x in SIGMAS]))
+        ax.xaxis.set_minor_locator(NullLocator())
+        ax.set_xlabel("σ (weight-≤3 angle scale)")
+
+    def save(fig, name):
+        fig.tight_layout()
+        fig.savefig(fig_dir / f"{name}.png", dpi=150)
+        fig.savefig(fig_dir / f"{name}.pdf")
+        plt.close(fig)
+
+    def ser(t, N, key):
+        return np.array([st[f"{t}/N_{nkey(N)}/sigma_{x:g}"][key] for x in SIGMAS])
+
+    # R_vs_sigma
+    fig, ax = plt.subplots(figsize=(7.2, 5.0))
+    ax.axvspan(*Q1_BAND, facecolor="none", hatch="//", edgecolor="0.6", lw=0, label="Q1 band [0.15, 0.20)")
+    mk = {"iqp4": "o", "iqp4f": "s"}
+    col = {"iqp4": "k", "iqp4f": "0.45"}
+    for t in TARGETS:
+        for N, ls in ((None, "-"), (10000, "--")):
+            q = ser(t, N, "R_iqr")
+            ax.plot(sg, q[:, 1], marker=mk[t], ls=ls, color=col[t],
+                    mfc=col[t] if N is None else "white", label=f"{t}, N = {'∞' if N is None else '1e4'}")
+            ax.fill_between(sg, q[:, 0], q[:, 2], color=col[t], alpha=0.10, lw=0)
+    r01 = ser("iqp4", None, "R_iqr")[0, 1]
+    xx = np.linspace(SIGMAS[0], SIGMAS[-1], 50)
+    ax.plot(xx, r01 * (xx / 0.1) ** -POWER_K, ls=":", color="k", lw=1, label=f"σ^-{POWER_K} through σ = 0.1 (iqp4, N = ∞)")
+    ax.axhline(1.0, color="k", lw=0.8)
+    ax.set_yscale("log"); sax(ax)
+    ax.set_ylabel("R = G_iqp / G_maxent3 (median, IQR band; 5 seeds)")
+    ax.legend(fontsize=7)
+    save(fig, "R_vs_sigma")
+
+    # G_vs_sigma
+    fig, axs = plt.subplots(1, 2, figsize=(10, 4.4), sharey=True)
+    for ax, t in zip(axs, TARGETS):
+        for key, m, ls, c, lab in (("G_iqp_iqr", "o", "-", "k", "G_iqp (orders 4-6)"),
+                                   ("G_maxent_iqr", "s", "--", "0.4", "G_maxent3 (orders 4-6)"),
+                                   ("G_train_residual_iqr", "^", ":", "k", "G training residual (orders ≤3, sum)")):
+            q = ser(t, None, key)
+            ax.plot(sg, q[:, 1], marker=m, ls=ls, color=c, label=lab)
+            ax.fill_between(sg, q[:, 0], q[:, 2], color=c, alpha=0.10, lw=0)
+        ax.set_yscale("log"); sax(ax)
+        ax.set_title(f"{t}, N = ∞" + (" (weight-4 angles fixed at 0.2 z')" if t == "iqp4f" else ""), fontsize=9)
+    axs[0].set_ylabel("median over 5 seeds (IQR band)")
+    axs[0].legend(fontsize=7)
+    save(fig, "G_vs_sigma")
+
+
+def report():
+    g = load_grid()
+    write_table(g, ROOT / "results" / "step5" / "table.csv")
+    st = stats(g)
+    cr = crossings(st)
+    v = verdicts(st, cr)
+    out = {"n_instances": len(g), "verdicts": v, "crossings": cr, "stats": st,
+           "maxent_maxiter_hits_total": sum(x["maxent_maxiter_hits"] for x in st.values())}
+    (ROOT / "results" / "step5" / "verdicts.json").write_text(json.dumps(out, indent=1))
+    make_figures(st, ROOT / "figures" / "step5")
+    print(json.dumps({"verdicts": v, "crossings": {k: {kk: vv for kk, vv in c.items()} for k, c in cr.items()}},
+                     indent=1))
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument("--target", choices=TARGETS)
@@ -183,8 +362,12 @@ def main(argv=None):
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--out", default=None)
     ap.add_argument("--projection", action="store_true")
+    ap.add_argument("--report", action="store_true", help="table.csv, verdicts.json, figures/step5/*")
     ap.add_argument("--all", action="store_true")
     a = ap.parse_args(argv)
+    if a.report:
+        report()
+        return
     if a.projection:
         pr = projection()
         f = ROOT / "results" / "step5" / "PROJECTION.json"

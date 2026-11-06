@@ -1,0 +1,22 @@
+{
+ "projected_hours": 0.27310657898585,
+ "instances": 140,
+ "basis": "spec rule: the slower of the two timed instances (iqp4 sigma=0.2 N=1e4 seed 0; mix amend-1 parameters N=1e4 seed 0) x 140",
+ "slowest_instance_seconds": 7.022740602493286,
+ "per_instance": {
+  "iqp4/sigma_0.2/N_10000/seed_0": {
+   "total_seconds": 7.022740602493286,
+   "G_fit_seconds": 6.333028078079224,
+   "G_train_residual": 0.0028983587081918595
+  },
+  "mix/none/N_10000/seed_0": {
+   "total_seconds": 1.9172852039337158,
+   "G_fit_seconds": 1.6187984943389893,
+   "G_train_residual": 0.02356015725592716
+  }
+ },
+ "step3_underestimate": "step 3 ran 1.43x slower than its projection (118 min actual vs 1.38 h projected)",
+ "projected_hours_x_step3_slowdown": 0.3892098589411872,
+ "caution_step3_based_hours": 3.34947352276908,
+ "caution_basis": "80 iqp/maxent_proj instances x 145 s (median step-3 instance time at sigma 0.1/0.2, which also includes 10 O restarts) + the rest x 7.0 s; untimed in step 4, an assumption"
+}

@@ -278,5 +278,23 @@ and harness unchanged.
 - D2 (mix): median D3 at delta 0.9 / 0.95 / 0.99 = 6.0e-3 / 8.3e-3 / 1.07e-2, vs the iqp
   sigma = 0.2 reference 0.187 (~17x below even at 0.99).
 
+## Amendment 1 (specs/step4_amendment1.md, approved; master merged 2026-11-06)
+- mix: K_MIX is a parameter (K = 3 bit-identical to the original draws; tested).
+  `results/step4/calibration_amend1.json` (D3 only): reference = median D3 of iqp at
+  sigma = 0.1 from the step-3 table = 0.0462; rule (closest on log scale) → **K = 48,
+  delta = 0.99** (median D3 0.0385). calibration.json unchanged. The grid's mix reads
+  calibration_amend1.json (tested). 13 tests pass; check.sh --stage 10 passes (2ecbd53).
+
+## Build item 3 (2026-11-06): timing + PROJECTION.json DONE, waiting for the budget-approval file
+- iqp4 sigma=0.2 N=1e4 seed 0: 7.0 s (G fit 6.3 s); G residual 2.9e-3 (restarts 3.2e-3,
+  2.9e-3, 3.6e-3); MaxEnt residual 8.2e-15; noise floor 9.2e-5.
+- mix (K=48, delta=0.99) N=1e4 seed 0: 1.9 s (G fit 1.6 s); G residual 2.4e-2 (restarts
+  3.7e-2, 2.9e-2, 2.4e-2); MaxEnt residual 9.6e-16; noise floor 1.0e-4.
+- R is in the two metrics.json files only (not reported, per the user).
+- PROJECTION.json: spec rule 140 x 7.0 s = 0.27 h (x1.43 step-3 slowdown: 0.39 h). Caution
+  (assumption, untimed): step-3 iqp/maxent_proj instances at sigma 0.1/0.2, N = inf took
+  ~145 s each; if the 80 iqp/maxent_proj instances cost that, 3.3 h (over the 3 h cut line).
+- `python -m src.step4.run --projection` writes PROJECTION.json; check.sh --stage 11 passes.
+
 ## Next
-- Waiting for step 4 amendment 1 from the user. Item 3 not started.
+- Waiting for the budget-approval file. The grid has not been run.

@@ -1,0 +1,4 @@
+C:\Users\tseng\qgen-practical-step1\results\step4\iqp4\sigma_0.2\N_10000\seed_0\metrics.json
+  total 7.0 s  G fit 6.3 s  G residual 2.898e-03  restarts ['3.18e-03', '2.90e-03', '3.58e-03']  maxent residual 8.167e-15 (nit 193)  noise floor 9.20e-05
+C:\Users\tseng\qgen-practical-step1\results\step4\mix\none\N_10000\seed_0\metrics.json
+  total 1.9 s  G fit 1.6 s  G residual 2.356e-02  restarts ['3.73e-02', '2.85e-02', '2.36e-02']  maxent residual 9.602e-16 (nit 26)  noise floor 9.98e-05

@@ -207,6 +207,44 @@ def run_instance(target: str, sigma, N, seed: int, n: int = N_BITS, delta=None,
     return out
 
 
+# ---------------- budget projection (build order item 3) ----------------
+TIMED = (("iqp4", 0.2, 10000, 0), ("mix", None, 10000, 0))
+STEP3_SLOWDOWN = 118.0 / (1.38 * 60)    # step 3: 118 min actual vs 1.38 h projected (~1.4x)
+
+
+def projection() -> dict:
+    per = {}
+    for t, sg, N, s in TIMED:
+        d = json.loads((default_out(t, sg, N, s) / "metrics.json").read_text())
+        per[f"{t}/{'none' if sg is None else f'sigma_{sg:g}'}/N_{N}/seed_{s}"] = {
+            "total_seconds": d["total_seconds"], "G_fit_seconds": d["G_fit_seconds"],
+            "G_train_residual": d["G_train_residual"]}
+    slow = max(v["total_seconds"] for v in per.values())
+    n_inst = sum(1 for _ in grid())
+    out = {"projected_hours": n_inst * slow / 3600.0, "instances": n_inst,
+           "basis": "spec rule: the slower of the two timed instances (iqp4 sigma=0.2 N=1e4 seed 0; "
+                    "mix amend-1 parameters N=1e4 seed 0) x 140",
+           "slowest_instance_seconds": slow, "per_instance": per,
+           "step3_underestimate": f"step 3 ran {STEP3_SLOWDOWN:.2f}x slower than its projection "
+                                  "(118 min actual vs 1.38 h projected)",
+           "projected_hours_x_step3_slowdown": n_inst * slow / 3600.0 * STEP3_SLOWDOWN}
+    # Not the spec's basis (a caution): the two timed instances are fast (moments with a high
+    # residual floor). In step 3 the same G (3 restarts) on iqp / maxent_proj at sigma = 0.1-0.2,
+    # N = inf, took ~145 s per instance (median total, results/step3/table.csv). If the 80
+    # iqp / maxent_proj instances cost that and the other 60 cost the slower timed instance:
+    s3 = STEP3_TABLE.read_text().strip().splitlines()
+    cols = s3[0].split(",")
+    rows = [dict(zip(cols, l.split(","))) for l in s3[1:]]
+    t3 = [float(r["total_seconds"]) for r in rows if float(r["sigma"]) in SIGMAS]
+    med3 = float(np.median(t3))
+    n_like3 = sum(1 for t, *_ in grid() if t in ("iqp", "maxent_proj"))
+    out["caution_step3_based_hours"] = (n_like3 * med3 + (n_inst - n_like3) * slow) / 3600.0
+    out["caution_basis"] = (f"{n_like3} iqp/maxent_proj instances x {med3:.0f} s (median step-3 instance "
+                            f"time at sigma 0.1/0.2, which also includes 10 O restarts) + the rest x {slow:.1f} s; "
+                            "untimed in step 4, an assumption")
+    return out
+
+
 # ---------------- CLI ----------------
 def default_out(target: str, sigma, N, seed: int) -> Path:
     cell = "none" if target == "mix" else f"sigma_{sigma:g}"
@@ -242,6 +280,7 @@ def main(argv=None):
     ap.add_argument("--calibrate", action="store_true", help="original delta rule (calibration.json)")
     ap.add_argument("--calibrate-amend1", action="store_true", help="K x delta (calibration_amend1.json)")
     ap.add_argument("--all", action="store_true")
+    ap.add_argument("--projection", action="store_true", help="results/step4/PROJECTION.json from the timed pair")
     a = ap.parse_args(argv)
 
     if a.calibrate_amend1:
@@ -250,6 +289,13 @@ def main(argv=None):
         CALIB_AMEND1_FILE.write_text(json.dumps(c, indent=1))
         print(CALIB_AMEND1_FILE)
         print(json.dumps({k: c[k] for k in ("chosen_K", "chosen_delta", "reference_D3", "D3_by_K_delta")}, indent=1))
+        return
+    if a.projection:
+        pr = projection()
+        f = ROOT / "results" / "step4" / "PROJECTION.json"
+        f.write_text(json.dumps(pr, indent=1))
+        print(f)
+        print(json.dumps(pr, indent=1))
         return
     if a.calibrate:
         c = calibrate()

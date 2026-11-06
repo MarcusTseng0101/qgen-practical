@@ -246,3 +246,26 @@ Designed after the step 1–2 diagnostics (notes/2026-11-06_steps1-2_findings.md
 - n = 12; target angle scale 0.4; init scale 0.05; 10 restarts; MaxEnt ridge 1e-8; levels 4–6.
 - L-BFGS-B options (both models): maxiter 20000, maxfun 40000, ftol 1e-16, maxcor 20;
   gtol 1e-13 (IQP) / 1e-12 (MaxEnt). scipy's ftol is effectively absolute once L < 1.
+
+# Step 4 (specs/step4_misspec_finite_n.md, master fe7d058 + harness v5 ceeef36; branch step4-misspec)
+
+## Build items 1-2 (2026-11-06): DONE, `check.sh --stage 10` passes
+- master merged into step3-ratio (e231798), then `git switch -c step4-misspec`.
+- `src/step4/targets.py`: iqp4 (iqp + 6 weight-4 generators, supports then z' from
+  default_rng(4000+s), angles sigma*z'), mix (K = 3 product-Bernoulli, from default_rng(5000+s):
+  Dirichlet weights then u; the same (w, u) for every delta), stub fit_mixture_moments.
+- `src/step4/run.py`: targets, training moments (exact or from sample_indices), noise floor,
+  delta calibration, run_instance (G 3 restarts via step 3's fit_restarts, MaxEnt(3) frozen
+  ridge), CLI, grid flag gated by the budget-approval file. Paths/keys as check.sh v5.
+- `tests/test_step4.py`: 10 tests pass (about 20 s).
+- **Calibration** (`results/step4/calibration.json`, D3 only): iqp sigma=0.2 median D3 = 0.187.
+  mix median D3: delta 0.2 → 1.1e-7, 0.4 → 2.3e-5, 0.6 → 4.3e-4, 0.8 → 2.9e-3. Rule picks
+  **delta = 0.8, but its D3 is ~64x below the reference**: no candidate reaches the
+  iqp D3. Reported; candidates and rule not changed.
+- **FM2 warning (spec failure mode 3):** G on iqp4's exact moments, sigma=0.2 seed 0, 3
+  restarts: best residual 2.1e-3 (restarts 3.1e-3, 2.1e-3, 2.7e-3), versus 1.5e-4 for iqp at
+  sigma=0.2 in step 3. The test (> 1e-8) passes, but at this level P1 would test training
+  failure, not completion.
+
+## Next
+- Item 3 (two timed instances → PROJECTION.json) not started; waiting for the user.

@@ -1,0 +1,65 @@
+{
+ "basis": "spec section 7: per-n time of the timed instance (sigma = 0.2, seed 0, N = inf) x 25",
+ "seconds_by_n": {
+  "n_14": 51.207765340805054,
+  "n_16": 399.561062335968
+ },
+ "projected_hours_by_n": {
+  "n_14": 0.3556094815333684,
+  "n_16": 2.7747295995553336
+ },
+ "projected_hours": 3.1303390810887017,
+ "instances": 50,
+ "budget_hours": 3.0,
+ "over_budget": true,
+ "per_instance": {
+  "n_14/sigma_0.2/seed_0": {
+   "total_seconds": 51.207765340805054,
+   "G_fit_seconds": 29.962644338607788,
+   "G_train_residual": 0.004324217409746471,
+   "G_restart_residuals": [
+    0.004324217409746471,
+    0.005750105097222108,
+    0.004768763975191811
+   ],
+   "G_restart_nit": [
+    2213,
+    1203,
+    1438
+   ],
+   "G_n_params": 469,
+   "peak_memory_bytes_process": 333107200
+  },
+  "n_16/sigma_0.2/seed_0": {
+   "total_seconds": 399.561062335968,
+   "G_fit_seconds": 334.44254755973816,
+   "G_train_residual": 0.0067062832980801295,
+   "G_restart_residuals": [
+    0.0067062832980801295,
+    0.007413042868045858,
+    0.007149586669952763
+   ],
+   "G_restart_nit": [
+    2356,
+    2568,
+    2093
+   ],
+   "G_n_params": 696,
+   "peak_memory_bytes_process": 1548001280
+  }
+ },
+ "note": "one timed instance per n at sigma = 0.2; other sigma may converge faster or slower. Steps 3-4 ran 1.4x-2x slower than projected on a shared machine.",
+ "projected_hours_x2_shared_machine": 6.2606781621774035,
+ "cut": {
+  "order": "spec section 7: drop n = 16 sigma = 0.25, then n = 16 sigma = 0.125; never seeds, restarts, n = 14 cells, or n = 16 at sigma 0.15/0.175/0.2",
+  "steps": [
+   {
+    "drop": "n = 16, sigma = 0.25",
+    "projected_hours_after": 2.5753931611776353,
+    "instances_after": 45
+   }
+  ],
+  "cut_grid_within_budget": true,
+  "if_not_within_budget": null
+ }
+}

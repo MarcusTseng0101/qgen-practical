@@ -354,3 +354,23 @@ and harness unchanged.
 
 ## Next
 - Step 5 is complete. Waiting for the user.
+
+# Step 6 (specs/step6_iqp4_scaling_n.md, frozen 567aab6; harness v7 bccacee)
+
+## Build items 1-2 (2026-11-07): DONE, `check.sh --stage 17` passes; stopped for BUDGET_OK
+- Branch `step6-scaling` from `step5-sigma` (bdc4cea), master merged. src/step1..5 untouched.
+- `src/step6/run.py`: one instance = `src.step5.run.fit_instance("iqp4", sigma, N=None, seed, n)`
+  imported unchanged, plus G_n_params, peak memory (Windows peak working set), IO, projection with
+  the spec's cut order, BUDGET_OK-gated grid.
+- `tests/test_step6.py`: 5 pass (n = 12 reproduces step 5 sigma = 0.2 seed 0 within 1e-6;
+  G generators 469 / 696; iqp4_target at n = 14 has 46 generators; paths).
+- Timing (sigma = 0.2, seed 0, N = inf, 3 restarts, all L-BFGS-B converged, not maxiter):
+  - n = 14: 51.2 s (G fit 30.0 s); G residual 4.3e-3 (restarts 4.3e-3, 5.8e-3, 4.8e-3; nit
+    2213, 1203, 1438); MaxEnt residual 3.4e-14 (nit 1976); peak 318 MiB.
+  - n = 16: 399.6 s (G fit 334.4 s); G residual 6.7e-3 (restarts 6.7e-3, 7.4e-3, 7.2e-3; nit
+    2356, 2568, 2093); MaxEnt residual 1.9e-13 (nit 875); peak 1476 MiB.
+- PROJECTION.json: 25 x 51.2 s + 25 x 399.6 s = 0.36 + 2.78 = 3.13 h > 3 h. Cut step 1 (drop
+  n = 16 sigma = 0.25) -> 45 instances, 2.58 h, within budget. x2 shared-machine: 6.3 h.
+
+## Next
+- Waiting for the user (BUDGET_OK; whether to apply the cut).

@@ -372,5 +372,23 @@ and harness unchanged.
 - PROJECTION.json: 25 x 51.2 s + 25 x 399.6 s = 0.36 + 2.78 = 3.13 h > 3 h. Cut step 1 (drop
   n = 16 sigma = 0.25) -> 45 instances, 2.58 h, within budget. x2 shared-machine: 6.3 h.
 
+- User chose A (cut n = 16 sigma = 0.25), created BUDGET_OK, STAGE 18; stop limit raised 5 h -> 7 h mid-run.
+
+## Build item 3 (2026-11-08): DONE, `check.sh --stage 18` passes
+- Grid 45/45 (n = 16 sigma = 0.25 cut per spec section 7), resumable (`--all` skips existing
+  metrics.json; the two timed instances were reused). Wall clock ~4.9 h (21:35-02:31); sum of
+  instance times n = 14 0.45 h, n = 16 4.61 h (projected 2.58 h; n = 16 per-iteration time varied ~15x).
+- `--report` -> table.csv (n = 12 from step 5), verdicts.json, figures/step6/{R_vs_sigma_by_n,
+  G_vs_sigma_by_n, collision_vs_n}; SUMMARY.md.
+- S1 FAIL (sigma 0.2: n14 0.889 [0.720, 1.04], n16 1.38 [0.623, 1.51], both undecided);
+  S2 FAIL (sigma*(14) = 0.185 in band; sigma*(16) undefined, median R >= 1 at all 4 sigma);
+  S3 FAIL (sigma 0.175: n14 undecided 1.08, n16 >= 1 1.81); S4 PASS (n16 G_iqp max/min 1.54 over 4 sigma).
+- Failure modes: n = 16 seed 1 residual >> 1e-2 at sigma 0.125 (0.160) and 0.15 (0.179), highest
+  at every n = 16 sigma -> flagged as a pattern (possible FM2/under-training, R possibly biased
+  up); 26 other instances 1e-2..3.6e-2; G maxiter 0/45; MaxEnt maxiter 2/45 (n16 seed 3,
+  sigma 0.125/0.15, residual <= 3.6e-11); peak memory 1.5 GiB.
+- Exploratory: at fixed sigma R grows with n; G_maxent3 (room) shrinks faster with n than G_iqp
+  while D3 stays ~0.24; collision ratio x3.3-4 per +2 qubits.
+
 ## Next
-- Waiting for the user (BUDGET_OK; whether to apply the cut).
+- Step 6 is complete. Waiting for the user.

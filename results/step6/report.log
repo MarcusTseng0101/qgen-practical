@@ -1,0 +1,110 @@
+{
+ "verdicts": {
+  "S1": {
+   "PASS": false,
+   "n_14": "undecided",
+   "n_16": "undecided"
+  },
+  "S2": {
+   "PASS": false,
+   "band": [
+    0.135,
+    0.185
+   ],
+   "sigma_star_n_14": 0.18457522796772016,
+   "sigma_star_n_16": null,
+   "sign_changes_n_14": 1,
+   "sign_changes_n_16": 0,
+   "rule": "spec section 4: both defined and in the band; undefined -> FAIL"
+  },
+  "S3": {
+   "PASS": false,
+   "n_14": "undecided",
+   "n_16": ">=1"
+  },
+  "S4": {
+   "PASS": true,
+   "G_iqp_max_over_min_n16": 1.5380557893098765,
+   "sigmas_used": [
+    0.125,
+    0.15,
+    0.175,
+    0.2
+   ],
+   "note": "sigma = 0.25 at n = 16 was cut (spec section 7, user decision A); the ratio is over the 4 remaining sigma"
+  }
+ },
+ "crossings": {
+  "n_12": {
+   "sigmas": [
+    0.125,
+    0.15,
+    0.175,
+    0.2,
+    0.25
+   ],
+   "median_R": [
+    2.8236177865880037,
+    1.3462876223385452,
+    0.6698283068056853,
+    0.5767520740008093,
+    0.8906720025342284
+   ],
+   "sigma_star": 0.16017967442881073,
+   "sign_changes": 1,
+   "step5_verdicts_sigma_star": 0.16017967442881073,
+   "step5_verdicts_sign_changes": 1,
+   "note": "step 5 value over its 6 sigma (incl. 0.1); sigma_star above is recomputed on step 6's 5 sigma"
+  },
+  "n_14": {
+   "sigmas": [
+    0.125,
+    0.15,
+    0.175,
+    0.2,
+    0.25
+   ],
+   "median_R": [
+    4.321853661910315,
+    1.881764647213014,
+    1.0812278431737612,
+    0.8889945146650153,
+    0.8823006334753897
+   ],
+   "sigma_star": 0.18457522796772016,
+   "sign_changes": 1
+  },
+  "n_16": {
+   "sigmas": [
+    0.125,
+    0.15,
+    0.175,
+    0.2
+   ],
+   "median_R": [
+    10.936312250888697,
+    4.912311313185408,
+    1.8124159847105243,
+    1.376277883386386
+   ],
+   "sigma_star": null,
+   "sign_changes": 0
+  }
+ },
+ "timing": {
+  "n_14": {
+   "instances": 25,
+   "sum_seconds": 1605.8801074028015,
+   "mean_seconds": 64.23520429611206,
+   "max_seconds": 192.466459274292
+  },
+  "n_16": {
+   "instances": 20,
+   "sum_seconds": 16599.865371465683,
+   "mean_seconds": 829.9932685732841,
+   "max_seconds": 3167.9516282081604
+  }
+ },
+ "maxent_maxiter_hits_total": 2,
+ "G_maxiter_instances_total": 0
+}

@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 # Definition of done for step 1 (specs/step1_synthetic_completion_gap.md + specs/step1_amendment1.md).
-# Usage: bash scripts/check.sh --stage N   (step 1: N in 0..3, cumulative; step 2: N in 4..6; step 3: N in 7..9; step 4: N in 10..12; step 5: N in 13..15)
+# Usage: bash scripts/check.sh --stage N   (step 1: N in 0..3, cumulative; step 2: N in 4..6; step 3: N in 7..9; step 4: N in 10..12; step 5: N in 13..15; step 6: N in 16..18)
 # Exit 0 = every criterion up to stage N holds. Do not edit to make it pass;
 # if a check is wrong, stop and tell the user which one and why.
+# v7 (2026-11-07): stages 16..18 = step 6 track (specs/step6_iqp4_scaling_n.md); step-5 checks only at 13..15.
 # v6 (2026-11-07): stages 13..15 = step 5 track (specs/step5_iqp4_sigma_scan.md); step-4 checks only at 10..12.
 # v5 (2026-11-06): stages 10..12 = step 4 track (specs/step4_misspec_finite_n.md); step-3 checks only at 7..9.
 # v4 (2026-11-06): stages 7..9 = step 3 track (specs/step3_completion_vs_sigma.md).
@@ -19,7 +20,7 @@ PY=python; [ -x .venv/Scripts/python ] && PY=.venv/Scripts/python; [ -x .venv/bi
 TARGETS="biased maxent_proj random"
 
 # ---- stage 0: harness and frozen predictions in place
-for f in specs/step1_synthetic_completion_gap.md specs/step1_amendment1.md specs/step2_sigma_boundary.md specs/step3_completion_vs_sigma.md specs/step4_misspec_finite_n.md specs/step5_iqp4_sigma_scan.md prereg/step1.md \
+for f in specs/step1_synthetic_completion_gap.md specs/step1_amendment1.md specs/step2_sigma_boundary.md specs/step3_completion_vs_sigma.md specs/step4_misspec_finite_n.md specs/step5_iqp4_sigma_scan.md specs/step6_iqp4_scaling_n.md prereg/step1.md \
          .claude/settings.json .claude/hooks/guard.py .claude/hooks/stop_check.sh PROGRESS.md; do
   [ -f "$f" ] || die "harness" "missing $f"
 done
@@ -346,7 +347,66 @@ EOF
 }
 
 [ "$stage" -ge 10 ] && [ "$stage" -le 12 ] && step4_checks "$stage"
-[ "$stage" -ge 13 ] && step5_checks "$stage"
+
+# ==== step 6 track (stages 16..18): specs/step6_iqp4_scaling_n.md. Steps 1-5 are closed (step 5 closed at bdc4cea).
+S6_SENT="Step 6 was designed after step 5; the n = 12 reference is data already seen; G is the generic IQP (no oracle); n ≤ 16 proxies are not hardness evidence."
+step6_checks() {
+  local st=$1
+  f=specs/step6_iqp4_scaling_n.md
+  git ls-files --error-unmatch "$f" >/dev/null 2>&1 || die "s6-spec" "$f is not committed"
+  git diff --quiet HEAD -- "$f" 2>/dev/null || die "s6-spec" "$f modified after commit (hypotheses are frozen)"
+  for p in src/step6/run.py tests/test_step6.py; do [ -f $p ] || die "s6-layout" "missing $p"; done
+  git cat-file -e bdc4cea 2>/dev/null || die "s6-closed" "commit bdc4cea (step 5 close) not in history; branch step6 from step5-sigma"
+  git diff --quiet HEAD -- src/step1/ src/step2/ src/step3/ src/step4/ src/step5/ 2>/dev/null || die "s6-closed" "src/step1..5 has uncommitted edits (closed records)"
+  [ -z "$(git diff --name-only bdc4cea HEAD -- src/step1/ src/step2/ src/step3/ src/step4/ src/step5/ 2>/dev/null)" ] || die "s6-closed" "src/step1..5 changed after step 5 closed (bdc4cea)"
+  "$PY" -m pytest -q tests/test_step6.py >/tmp/step6_pytest.txt 2>&1 || { die "s6-tests" "tests/test_step6.py fails"; tail -5 /tmp/step6_pytest.txt >&2; }
+  s6_json() {  # $1 metrics.json, $2 n
+    "$PY" - "$1" "$2" <<'EOF' || die "s6-metrics" "$1 lacks required step-6 keys"
+import json, sys
+d = json.load(open(sys.argv[1]))
+need = ["n", "sigma", "seed", "G_iqp", "G_maxent", "R", "G_train_residual", "G_restart_residuals", "G_restart_G",
+        "G_restart_nit", "G_n_params", "maxent_train_residual", "D3", "collision_ratio_target", "versions", "total_seconds"]
+miss = [k for k in need if k not in d]
+if miss: print("missing:", miss, file=sys.stderr); sys.exit(1)
+if len(d["G_restart_residuals"]) < 3: print("fewer than 3 G restarts (never cut)", file=sys.stderr); sys.exit(1)
+n = int(sys.argv[2])
+if d["n"] != n: print("n mismatch", file=sys.stderr); sys.exit(1)
+want = n + n * (n - 1) // 2 + n * (n - 1) * (n - 2) // 6
+if d["G_n_params"] != want: print(f"G_n_params {d['G_n_params']} != {want}", file=sys.stderr); sys.exit(1)
+EOF
+  }
+  if [ "$st" -ge 17 ]; then
+    for n in 14 16; do p=results/step6/n_$n/sigma_0.2/seed_0/metrics.json
+      if [ -f "$p" ]; then s6_json "$p" $n; else die "s6-first" "missing $p (timing instance)"; fi
+    done
+    [ -f results/step6/PROJECTION.json ] || die "s6-budget" "missing results/step6/PROJECTION.json"
+  fi
+  if [ "$st" -ge 18 ]; then
+    tot=0
+    for n in 14 16; do for sg in 0.125 0.15 0.175 0.2 0.25; do
+      c=results/step6/n_$n/sigma_$sg; k=0
+      for s in 0 1 2 3 4; do p=$c/seed_$s/metrics.json; [ -f $p ] && { k=$((k+1)); s6_json $p $n; }; done
+      tot=$((tot+k))
+      [ $k -eq 0 ] || [ $k -eq 5 ] || die "s6-grid" "$c has $k/5 seeds (seeds are never cut)"
+      if [ $n = 14 ] || [ $sg = 0.15 ] || [ $sg = 0.175 ] || [ $sg = 0.2 ]; then
+        [ $k -eq 5 ] || die "s6-grid" "$c incomplete (never cut: all n = 14 cells and n = 16 at sigma 0.15/0.175/0.2)"
+      fi
+    done; done
+    [ "$tot" -ge 40 ] || die "s6-grid" "only $tot/50 instances"
+    for fig in R_vs_sigma_by_n G_vs_sigma_by_n collision_vs_n; do
+      [ -f figures/step6/$fig.png ] && [ -f figures/step6/$fig.pdf ] || die "s6-figures" "missing figures/step6/$fig.{png,pdf}"
+    done
+    for a in table.csv verdicts.json; do [ -f results/step6/$a ] || die "s6-artifacts" "missing results/step6/$a"; done
+    S=results/step6/SUMMARY.md
+    if [ -f $S ]; then
+      grep -qF "$S6_SENT" $S || die "s6-summary" "SUMMARY lacks the required designed-after sentence"
+      for h in S1 S2 S3 S4; do grep -qE "(^|[^A-Za-z0-9])$h([^A-Za-z0-9]).*(PASS|FAIL)" $S || die "s6-summary" "SUMMARY does not mark $h PASS/FAIL"; done
+    else die "s6-summary" "missing $S"; fi
+  fi
+}
+
+[ "$stage" -ge 13 ] && [ "$stage" -le 15 ] && step5_checks "$stage"
+[ "$stage" -ge 16 ] && step6_checks "$stage"
 
 [ $fail -eq 0 ] && echo "ALL CHECKS PASS (stage $stage)"
 exit $fail

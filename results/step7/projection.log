@@ -1,0 +1,72 @@
+C:\Users\tseng\qgen-practical-step1\results\step7\PROJECTION.json
+{
+ "basis": "spec section 7: per-n time of the timed instance (largest sigma, seed 0, N = inf) x 15",
+ "seconds_by_n": {
+  "n_14": 48.627338886260986,
+  "n_16": 762.353084564209
+ },
+ "projected_hours_by_n": {
+  "n_14": 0.20261391202608744,
+  "n_16": 3.1764711856842043
+ },
+ "projected_hours": 3.3790850977102918,
+ "instances": 30,
+ "budget_hours": 5.0,
+ "over_budget": false,
+ "per_instance": {
+  "n_14/sigma_0.236/seed_0": {
+   "level": "C",
+   "total_seconds": 48.627338886260986,
+   "G_fit_seconds": 35.84347057342529,
+   "G_train_residual": 0.0018470058374437592,
+   "G_restart_residuals": [
+    0.0026153514741210997,
+    0.0023248462241985683,
+    0.0018470058374437592
+   ],
+   "G_restart_nit": [
+    1360,
+    2244,
+    2436
+   ],
+   "G_restart_message": [
+    "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+    "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+    "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH"
+   ],
+   "maxent_train_residual": 7.882471708882263e-14,
+   "maxent_nit": 1131,
+   "collision_ratio_target": 174.34673957787487,
+   "peak_memory_bytes_process": 333254656
+  },
+  "n_16/sigma_0.274/seed_0": {
+   "level": "C",
+   "total_seconds": 762.353084564209,
+   "G_fit_seconds": 733.8788948059082,
+   "G_train_residual": 0.0009688168087847305,
+   "G_restart_residuals": [
+    0.0010364362223563373,
+    0.0010439529462989187,
+    0.0009688168087847305
+   ],
+   "G_restart_nit": [
+    6213,
+    3088,
+    7654
+   ],
+   "G_restart_message": [
+    "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+    "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+    "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH"
+   ],
+   "maxent_train_residual": 1.0345262450871626e-14,
+   "maxent_nit": 278,
+   "collision_ratio_target": 133.92833186650384,
+   "peak_memory_bytes_process": 1548328960
+  }
+ },
+ "note": "one timed instance per n. In step 6, n = 16 instances took 0.8x-8x their 400 s timing instance (sum 2.1x the projection).",
+ "projected_hours_x2": 6.7581701954205835,
+ "stop_loss_wall_clock_hours": 8.0,
+ "cut": null
+}

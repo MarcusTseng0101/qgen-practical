@@ -390,5 +390,29 @@ and harness unchanged.
 - Exploratory: at fixed sigma R grows with n; G_maxent3 (room) shrinks faster with n than G_iqp
   while D3 stays ~0.24; collision ratio x3.3-4 per +2 qubits.
 
+## Next (at step 6 close)
+- Step 6 was complete; step 7 spec (3407d50) and harness v8 (d401a18) followed.
+
+# Step 7: collision-matched sigma (specs/step7_collision_matched.md), branch step7-collision
+
+## Build items 1-4 (2026-11-08): DONE in one pass (user removed the harness hooks and created BUDGET_OK; told to run through without stopping)
+- src/step7/run.py wraps src.step6.run.run_instance at the six exact matched sigma
+  (n14 A/B/C 0.193/0.213/0.236; n16 0.231/0.251/0.274) and records level + n = 12 reference.
+- tests/test_step7.py: 9 pass (step 6 R reproduced at n14 sigma 0.2 seed 0 within 1e-6; sigma table
+  exact; each matched sigma's median collision within x1.25 of its n = 12 level).
+- Timing (largest sigma, seed 0): n14 48.6 s, residual 1.85e-3, nit 1360/2244/2436, 318 MiB;
+  n16 762.4 s, residual 9.69e-4, nit 6213/3088/7654, 1477 MiB. PROJECTION 3.38 h < 5 h -> no cut.
+- Grid 30/30, no cut (user decision), resumable; wall clock 12:55-17:22 (4 h 27 min); sum of
+  instance times 4.46 h (n16 4.27 h, 230-1641 s per instance).
+- Report: table.csv, verdicts.json, figures/step7/{R_vs_collision_by_n, G_vs_level_by_n}, SUMMARY.md.
+- C1 FAIL (B: n14 0.870 <1, n16 0.654 [0.651, 1.105] undecided); C2 FAIL (C: n14 0.706 <1, n16 0.799
+  [0.593, 1.313] undecided); C3 FAIL (A medians 0.754, 0.832 < 1); C4 PASS (n16 residual B 2.1e-3,
+  C 1.6e-3). Reading rule: advantage shrinks with n at matched peakedness, not under-training;
+  qualified: n16 cells are undecided (medians < 1), driven by seeds 1 and 2 having R > 1 at all levels.
+- Failure modes: G maxiter 0/30, MaxEnt maxiter 0/30, max G residual 2.3e-2 (n14 A seed 3); n16 seed 1
+  highest residual at every level (1.8e-2 / 9.7e-3 / 4.8e-3), smaller than step 6.
+- Exploratory: n14/n16 R flat 0.65-0.87 across levels (no collapse onto n = 12); D3 grows with n at
+  matched collision (level C 0.248 / 0.251 / 0.325).
+
 ## Next
-- Step 6 is complete. Waiting for the user.
+- Step 7 is complete. Waiting for the user.

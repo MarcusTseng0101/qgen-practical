@@ -1,0 +1,48 @@
+{
+ "verdicts": {
+  "C1": {
+   "PASS": false,
+   "level": "B",
+   "n_14": "<1",
+   "n_16": "undecided",
+   "n_14_median_R": 0.8702349190470217,
+   "n_16_median_R": 0.6540828355872815
+  },
+  "C2": {
+   "PASS": false,
+   "level": "C",
+   "n_14": "<1",
+   "n_16": "undecided",
+   "n_14_median_R": 0.7059042833636422,
+   "n_16_median_R": 0.7987594377879781
+  },
+  "C3": {
+   "PASS": false,
+   "level": "A",
+   "n_14_median_R": 0.7544388623375456,
+   "n_16_median_R": 0.8324812076310003
+  },
+  "C4": {
+   "PASS": true,
+   "n_16_level_B_median_residual": 0.0021129297458601453,
+   "n_16_level_C_median_residual": 0.001570245532114811
+  },
+  "reading_rule": "C1 and C2 both fail at n = 16 while C4 passes: the advantage shrinks with n even at matched peakedness, and under-training does not explain it."
+ },
+ "timing": {
+  "n_14": {
+   "instances": 15,
+   "sum_seconds": 686.1087746620178,
+   "mean_seconds": 45.740584977467854,
+   "max_seconds": 62.24443197250366
+  },
+  "n_16": {
+   "instances": 15,
+   "sum_seconds": 15384.144662618637,
+   "mean_seconds": 1025.6096441745758,
+   "max_seconds": 1640.9508774280548
+  }
+ },
+ "maxent_maxiter_hits_total": 0,
+ "G_maxiter_instances_total": 0
+}

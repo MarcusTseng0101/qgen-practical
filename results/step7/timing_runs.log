@@ -1,0 +1,4 @@
+C:\Users\tseng\qgen-practical-step1\results\step7\n_14\sigma_0.236\seed_0\metrics.json
+  n 14  level C  sigma 0.236  total 48.6 s  G fit 35.8 s  G residual 1.847e-03  restarts ['2.62e-03', '2.32e-03', '1.85e-03']  nit [1360, 2244, 2436]  maxent residual 7.88e-14 (nit 1131)  coll 174.3  peak memory 318 MiB
+C:\Users\tseng\qgen-practical-step1\results\step7\n_16\sigma_0.274\seed_0\metrics.json
+  n 16  level C  sigma 0.274  total 762.4 s  G fit 733.9 s  G residual 9.688e-04  restarts ['1.04e-03', '1.04e-03', '9.69e-04']  nit [6213, 3088, 7654]  maxent residual 1.03e-14 (nit 278)  coll 133.9  peak memory 1477 MiB

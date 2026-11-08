@@ -21,6 +21,7 @@ v5 (2026-11-06), two false positives fixed:
 
 v6 (2026-11-07): step-5 grid gate added.
 v7 (2026-11-07): step-6 grid gate added.
+v8 (2026-11-08): step-7 grid gate added.
 """
 import json, os, re, sys
 
@@ -41,6 +42,7 @@ REDIR_TARGET = re.compile(r"(?<![0-9&<>-])>{1,2}\|?\s*['\"]?([^\s'\";|&<>]+)")
 GIT_SAFE = re.compile(r"^\s*git\s+(add|commit|status|diff|log|show)\b")
 PROMPT_TEXT = re.compile(r"^\s*herdr\s+agent\s+prompt\b")
 GATES = [
+    (r"step7[./\\]run(\.py)?\b.*--all", "Step-7 grid blocked: no BUDGET_OK. Write results/step7/PROJECTION.json, report it, and wait for the user."),
     (r"step6[./\\]run(\.py)?\b.*--all", "Step-6 grid blocked: no BUDGET_OK. Write results/step6/PROJECTION.json, report it, and wait for the user."),
     (r"step5[./\\]run(\.py)?\b.*--all", "Step-5 grid blocked: no BUDGET_OK. Write results/step5/PROJECTION.json, report it, and wait for the user."),
     (r"step4[./\\]run(\.py)?\b.*--all", "Step-4 grid blocked: no BUDGET_OK. Write results/step4/PROJECTION.json, report it, and wait for the user."),

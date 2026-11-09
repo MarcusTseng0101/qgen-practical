@@ -1,0 +1,42 @@
+2026-11-09 23:41:07 start: 20 seeds, 16 workers x 1 thread, 10 restarts
+2026-11-09 23:41:07 launch seed=10
+2026-11-09 23:41:07 launch seed=11
+2026-11-09 23:41:07 launch seed=12
+2026-11-09 23:41:07 launch seed=13
+2026-11-09 23:41:07 launch seed=14
+2026-11-09 23:41:07 launch seed=15
+2026-11-09 23:41:07 launch seed=16
+2026-11-09 23:41:07 launch seed=17
+2026-11-09 23:41:07 launch seed=18
+2026-11-09 23:41:07 launch seed=19
+2026-11-09 23:41:07 launch seed=20
+2026-11-09 23:41:07 launch seed=21
+2026-11-09 23:41:07 launch seed=22
+2026-11-09 23:41:07 launch seed=23
+2026-11-09 23:41:07 launch seed=24
+2026-11-09 23:41:07 launch seed=25
+2026-11-09 23:50:12 done seed=14 rc=0 9.1 min
+2026-11-09 23:50:12 launch seed=26
+2026-11-09 23:50:37 done seed=17 rc=0 9.5 min
+2026-11-09 23:50:37 launch seed=27
+2026-11-09 23:53:02 done seed=10 rc=0 11.9 min
+2026-11-09 23:53:02 launch seed=28
+2026-11-09 23:53:12 done seed=19 rc=0 12.1 min
+2026-11-09 23:53:12 launch seed=29
+2026-11-09 23:54:37 done seed=15 rc=0 13.5 min
+2026-11-09 23:56:42 done seed=11 rc=0 15.6 min
+2026-11-09 23:56:42 done seed=23 rc=0 15.6 min
+2026-11-09 23:56:52 done seed=20 rc=0 15.8 min
+2026-11-09 23:57:52 done seed=22 rc=0 16.8 min
+2026-11-09 23:58:02 done seed=24 rc=0 16.9 min
+2026-11-09 23:58:22 done seed=16 rc=0 17.3 min
+2026-11-09 23:58:32 done seed=18 rc=0 17.4 min
+2026-11-09 23:59:02 done seed=21 rc=0 17.9 min
+2026-11-09 23:59:12 done seed=12 rc=0 18.1 min
+2026-11-09 23:59:27 done seed=28 rc=0 6.4 min
+2026-11-10 00:00:22 done seed=13 rc=0 19.3 min
+2026-11-10 00:01:07 done seed=25 rc=0 20.0 min
+2026-11-10 00:01:17 done seed=29 rc=0 8.1 min
+2026-11-10 00:03:47 done seed=26 rc=0 13.6 min
+2026-11-10 00:03:57 done seed=27 rc=0 13.3 min
+2026-11-10 00:03:57 end: 22.8 min, failed []

@@ -1,0 +1,9 @@
+ok   [spec] specs/step10_more_restarts.md committed and unchanged
+ok   [closed] src/step1..9 unchanged since e55c4b6
+ok   [grid] 20 seeds, exact σ, 10 restarts, restarts 0–2 reproduce step 9
+ok   [summary] SUMMARY opens with the required sentence
+ok   [summary] K1–K4 marked
+ok   [figures] figures/step10/R_3_vs_10
+ok   [tests] 2 passed in 0.59s
+ALL CHECKS PASS (step 10)
+exit 0

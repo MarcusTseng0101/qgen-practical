@@ -430,3 +430,14 @@ and harness unchanged.
   is flagged; this changes no sign. The check was not loosened.
 - Harness: no v9 hooks or BUDGET_OK. The user said "全部做完不要再問了" ("finish everything,
   don't ask again"); this is noted in the spec.
+
+## Step 10 (2026-11-10): n = 14 with 10 G restarts (specs/step10_more_restarts.md)
+- Done: 20 seeds in 22.8 min; `--verify` exits 0.
+- Verdicts:
+  - K1 FAIL: 11/20 wins.
+  - K2 FAIL: 7/20 residual > 1e-2.
+  - K3 FAIL: 1/10 losers rescued.
+  - K4 PASS: 0/10 winners flipped.
+- High residuals are a floor: 10 restarts land within 1.2–1.6×. So step 9's n = 14 losses are not
+  under-training but moment misfit and real losses.
+- Oracle restart choice gives only 11/20, so no selection rule rescues n = 14.

@@ -1,0 +1,48 @@
+{
+ "K1": {
+  "wins": 11,
+  "need": 15,
+  "pass": false
+ },
+ "K2": {
+  "res_gt_1e2": 7,
+  "max": 2,
+  "step9": 8,
+  "pass": false
+ },
+ "K3": {
+  "rescued": 1,
+  "need": 6,
+  "pass": false
+ },
+ "K4": {
+  "flipped": 0,
+  "max": 1,
+  "pass": true
+ },
+ "exploratory": {
+  "R_iqr_10": [
+   0.5215657590760077,
+   0.8202138077769769,
+   1.4924772288116606
+  ],
+  "R_iqr_3": [
+   0.5791966264747619,
+   0.9758130401228022,
+   1.5400580656299594
+  ],
+  "res_median_10": 0.0029788274593026804,
+  "res_median_3": 0.0039006371066962805,
+  "spearman_res_G_within_instance_median": 0.6848484848484848,
+  "spearman_res_G_within_instance_iqr": [
+   0.5909090909090908,
+   0.6848484848484848,
+   0.8212121212121211
+  ],
+  "min_residual_is_min_G": 8,
+  "best_restart_changed_from_step9": 16,
+  "restarts_0_2_all_match": true,
+  "restarts_0_2_max_rel_diff": 0.0,
+  "oracle_min_G_wins": 11
+ }
+}

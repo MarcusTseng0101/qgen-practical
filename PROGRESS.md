@@ -416,3 +416,17 @@ and harness unchanged.
 
 ## Next
 - Step 7 is complete. Waiting for the user.
+
+## Step 9 (2026-11-09): fresh seeds 10–29 at level B (specs/step9_fresh_seeds.md, amendment 1)
+- Done: 40-instance grid plus the n = 16 reproduction instance; 1.31 h with 16 workers × 1 thread; no
+  failures. Report, figures and SUMMARY are written.
+- Verdicts:
+  - H1 PASS: 16/20 win at n = 16, robust to a 10% margin.
+  - H5 PASS: median 0.637, IQR [0.543, 0.889].
+  - H6 PASS.
+  - H2 FAIL: 10/20 at n = 14, with under-training in 8/20 seeds.
+  - H3, H4 and H7 FAIL: step 8's two-mechanism model does not hold out of sample.
+- `--verify` exits 1 on [repro] only: n = 16 seed 0 is off by 6.0e-3 at 1 thread. Every n = 16 R
+  is flagged; this changes no sign. The check was not loosened.
+- Harness: no v9 hooks or BUDGET_OK. The user said "全部做完不要再問了" ("finish everything,
+  don't ask again"); this is noted in the spec.

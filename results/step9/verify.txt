@@ -1,0 +1,13 @@
+ok   [spec] specs/step9_fresh_seeds.md committed
+ok   [spec] spec unchanged since commit
+ok   [closed] src/step1..7 unchanged since 72d47b1
+ok   [grid] 40 instances, exact n / σ / level B / seed, ≥ 3 restarts
+FAIL [repro] n = 16 B seed 0 reproduces step 7 R: 6.03e-03
+ok   [summary] SUMMARY opens with the required sentence
+ok   [summary] SUMMARY marks H1–H7 PASS/FAIL
+ok   [artifacts] results/step9/table.csv
+ok   [artifacts] results/step9/verdicts.json
+ok   [figures] figures/step9/*
+ok   [tests] 3 passed in 70.52s (0:01:10)
+FAILED: ['repro']
+exit 1

@@ -1,0 +1,84 @@
+2026-11-09 11:34:07 start: 41 jobs, 16 workers x 1 threads, stop-loss 6.0 h
+2026-11-09 11:34:07 launch repro n=16 seed=0
+2026-11-09 11:34:07 launch grid n=16 seed=10
+2026-11-09 11:34:07 launch grid n=16 seed=11
+2026-11-09 11:34:07 launch grid n=16 seed=12
+2026-11-09 11:34:07 launch grid n=16 seed=13
+2026-11-09 11:34:07 launch grid n=16 seed=14
+2026-11-09 11:34:07 launch grid n=16 seed=15
+2026-11-09 11:34:07 launch grid n=16 seed=16
+2026-11-09 11:34:07 launch grid n=16 seed=17
+2026-11-09 11:34:07 launch grid n=16 seed=18
+2026-11-09 11:34:07 launch grid n=16 seed=19
+2026-11-09 11:34:07 launch grid n=16 seed=20
+2026-11-09 11:34:07 launch grid n=16 seed=21
+2026-11-09 11:34:07 launch grid n=16 seed=22
+2026-11-09 11:34:07 launch grid n=16 seed=23
+2026-11-09 11:34:07 launch grid n=16 seed=24
+2026-11-09 11:54:32 done ('grid', 16, 14) rc=0 20.4 min
+2026-11-09 11:54:32 launch grid n=16 seed=25
+2026-11-09 12:02:27 done ('grid', 16, 20) rc=0 28.3 min
+2026-11-09 12:02:27 launch grid n=16 seed=26
+2026-11-09 12:04:32 done ('grid', 16, 12) rc=0 30.4 min
+2026-11-09 12:04:32 launch grid n=16 seed=27
+2026-11-09 12:09:52 done ('grid', 16, 17) rc=0 35.8 min
+2026-11-09 12:09:52 launch grid n=16 seed=28
+2026-11-09 12:10:02 done ('grid', 16, 18) rc=0 35.9 min
+2026-11-09 12:10:02 launch grid n=16 seed=29
+2026-11-09 12:12:52 done ('grid', 16, 24) rc=0 38.8 min
+2026-11-09 12:12:52 launch grid n=14 seed=10
+2026-11-09 12:14:57 done ('grid', 16, 22) rc=0 40.8 min
+2026-11-09 12:14:57 launch grid n=14 seed=11
+2026-11-09 12:15:32 done ('grid', 16, 10) rc=0 41.4 min
+2026-11-09 12:15:32 launch grid n=14 seed=12
+2026-11-09 12:16:27 done ('grid', 16, 13) rc=0 42.3 min
+2026-11-09 12:16:27 launch grid n=14 seed=13
+2026-11-09 12:17:02 done ('grid', 16, 15) rc=0 42.9 min
+2026-11-09 12:17:02 launch grid n=14 seed=14
+2026-11-09 12:17:37 done ('grid', 14, 10) rc=0 4.8 min
+2026-11-09 12:17:37 launch grid n=14 seed=15
+2026-11-09 12:19:42 done ('grid', 14, 12) rc=0 4.2 min
+2026-11-09 12:19:42 launch grid n=14 seed=16
+2026-11-09 12:20:07 done ('grid', 16, 19) rc=0 46.0 min
+2026-11-09 12:20:07 launch grid n=14 seed=17
+2026-11-09 12:20:12 done ('grid', 14, 14) rc=0 3.2 min
+2026-11-09 12:20:12 launch grid n=14 seed=18
+2026-11-09 12:20:52 done ('grid', 14, 11) rc=0 5.9 min
+2026-11-09 12:20:52 launch grid n=14 seed=19
+2026-11-09 12:22:17 done ('grid', 14, 15) rc=0 4.7 min
+2026-11-09 12:22:17 launch grid n=14 seed=20
+2026-11-09 12:23:27 done ('grid', 14, 17) rc=0 3.3 min
+2026-11-09 12:23:27 launch grid n=14 seed=21
+2026-11-09 12:23:42 done ('grid', 14, 13) rc=0 7.3 min
+2026-11-09 12:23:42 launch grid n=14 seed=22
+2026-11-09 12:24:47 done ('grid', 14, 19) rc=0 3.9 min
+2026-11-09 12:24:47 launch grid n=14 seed=23
+2026-11-09 12:25:47 done ('grid', 14, 18) rc=0 5.6 min
+2026-11-09 12:25:47 launch grid n=14 seed=24
+2026-11-09 12:26:37 done ('grid', 14, 16) rc=0 6.9 min
+2026-11-09 12:26:37 launch grid n=14 seed=25
+2026-11-09 12:27:22 done ('grid', 14, 20) rc=0 5.1 min
+2026-11-09 12:27:22 launch grid n=14 seed=26
+2026-11-09 12:29:27 done ('grid', 14, 21) rc=0 6.0 min
+2026-11-09 12:29:27 done ('grid', 14, 22) rc=0 5.8 min
+2026-11-09 12:29:27 launch grid n=14 seed=27
+2026-11-09 12:29:27 launch grid n=14 seed=28
+2026-11-09 12:30:07 done ('grid', 14, 23) rc=0 5.3 min
+2026-11-09 12:30:07 launch grid n=14 seed=29
+2026-11-09 12:30:47 done ('grid', 16, 28) rc=0 20.9 min
+2026-11-09 12:31:07 done ('grid', 16, 25) rc=0 36.6 min
+2026-11-09 12:31:17 done ('grid', 14, 24) rc=0 5.5 min
+2026-11-09 12:32:03 done ('grid', 14, 28) rc=0 2.6 min
+2026-11-09 12:33:03 done ('grid', 14, 26) rc=0 5.7 min
+2026-11-09 12:33:03 done ('grid', 14, 29) rc=0 2.9 min
+2026-11-09 12:33:08 done ('grid', 14, 25) rc=0 6.5 min
+2026-11-09 12:35:03 done ('grid', 16, 11) rc=0 60.9 min
+2026-11-09 12:35:43 done ('grid', 14, 27) rc=0 6.3 min
+2026-11-09 12:37:28 done ('repro', 16, 0) rc=0 63.4 min
+2026-11-09 12:38:43 done ('grid', 16, 21) rc=0 64.6 min
+2026-11-09 12:41:03 done ('grid', 16, 16) rc=0 66.9 min
+2026-11-09 12:44:23 done ('grid', 16, 23) rc=0 70.3 min
+2026-11-09 12:46:33 done ('grid', 16, 27) rc=0 42.0 min
+2026-11-09 12:48:08 done ('grid', 16, 26) rc=0 45.7 min
+2026-11-09 12:52:53 done ('grid', 16, 29) rc=0 42.8 min
+2026-11-09 12:52:53 end: 1.31 h, failed []

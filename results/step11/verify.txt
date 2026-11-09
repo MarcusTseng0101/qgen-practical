@@ -1,0 +1,9 @@
+ok   [spec] specs/step11_bitflip_control.md committed and unchanged
+ok   [closed] src/step1..10 unchanged since a7dbff9
+ok   [grid] 40 seeds, exact σ, 10 restarts, targets match step 9
+ok   [prob] every bitflip p ≥ −1e-12 and sums to 1 within 1e-10
+ok   [summary] SUMMARY opens with the required sentence
+ok   [summary] C1–C4 marked
+ok   [figures] figures/step11/G_iqp_vs_bitflip
+ok   [tests] 5 passed in 0.50s
+ALL CHECKS PASS (step 11)

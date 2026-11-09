@@ -441,3 +441,18 @@ and harness unchanged.
 - High residuals are a floor: 10 restarts land within 1.2–1.6×. So step 9's n = 14 losses are not
   under-training but moment misfit and real losses.
 - Oracle restart choice gives only 11/20, so no selection rule rescues n = 14.
+
+## Step 11 (2026-11-10): bitflip (decohered) control (specs/step11_bitflip_control.md)
+- Done: 40 seeds in 0.88 h (12 workers x 1 thread); `--verify` exits 0. Code 17276d5.
+- Verdicts:
+  - C1 PASS: n = 16, G_iqp < G_bitflip in 20/20.
+  - C2 FAIL: n = 16, bitflip beats MaxEnt(3) in 3/20.
+  - C3 PASS: n = 14, 20/20.
+  - C4 FAIL: n = 14, 2/20.
+  - Frozen reading: the advantage needs coherence.
+- **Caveat (load-bearing):** the bitflip model misfits the order-<=3 training moments in all 40
+  seeds (median residual ~0.1, against 4/20 and 8/20 IQP seeds above 1e-2). No seed has both
+  residuals <= 1e-2, so completion cannot be separated from training misfit. The decohered twin
+  lacks the expressivity to match these targets' low-order moments at all.
+- Minor: `--report`'s final print crashes on cp950. SUMMARY and the other files were already
+  written. Run it with PYTHONIOENCODING=utf-8.

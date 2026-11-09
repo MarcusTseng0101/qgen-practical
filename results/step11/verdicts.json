@@ -1,0 +1,70 @@
+{
+  "verdicts": {
+    "C1": {
+      "wins": 20,
+      "PASS": true,
+      "n": 16,
+      "statement": "G_iqp < G_bitflip"
+    },
+    "C2": {
+      "wins": 3,
+      "PASS": false,
+      "n": 16,
+      "statement": "G_bitflip < G_maxent3"
+    },
+    "C3": {
+      "wins": 20,
+      "PASS": true,
+      "n": 14,
+      "statement": "G_iqp < G_bitflip"
+    },
+    "C4": {
+      "wins": 2,
+      "PASS": false,
+      "n": 14,
+      "statement": "G_bitflip < G_maxent3"
+    }
+  },
+  "stats": {
+    "16": {
+      "Q": "0.39 [0.222, 0.558]",
+      "R_B": "1.84 [1.19, 2.97]",
+      "R": "0.637 [0.543, 0.889]",
+      "R_wins": 16,
+      "bitflip_resid": "0.0937 [0.055, 0.224]",
+      "bitflip_resid_gt_1e-2": 20,
+      "iqp_resid_gt_1e-2": 4,
+      "both_fit_seeds": 0,
+      "both_fit_Q_wins": 0,
+      "both_fit_R_B_wins": 0,
+      "both_fit_R_wins": 0,
+      "Q_10_bitflip_wins": 20,
+      "R_B_10_wins": 3,
+      "spearman_R_RB": 0.3488721804511278,
+      "p_min": 3.254489556087226e-11,
+      "p_sum_err_max": 3.3306690738754696e-16,
+      "minutes_median": 18.172251480817796
+    },
+    "14": {
+      "Q": "0.324 [0.116, 0.486]",
+      "R_B": "3.66 [2.21, 5.44]",
+      "R": "0.976 [0.579, 1.54]",
+      "R_wins": 10,
+      "bitflip_resid": "0.0998 [0.0623, 0.292]",
+      "bitflip_resid_gt_1e-2": 20,
+      "iqp_resid_gt_1e-2": 8,
+      "both_fit_seeds": 0,
+      "both_fit_Q_wins": 0,
+      "both_fit_R_B_wins": 0,
+      "both_fit_R_wins": 0,
+      "Q_10_bitflip_wins": 20,
+      "R_B_10_wins": 2,
+      "spearman_R_RB": 0.34285714285714286,
+      "p_min": 2.703854273677823e-10,
+      "p_sum_err_max": 4.440892098500626e-16,
+      "minutes_median": 5.120480744043986,
+      "Q_10_wins": 19
+    }
+  },
+  "reading": "advantage needs coherence (decohered twin lacks it)"
+}

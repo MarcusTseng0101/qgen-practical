@@ -147,3 +147,27 @@ include the step-8 n = 14 model (log R̂ = −0.2298 − 2.6888·D3 + 2.2920·r4
    - the `r4` feature reproduces step 8's value for step-7 seed 1 at n = 16 (0.415).
 3. The grid (in the background, resumable, logged), then the report, figures and SUMMARY, then
    `--verify` exit 0. Commit, and update PROGRESS.md.
+
+## Amendment 1 (2026-11-09, written before any grid instance ran)
+
+**What happened.** The build-order test (n = 14, B, seed 0 against step 7) **failed** with 4 BLAS
+threads: R = 0.4004 against step 7's 0.4453 (relative difference 0.10).
+
+**Cause.** At 4 threads, restart 2 converged to a different point (residual 4.28e-3 against
+3.74e-3). The lowest-residual restart therefore became restart 0.
+- Restart 0 has G_iqp = 2.03e-4.
+- Restart 2, chosen in step 7, has 2.25e-4.
+
+**At other thread settings:**
+- the default thread count reproduces step 7 exactly;
+- 1 thread reproduces it to 1e-7 (it takes 83 s against 55 s).
+
+**Change.** Workers run with **1 BLAS / OpenMP thread**, and up to **16 workers** run at a time
+(about 24 GiB at n = 16). Everything else is unchanged: the fit, the selection rule and the
+hypotheses. The n = 16 reproduction instance runs under the same setting and still has to pass at
+1e-6.
+
+**What this adds (exploratory, to be reported).** The per-instance R of the generic IQP carries a
+numerical sensitivity of order 10%. It comes from which restart has the lowest residual: restarts
+with nearly equal residuals give different G_iqp. Instances with R within about 10% of 1 can change
+sign under floating-point noise. The note must say this next to H1.

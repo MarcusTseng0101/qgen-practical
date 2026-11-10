@@ -1,0 +1,10 @@
+ok   [spec] specs/step12_nonIQP_targets.md committed and unchanged
+ok   [closed] src/step1..11 unchanged since 438fc80
+ok   [calibration] CALIBRATION.json: each median collision ratio within 1% of step 9
+ok   [grid] 80 instances, calibrated beta, 3 G and 3 bitflip restarts
+ok   [targets] every target p >= 0 and sums to 1 within 1e-12
+ok   [summary] SUMMARY opens with the required sentence
+ok   [summary] E1–E8 marked
+ok   [figures] figures/step12/R_by_family
+ok   [tests] 3 passed in 0.11s
+ALL CHECKS PASS (step 12)

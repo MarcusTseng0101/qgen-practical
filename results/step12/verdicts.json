@@ -1,0 +1,122 @@
+{
+  "verdicts": {
+    "E1": {
+      "wins": 0,
+      "PASS": false,
+      "family": "lcm",
+      "n": 16,
+      "statement": "R = G_iqp / G_maxent3 < 1"
+    },
+    "E2": {
+      "wins": 20,
+      "PASS": true,
+      "family": "lcm",
+      "n": 16,
+      "statement": "Q = G_iqp / G_bitflip < 1"
+    },
+    "E3": {
+      "wins": 0,
+      "PASS": false,
+      "family": "ising4",
+      "n": 16,
+      "statement": "R = G_iqp / G_maxent3 < 1"
+    },
+    "E4": {
+      "wins": 20,
+      "PASS": true,
+      "family": "ising4",
+      "n": 16,
+      "statement": "Q = G_iqp / G_bitflip < 1"
+    },
+    "E5": {
+      "wins": 0,
+      "PASS": false,
+      "family": "lcm",
+      "n": 14,
+      "statement": "R = G_iqp / G_maxent3 < 1"
+    },
+    "E6": {
+      "wins": 20,
+      "PASS": true,
+      "family": "lcm",
+      "n": 14,
+      "statement": "Q = G_iqp / G_bitflip < 1"
+    },
+    "E7": {
+      "wins": 0,
+      "PASS": false,
+      "family": "ising4",
+      "n": 14,
+      "statement": "R = G_iqp / G_maxent3 < 1"
+    },
+    "E8": {
+      "wins": 19,
+      "PASS": true,
+      "family": "ising4",
+      "n": 14,
+      "statement": "Q = G_iqp / G_bitflip < 1"
+    }
+  },
+  "stats": {
+    "lcm/n_16": {
+      "R": "25.4 [17.4, 43.5]",
+      "Q": "0.28 [0.139, 0.424]",
+      "R_B": "132 [55.3, 152]",
+      "R_B_wins": 0,
+      "iqp_resid": "0.605 [0.385, 1.5]",
+      "iqp_resid_gt_1e-2": 20,
+      "bitflip_resid_gt_1e-2": 20,
+      "D3": "0.0428 [0.0377, 0.048]",
+      "collision_ratio": "291 [225, 418]",
+      "spearman_R_D3": -0.193984962406015,
+      "gated_wins": 0,
+      "gated_losses": 0,
+      "minutes_median": 18.276260006427766
+    },
+    "ising4/n_16": {
+      "R": "2.05 [1.85, 2.6]",
+      "Q": "0.443 [0.376, 0.517]",
+      "R_B": "5.06 [3.54, 6.69]",
+      "R_B_wins": 0,
+      "iqp_resid": "0.2 [0.168, 0.225]",
+      "iqp_resid_gt_1e-2": 20,
+      "bitflip_resid_gt_1e-2": 20,
+      "D3": "0.339 [0.2, 0.465]",
+      "collision_ratio": "41.6 [31.8, 69.3]",
+      "spearman_R_D3": -0.33533834586466166,
+      "gated_wins": 0,
+      "gated_losses": 0,
+      "minutes_median": 14.797304999828338
+    },
+    "lcm/n_14": {
+      "R": "160 [57.4, 692]",
+      "Q": "0.349 [0.214, 0.438]",
+      "R_B": "559 [262, 1.52e+03]",
+      "R_B_wins": 0,
+      "iqp_resid": "1.57 [0.889, 3.06]",
+      "iqp_resid_gt_1e-2": 20,
+      "bitflip_resid_gt_1e-2": 20,
+      "D3": "0.0178 [0.0136, 0.0243]",
+      "collision_ratio": "381 [260, 650]",
+      "spearman_R_D3": -0.8240601503759398,
+      "gated_wins": 0,
+      "gated_losses": 0,
+      "minutes_median": 3.7828027586142223
+    },
+    "ising4/n_14": {
+      "R": "16.5 [8.34, 36.6]",
+      "Q": "0.447 [0.269, 0.523]",
+      "R_B": "48.8 [20, 145]",
+      "R_B_wins": 0,
+      "iqp_resid": "0.802 [0.657, 1.44]",
+      "iqp_resid_gt_1e-2": 20,
+      "bitflip_resid_gt_1e-2": 20,
+      "D3": "0.222 [0.131, 0.368]",
+      "collision_ratio": "314 [172, 829]",
+      "spearman_R_D3": -0.8045112781954886,
+      "gated_wins": 0,
+      "gated_losses": 0,
+      "minutes_median": 2.1646190524101256
+    }
+  }
+}

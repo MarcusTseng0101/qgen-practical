@@ -456,3 +456,20 @@ and harness unchanged.
   lacks the expressivity to match these targets' low-order moments at all.
 - Minor: `--report`'s final print crashes on cp950. SUMMARY and the other files were already
   written. Run it with PYTHONIOENCODING=utf-8.
+
+## Step 12 (2026-11-10): non-IQP targets lcm, ising4 (specs/step12_nonIQP_targets.md)
+- Done: 80 instances in 0.97 h (16 workers x 1 thread), none failed; `--verify` exits 0. Code ee5afc4.
+- Verdicts:
+  - E1 FAIL: lcm n = 16, R < 1 in 0/20 (median R 25).
+  - E2 PASS: lcm n = 16, Q < 1 in 20/20 (median Q 0.28).
+  - E3 FAIL: ising4 n = 16, 0/20 (median R 2.05).
+  - E4 PASS: ising4 n = 16, 20/20 (median Q 0.44).
+  - E5/E7 FAIL (0/20, 0/20); E6/E8 PASS (20/20, 19/20) at n = 14.
+  - Frozen reading: the completion advantage of steps 9-11 is specific to IQP-like targets.
+- Caveats:
+  - The IQP misfits the training moments on every seed (median residual 0.2-1.6), so on these
+    families R mostly measures misspecification; the residual-gated estimator falls back to
+    MaxEnt(3) everywhere.
+  - ising4 n = 16 test seeds are far less peaked than calibration seeds 0-4 (median collision
+    ratio 42 vs 319): large seed spread in that family. lcm matched (291 vs 319).
+  - Q < 1 everywhere: the coherent model still beats its decohered twin, but both lose to MaxEnt(3).

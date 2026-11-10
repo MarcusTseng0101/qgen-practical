@@ -1,0 +1,162 @@
+2026-11-10 13:09:55 start: 80 jobs, 16 workers x 1 thread, stop-loss 4.0 h
+2026-11-10 13:09:55 launch lcm n=16 seed=10
+2026-11-10 13:09:55 launch ising4 n=16 seed=10
+2026-11-10 13:09:55 launch lcm n=16 seed=11
+2026-11-10 13:09:55 launch ising4 n=16 seed=11
+2026-11-10 13:09:55 launch lcm n=16 seed=12
+2026-11-10 13:09:55 launch ising4 n=16 seed=12
+2026-11-10 13:09:55 launch lcm n=16 seed=13
+2026-11-10 13:09:55 launch ising4 n=16 seed=13
+2026-11-10 13:09:55 launch lcm n=16 seed=14
+2026-11-10 13:09:55 launch ising4 n=16 seed=14
+2026-11-10 13:09:55 launch lcm n=16 seed=15
+2026-11-10 13:09:55 launch ising4 n=16 seed=15
+2026-11-10 13:09:55 launch lcm n=16 seed=16
+2026-11-10 13:09:55 launch ising4 n=16 seed=16
+2026-11-10 13:09:55 launch lcm n=16 seed=17
+2026-11-10 13:09:55 launch ising4 n=16 seed=17
+2026-11-10 13:22:30 done ('lcm', 16, 17) rc=0 12.6 min
+2026-11-10 13:22:30 launch lcm n=16 seed=18
+2026-11-10 13:23:30 done ('lcm', 16, 11) rc=0 13.6 min
+2026-11-10 13:23:30 launch ising4 n=16 seed=18
+2026-11-10 13:24:05 done ('ising4', 16, 14) rc=0 14.2 min
+2026-11-10 13:24:05 launch lcm n=16 seed=19
+2026-11-10 13:24:45 done ('ising4', 16, 11) rc=0 14.8 min
+2026-11-10 13:24:45 launch ising4 n=16 seed=19
+2026-11-10 13:24:50 done ('ising4', 16, 13) rc=0 14.9 min
+2026-11-10 13:24:50 launch lcm n=16 seed=20
+2026-11-10 13:25:00 done ('ising4', 16, 10) rc=0 15.1 min
+2026-11-10 13:25:00 launch ising4 n=16 seed=20
+2026-11-10 13:25:15 done ('ising4', 16, 15) rc=0 15.3 min
+2026-11-10 13:25:15 done ('ising4', 16, 17) rc=0 15.3 min
+2026-11-10 13:25:15 launch lcm n=16 seed=21
+2026-11-10 13:25:15 launch ising4 n=16 seed=21
+2026-11-10 13:25:20 done ('ising4', 16, 16) rc=0 15.4 min
+2026-11-10 13:25:20 launch lcm n=16 seed=22
+2026-11-10 13:27:10 done ('lcm', 16, 15) rc=0 17.3 min
+2026-11-10 13:27:10 launch ising4 n=16 seed=22
+2026-11-10 13:27:45 done ('lcm', 16, 13) rc=0 17.8 min
+2026-11-10 13:27:46 launch lcm n=16 seed=23
+2026-11-10 13:29:11 done ('ising4', 16, 12) rc=0 19.3 min
+2026-11-10 13:29:11 done ('lcm', 16, 14) rc=0 19.3 min
+2026-11-10 13:29:11 launch ising4 n=16 seed=23
+2026-11-10 13:29:11 launch lcm n=16 seed=24
+2026-11-10 13:29:41 done ('lcm', 16, 12) rc=0 19.8 min
+2026-11-10 13:29:41 launch ising4 n=16 seed=24
+2026-11-10 13:31:36 done ('lcm', 16, 16) rc=0 21.7 min
+2026-11-10 13:31:36 launch lcm n=16 seed=25
+2026-11-10 13:34:16 done ('lcm', 16, 10) rc=0 24.3 min
+2026-11-10 13:34:16 launch ising4 n=16 seed=25
+2026-11-10 13:36:06 done ('lcm', 16, 19) rc=0 12.0 min
+2026-11-10 13:36:06 launch lcm n=16 seed=26
+2026-11-10 13:36:56 done ('ising4', 16, 18) rc=0 13.4 min
+2026-11-10 13:36:56 launch ising4 n=16 seed=26
+2026-11-10 13:37:56 done ('ising4', 16, 20) rc=0 12.9 min
+2026-11-10 13:37:56 done ('lcm', 16, 23) rc=0 10.2 min
+2026-11-10 13:37:56 launch lcm n=16 seed=27
+2026-11-10 13:37:56 launch ising4 n=16 seed=27
+2026-11-10 13:39:11 done ('ising4', 16, 21) rc=0 13.9 min
+2026-11-10 13:39:11 launch lcm n=16 seed=28
+2026-11-10 13:40:31 done ('lcm', 16, 20) rc=0 15.7 min
+2026-11-10 13:40:31 launch ising4 n=16 seed=28
+2026-11-10 13:41:11 done ('ising4', 16, 19) rc=0 16.4 min
+2026-11-10 13:41:11 launch lcm n=16 seed=29
+2026-11-10 13:41:21 done ('lcm', 16, 21) rc=0 16.1 min
+2026-11-10 13:41:21 launch ising4 n=16 seed=29
+2026-11-10 13:42:26 done ('lcm', 16, 18) rc=0 19.9 min
+2026-11-10 13:42:26 launch lcm n=14 seed=10
+2026-11-10 13:42:36 done ('lcm', 16, 24) rc=0 13.4 min
+2026-11-10 13:42:36 launch ising4 n=14 seed=10
+2026-11-10 13:43:16 done ('ising4', 16, 22) rc=0 16.1 min
+2026-11-10 13:43:16 done ('ising4', 16, 24) rc=0 13.6 min
+2026-11-10 13:43:16 launch lcm n=14 seed=11
+2026-11-10 13:43:16 launch ising4 n=14 seed=11
+2026-11-10 13:43:41 done ('ising4', 16, 23) rc=0 14.5 min
+2026-11-10 13:43:41 launch lcm n=14 seed=12
+2026-11-10 13:45:11 done ('ising4', 14, 10) rc=0 2.6 min
+2026-11-10 13:45:11 launch ising4 n=14 seed=12
+2026-11-10 13:45:56 done ('ising4', 14, 11) rc=0 2.7 min
+2026-11-10 13:45:56 launch lcm n=14 seed=13
+2026-11-10 13:46:11 done ('lcm', 14, 10) rc=0 3.8 min
+2026-11-10 13:46:11 done ('lcm', 14, 11) rc=0 2.9 min
+2026-11-10 13:46:11 launch ising4 n=14 seed=13
+2026-11-10 13:46:11 launch lcm n=14 seed=14
+2026-11-10 13:47:41 done ('ising4', 16, 25) rc=0 13.4 min
+2026-11-10 13:47:41 launch ising4 n=14 seed=14
+2026-11-10 13:47:56 done ('ising4', 14, 13) rc=0 1.8 min
+2026-11-10 13:47:56 launch lcm n=14 seed=15
+2026-11-10 13:48:21 done ('ising4', 14, 12) rc=0 3.2 min
+2026-11-10 13:48:21 launch ising4 n=14 seed=15
+2026-11-10 13:49:57 done ('ising4', 16, 26) rc=0 13.0 min
+2026-11-10 13:49:57 launch lcm n=14 seed=16
+2026-11-10 13:50:27 done ('ising4', 14, 14) rc=0 2.8 min
+2026-11-10 13:50:27 launch ising4 n=14 seed=16
+2026-11-10 13:50:57 done ('lcm', 16, 25) rc=0 19.4 min
+2026-11-10 13:50:57 launch lcm n=14 seed=17
+2026-11-10 13:51:32 done ('ising4', 14, 15) rc=0 3.2 min
+2026-11-10 13:51:32 launch ising4 n=14 seed=17
+2026-11-10 13:51:42 done ('lcm', 16, 28) rc=0 12.5 min
+2026-11-10 13:51:42 launch lcm n=14 seed=18
+2026-11-10 13:51:57 done ('ising4', 16, 27) rc=0 14.0 min
+2026-11-10 13:51:57 launch ising4 n=14 seed=18
+2026-11-10 13:52:58 done ('ising4', 14, 16) rc=0 2.5 min
+2026-11-10 13:52:58 launch lcm n=14 seed=19
+2026-11-10 13:53:08 done ('lcm', 14, 15) rc=0 5.2 min
+2026-11-10 13:53:08 launch ising4 n=14 seed=19
+2026-11-10 13:53:38 done ('lcm', 14, 12) rc=0 9.9 min
+2026-11-10 13:53:38 launch lcm n=14 seed=20
+2026-11-10 13:53:53 done ('ising4', 14, 17) rc=0 2.3 min
+2026-11-10 13:53:53 launch ising4 n=14 seed=20
+2026-11-10 13:54:13 done ('lcm', 14, 17) rc=0 3.3 min
+2026-11-10 13:54:13 launch lcm n=14 seed=21
+2026-11-10 13:54:43 done ('lcm', 14, 14) rc=0 8.5 min
+2026-11-10 13:54:43 done ('ising4', 14, 18) rc=0 2.8 min
+2026-11-10 13:54:43 launch ising4 n=14 seed=21
+2026-11-10 13:54:43 launch lcm n=14 seed=22
+2026-11-10 13:55:38 done ('ising4', 14, 19) rc=0 2.5 min
+2026-11-10 13:55:38 launch ising4 n=14 seed=22
+2026-11-10 13:56:03 done ('lcm', 14, 13) rc=0 10.1 min
+2026-11-10 13:56:03 launch lcm n=14 seed=23
+2026-11-10 13:56:08 done ('ising4', 14, 20) rc=0 2.3 min
+2026-11-10 13:56:08 launch ising4 n=14 seed=23
+2026-11-10 13:56:23 done ('lcm', 14, 16) rc=0 6.4 min
+2026-11-10 13:56:23 launch lcm n=14 seed=24
+2026-11-10 13:56:43 done ('lcm', 14, 20) rc=0 3.1 min
+2026-11-10 13:56:43 launch ising4 n=14 seed=24
+2026-11-10 13:56:58 done ('lcm', 14, 18) rc=0 5.3 min
+2026-11-10 13:56:58 launch lcm n=14 seed=25
+2026-11-10 13:57:08 done ('ising4', 14, 21) rc=0 2.4 min
+2026-11-10 13:57:08 launch ising4 n=14 seed=25
+2026-11-10 13:57:53 done ('lcm', 14, 22) rc=0 3.2 min
+2026-11-10 13:57:54 launch lcm n=14 seed=26
+2026-11-10 13:58:04 done ('ising4', 14, 22) rc=0 2.4 min
+2026-11-10 13:58:04 done ('ising4', 14, 23) rc=0 1.9 min
+2026-11-10 13:58:04 launch ising4 n=14 seed=26
+2026-11-10 13:58:04 launch lcm n=14 seed=27
+2026-11-10 13:58:14 done ('lcm', 14, 19) rc=0 5.3 min
+2026-11-10 13:58:14 launch ising4 n=14 seed=27
+2026-11-10 13:58:24 done ('lcm', 16, 26) rc=0 22.3 min
+2026-11-10 13:58:24 launch lcm n=14 seed=28
+2026-11-10 13:58:39 done ('ising4', 14, 24) rc=0 1.9 min
+2026-11-10 13:58:39 launch ising4 n=14 seed=28
+2026-11-10 13:59:14 done ('ising4', 14, 25) rc=0 2.1 min
+2026-11-10 13:59:14 launch lcm n=14 seed=29
+2026-11-10 13:59:19 done ('lcm', 14, 23) rc=0 3.3 min
+2026-11-10 13:59:19 launch ising4 n=14 seed=29
+2026-11-10 13:59:39 done ('lcm', 14, 21) rc=0 5.4 min
+2026-11-10 13:59:39 done ('lcm', 14, 24) rc=0 3.3 min
+2026-11-10 13:59:39 done ('lcm', 14, 25) rc=0 2.7 min
+2026-11-10 13:59:54 done ('ising4', 14, 26) rc=0 1.8 min
+2026-11-10 14:00:04 done ('lcm', 16, 29) rc=0 18.9 min
+2026-11-10 14:00:14 done ('ising4', 14, 28) rc=0 1.6 min
+2026-11-10 14:00:29 done ('ising4', 14, 27) rc=0 2.3 min
+2026-11-10 14:01:04 done ('ising4', 16, 29) rc=0 19.7 min
+2026-11-10 14:01:19 done ('lcm', 14, 28) rc=0 2.9 min
+2026-11-10 14:01:49 done ('ising4', 16, 28) rc=0 21.3 min
+2026-11-10 14:01:54 done ('lcm', 14, 26) rc=0 4.0 min
+2026-11-10 14:02:04 done ('ising4', 14, 29) rc=0 2.8 min
+2026-11-10 14:02:09 done ('lcm', 14, 27) rc=0 4.1 min
+2026-11-10 14:02:29 done ('lcm', 14, 29) rc=0 3.3 min
+2026-11-10 14:02:44 done ('lcm', 16, 22) rc=0 37.4 min
+2026-11-10 14:08:14 done ('lcm', 16, 27) rc=0 30.3 min
+2026-11-10 14:08:14 end: 0.97 h, failed []

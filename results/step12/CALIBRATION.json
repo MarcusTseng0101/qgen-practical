@@ -1,0 +1,29 @@
+{
+  "procedure": "bisect log beta in [0.01, 20] until median collision ratio over seeds 0-4 is within 1% of step 9's iqp4 median at that n",
+  "reference": {
+    "14": 479.1263869626298,
+    "16": 319.06300535336834
+  },
+  "beta": {
+    "lcm/n_16": {
+      "beta": 2.8471853167801915,
+      "median_collision_ratio": 319.17792130066687,
+      "rel_err": 0.00036016694311280517
+    },
+    "lcm/n_14": {
+      "beta": 4.188380845315547,
+      "median_collision_ratio": 479.18773639260394,
+      "rel_err": 0.00012804435665314529
+    },
+    "ising4/n_16": {
+      "beta": 0.5784089943199191,
+      "median_collision_ratio": 319.16092285088,
+      "rel_err": 0.0003068907891818906
+    },
+    "ising4/n_14": {
+      "beta": 0.9020940248314148,
+      "median_collision_ratio": 479.1478914286974,
+      "rel_err": 4.488265863189511e-05
+    }
+  }
+}

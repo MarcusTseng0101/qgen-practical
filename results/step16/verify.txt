@@ -1,0 +1,9 @@
+ok   [spec] specs/step16_shot_threshold.md committed and unchanged
+ok   [closed] src/step1..15 unchanged since ee59b78
+ok   [grid] 60 instances: family/N/seed, n = 16, 3 G restarts, step-12 beta or level-B sigma
+ok   [targets] every target p >= 0 and sums to 1 within 1e-12
+ok   [summary] SUMMARY opens with the required sentence
+ok   [summary] T1–T2 marked
+ok   [figures] figures/step16/gate_N3e4
+ok   [tests] 3 passed in 0.57s
+ALL CHECKS PASS (step 16)

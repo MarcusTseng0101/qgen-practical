@@ -1,0 +1,44 @@
+{
+ "family": "lcm",
+ "n": 16,
+ "N": 30000,
+ "seed": 74,
+ "beta": 2.8471853167801915,
+ "versions": {
+  "python": "3.12.10",
+  "numpy": "2.5.4",
+  "scipy": "1.18.1",
+  "matplotlib": "3.11.2"
+ },
+ "G_iqp": 0.0002970882366415905,
+ "G_maxent": 3.802344294618742e-05,
+ "R": 7.813291317728483,
+ "G_train_residual": 0.16940859055113824,
+ "floor": 0.021578270967555553,
+ "excess": 0.1478303195835827,
+ "r_true": 0.18128761030946214,
+ "noise_true": 0.02192714267472791,
+ "G_n_restarts": 3,
+ "G_restart_residuals": [
+  0.22554038873761312,
+  0.16940859055113824,
+  0.17081095211654973
+ ],
+ "G_restart_G": [
+  0.00040151308716805954,
+  0.0002970882366415905,
+  0.00025688316993947613
+ ],
+ "G_best_restart": 1,
+ "D3": 0.04132654563787408,
+ "collision_ratio_target": 260.56006399959415,
+ "maxent_train_residual": 1.300837872990908e-12,
+ "maxent_nit": 806,
+ "p_min": 1.4125709110578508e-12,
+ "p_sum_err": 0.0,
+ "tau": 0.01,
+ "R_gate": 1.0,
+ "designed_after": "steps 14-15 (notes/2026-11-11_step14_finiteN_findings.md, notes/2026-11-11_step15_split_pilot.md)",
+ "blas_threads_env": "1",
+ "total_seconds": 1530.8076190948486
+}

@@ -1,0 +1,130 @@
+{
+  "verdicts": {
+    "T1": {
+      "picked": 19,
+      "wins": 17,
+      "losses": 2,
+      "ties": 1,
+      "sign_p": 0.0003643035888671875,
+      "PASS": true,
+      "N": 30000,
+      "statement": "iqp4: wins >= 10/20 and one-sided sign-test p <= 0.05"
+    },
+    "T2": {
+      "picked": 0,
+      "wins": 0,
+      "losses": 0,
+      "ties": 40,
+      "PASS": true,
+      "N": 30000,
+      "statement": "lcm + ising4 pooled: losses <= 2/40"
+    }
+  },
+  "stats": {
+    "N_30000": {
+      "pool_gmean_R_gate": 0.8953661816397972,
+      "pool_gmean_oracle_min_R_1": 0.8930782861065422,
+      "pool_gmean_R_iqp_always": 2.8822738225887545,
+      "iqp4": {
+        "picked": 19,
+        "wins": 17,
+        "losses": 2,
+        "ties": 1,
+        "R": "0.71 [0.649, 0.877]",
+        "excess": "-0.0167 [-0.0187, -0.0141]",
+        "r_N": "0.00591 [0.00362, 0.0079]",
+        "r_true": "0.0224 [0.0205, 0.0259]",
+        "floor": "0.0222 [0.0219, 0.0225]",
+        "worst_R_gate_picked": 1.1019529514845843,
+        "gmean_R_gate": 0.7177976970221037,
+        "uncorrected": {
+          "picked": 17,
+          "wins": 15,
+          "losses": 2,
+          "ties": 3
+        },
+        "tau_3e-3": {
+          "picked": 19,
+          "wins": 17,
+          "losses": 2,
+          "ties": 1
+        },
+        "tau_3e-2": {
+          "picked": 20,
+          "wins": 17,
+          "losses": 3,
+          "ties": 0
+        },
+        "D3": "0.329 [0.307, 0.412]",
+        "minutes": 45.520336373647055
+      },
+      "lcm": {
+        "picked": 0,
+        "wins": 0,
+        "losses": 0,
+        "ties": 20,
+        "R": "12.8 [8.58, 20.2]",
+        "excess": "0.641 [0.282, 0.824]",
+        "r_N": "0.663 [0.304, 0.846]",
+        "r_true": "0.683 [0.304, 0.858]",
+        "floor": "0.0219 [0.0216, 0.0222]",
+        "worst_R_gate_picked": null,
+        "gmean_R_gate": 1.0,
+        "uncorrected": {
+          "picked": 0,
+          "wins": 0,
+          "losses": 0,
+          "ties": 20
+        },
+        "tau_3e-3": {
+          "picked": 0,
+          "wins": 0,
+          "losses": 0,
+          "ties": 20
+        },
+        "tau_3e-2": {
+          "picked": 0,
+          "wins": 0,
+          "losses": 0,
+          "ties": 20
+        },
+        "D3": "0.0485 [0.042, 0.0541]",
+        "minutes": 19.380234984556832
+      },
+      "ising4": {
+        "picked": 0,
+        "wins": 0,
+        "losses": 0,
+        "ties": 20,
+        "R": "2.35 [1.73, 3.15]",
+        "excess": "0.121 [0.0975, 0.212]",
+        "r_N": "0.144 [0.121, 0.235]",
+        "r_true": "0.155 [0.13, 0.243]",
+        "floor": "0.0229 [0.0226, 0.023]",
+        "worst_R_gate_picked": null,
+        "gmean_R_gate": 1.0,
+        "uncorrected": {
+          "picked": 0,
+          "wins": 0,
+          "losses": 0,
+          "ties": 20
+        },
+        "tau_3e-3": {
+          "picked": 0,
+          "wins": 0,
+          "losses": 0,
+          "ties": 20
+        },
+        "tau_3e-2": {
+          "picked": 0,
+          "wins": 0,
+          "losses": 0,
+          "ties": 20
+        },
+        "D3": "0.354 [0.208, 0.425]",
+        "minutes": 16.543427755435307
+      }
+    }
+  },
+  "complete": true
+}

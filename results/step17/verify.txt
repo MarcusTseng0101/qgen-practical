@@ -1,0 +1,7 @@
+ok   [spec] specs/step17_real_mnist16.md committed and unchanged
+ok   [closed] src/step1..16 unchanged since 5317a9d
+ok   [grid] 20 splits: N_train 3e4, N_test 4e4, 3 restarts, pinned SHA-256
+ok   [summary] SUMMARY opens with the required sentence
+ok   [summary] U1–U2 marked
+ok   [tests] 4 passed in 1.13s
+ALL CHECKS PASS (step 17)

@@ -1,0 +1,45 @@
+{
+ "family": "iqp4",
+ "n": 16,
+ "N": 10000,
+ "seed": 59,
+ "sigma": 0.251,
+ "level": "B",
+ "versions": {
+  "python": "3.12.10",
+  "numpy": "2.5.4",
+  "scipy": "1.18.1",
+  "matplotlib": "3.11.2"
+ },
+ "G_iqp": 0.0003004880535864805,
+ "G_maxent": 0.0003021878231690962,
+ "R": 0.9943751221846403,
+ "G_train_residual": 0.03473712424805578,
+ "floor": 0.06184951851200001,
+ "excess": -0.027112394263944233,
+ "r_true": 0.07340284662824341,
+ "noise_true": 0.05392421483752362,
+ "G_n_restarts": 3,
+ "G_restart_residuals": [
+  0.03473712424805578,
+  0.03538701394689325,
+  0.03863193695896854
+ ],
+ "G_restart_G": [
+  0.0003004880535864805,
+  0.0003082357163528142,
+  0.0003455006290306278
+ ],
+ "G_best_restart": 0,
+ "D3": 0.35148855557644476,
+ "collision_ratio_target": 1697.4794756382082,
+ "maxent_train_residual": 2.1560302809408942e-13,
+ "maxent_nit": 1008,
+ "p_min": 4.976122063972561e-13,
+ "p_sum_err": 0.0,
+ "tau": 0.01,
+ "R_gate": 0.9943751221846403,
+ "designed_after": "step 13 (notes/2026-11-10_step13_gate_findings.md) and the step 14 pilot",
+ "blas_threads_env": "1",
+ "total_seconds": 2003.5263104438782
+}

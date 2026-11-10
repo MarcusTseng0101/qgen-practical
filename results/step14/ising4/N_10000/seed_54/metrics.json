@@ -1,0 +1,44 @@
+{
+ "family": "ising4",
+ "n": 16,
+ "N": 10000,
+ "seed": 54,
+ "beta": 0.5784089943199191,
+ "versions": {
+  "python": "3.12.10",
+  "numpy": "2.5.4",
+  "scipy": "1.18.1",
+  "matplotlib": "3.11.2"
+ },
+ "G_iqp": 0.0005014200166670881,
+ "G_maxent": 0.00031804459096690184,
+ "R": 1.576571433404034,
+ "G_train_residual": 0.16412580070128371,
+ "floor": 0.06870852054,
+ "excess": 0.09541728016128372,
+ "r_true": 0.18589060652941009,
+ "noise_true": 0.07162953115690548,
+ "G_n_restarts": 3,
+ "G_restart_residuals": [
+  0.16412580070128371,
+  0.39993141613092037,
+  0.24729426656493386
+ ],
+ "G_restart_G": [
+  0.0005014200166670881,
+  0.0006580932109402364,
+  0.0005531417370763279
+ ],
+ "G_best_restart": 0,
+ "D3": 0.4153118423693122,
+ "collision_ratio_target": 40.801673354916566,
+ "maxent_train_residual": 7.304991409298573e-15,
+ "maxent_nit": 179,
+ "p_min": 8.330709751446024e-11,
+ "p_sum_err": 2.220446049250313e-16,
+ "tau": 0.01,
+ "R_gate": 1.0,
+ "designed_after": "step 13 (notes/2026-11-10_step13_gate_findings.md) and the step 14 pilot",
+ "blas_threads_env": "1",
+ "total_seconds": 833.3221523761749
+}

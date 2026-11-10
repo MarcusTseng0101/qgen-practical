@@ -483,3 +483,15 @@ and harness unchanged.
   - F4 PASS: lcm + ising4 n = 14, 40/40 fallback.
 - Mixed pool of 60 at n = 16: gmean R_gate 0.867 vs always-IQP 3.43 and oracle min(R,1) 0.854.
 - Frozen reading (F1, F2 PASS): the deployable claim holds at n = 16.
+
+## Step 14 (2026-11-11): noise-corrected residual gate at finite N (specs/step14_finiteN_gate.md)
+- Done: 120 instances in 3.93 h (16 workers x 1 thread), none failed; `--verify` exits 0. Code df5bdfe.
+- Verdicts:
+  - S1 PASS: iqp4 N = 1e5, picks 14/20, 11 wins / 3 losses, p = 0.029.
+  - S2 PASS: lcm + ising4 N = 1e5, 0/40 picked.
+  - S3 FAIL: iqp4 N = 1e4, picks 20/20, 12 wins / 8 losses, p = 0.25.
+  - S4 PASS: N = 1e4, 0/40 picked.
+- The gate's rejections at N = 1e5 are mostly right: 5 of the 6 rejected iqp4 seeds had R > 1.
+- At N = 1e4 the floor (0.066) is 3x G's raw residual: G fits the noise, the excess is always
+  negative in-family, and the gate cannot discriminate.
+- The always-IQP median R rises with noise: 0.66 (N = inf, step 13), 0.93 (1e5), 0.99 (1e4).

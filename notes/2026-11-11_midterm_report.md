@@ -16,6 +16,36 @@ advantage exists only on IQP-like targets, and it needs coherence. On two non-IQ
 IQP loses to MaxEnt(3) on every seed. All targets are synthetic, and n ≤ 16. The n ≤ 16 proxies
 are not hardness evidence.
 
+## Update after steps 15–16 (added 2026-11-11)
+
+This box supersedes the claim wording in the Abstract and section 3. It also supersedes the
+split-sample and shot-threshold bullets of section 4, and the recommendation of section 6. The
+rest of the report is unchanged.
+
+- **Step 15 (pilot only, development seeds; `notes/2026-11-11_step15_split_pilot.md`).** The
+  split-sample gate is unbiased, but it has no power at τ = 1e-2. It does not rank R within
+  `iqp4`, and its families overlap at N = 1e4. It was dropped. At N = 1e4 the bottleneck is the
+  advantage itself, not the gate.
+- **Step 16 (frozen, fresh seeds 70–89; `notes/2026-11-11_step16_threshold_findings.md`).** The
+  step 14 gate, unchanged, was run at N = 3e4.
+  - T1 PASS: 19 picked, 17 wins, 2 losses, p = 3.6e-4.
+  - T2 PASS: 0/40 picked out of family.
+  - The pooled geometric mean R_gate is 0.895, against an oracle 0.893.
+  - Caveat: the always-IQP R is not monotone in N across seed sets, nor on the same pilot seeds.
+    The threshold is a soft transition.
+
+**Updated claim:**
+
+> At n = 16, a training-only noise-corrected residual gate picks the generic IQP over MaxEnt(3) on
+> IQP-like data and wins at N = 3e4 (17/2, p = 4e-4) and N = 1e5 (11/3, p = 0.03). It never picks
+> the IQP on non-IQP data: 0/120 across N ∈ {1e4, 3e4, 1e5}. At N = 1e4 the advantage itself is
+> gone (12/8, not significant).
+
+**Updated recommendation: rank 1, the real-data probe.** The shot budget is now known: about
+N ≥ 3e4 at n = 16. The gate works at that N. That removes the blocker that made rank 2 the
+recommendation. A real binary dataset with n ≤ 16 features and ≥ 3e4 rows can now be read through
+the frozen gate.
+
 ## 1. Question and setup
 
 ### 1.1 The question

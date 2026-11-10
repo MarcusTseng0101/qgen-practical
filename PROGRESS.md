@@ -473,3 +473,13 @@ and harness unchanged.
   - ising4 n = 16 test seeds are far less peaked than calibration seeds 0-4 (median collision
     ratio 42 vs 319): large seed spread in that family. lcm matched (291 vs 319).
   - Q < 1 everywhere: the coherent model still beats its decohered twin, but both lose to MaxEnt(3).
+
+## Step 13 (2026-11-10): residual-gated estimator on fresh seeds 30-49 (specs/step13_residual_gate.md)
+- Done: 120 instances in 2.39 h (16 workers x 1 thread), none failed; `--verify` exits 0. Code 91338a0.
+- Verdicts:
+  - F1 PASS: iqp4 n = 16, gate picks IQP 15/20, 14 wins / 1 loss, sign p = 0.0005.
+  - F2 PASS: lcm + ising4 n = 16, gate falls back 40/40, 0 losses.
+  - F3 FAIL: iqp4 n = 14, 9 wins / 2 losses (p = 0.033), fails only the wins >= 10 floor.
+  - F4 PASS: lcm + ising4 n = 14, 40/40 fallback.
+- Mixed pool of 60 at n = 16: gmean R_gate 0.867 vs always-IQP 3.43 and oracle min(R,1) 0.854.
+- Frozen reading (F1, F2 PASS): the deployable claim holds at n = 16.

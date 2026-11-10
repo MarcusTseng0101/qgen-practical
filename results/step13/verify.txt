@@ -1,0 +1,9 @@
+ok   [spec] specs/step13_residual_gate.md committed and unchanged
+ok   [closed] src/step1..12 unchanged since 41df310
+ok   [grid] 120 instances: family/n/seed, 3 G restarts, step-12 beta or level-B sigma
+ok   [targets] every target p >= 0 and sums to 1 within 1e-12
+ok   [summary] SUMMARY opens with the required sentence
+ok   [summary] F1–F4 marked
+ok   [figures] figures/step13/gate
+ok   [tests] 4 passed in 0.70s
+ALL CHECKS PASS (step 13)

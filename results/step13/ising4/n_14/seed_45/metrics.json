@@ -1,0 +1,39 @@
+{
+ "family": "ising4",
+ "n": 14,
+ "seed": 45,
+ "beta": 0.9020940248314148,
+ "N": "inf",
+ "versions": {
+  "python": "3.12.10",
+  "numpy": "2.5.4",
+  "scipy": "1.18.1",
+  "matplotlib": "3.11.2"
+ },
+ "G_iqp": 0.0034124907564997745,
+ "G_maxent": 0.0003159726956246025,
+ "R": 10.79995456491611,
+ "G_train_residual": 0.7426864762456317,
+ "G_n_restarts": 3,
+ "G_restart_residuals": [
+  0.8182721447954266,
+  0.7426864762456317,
+  0.9216004264605325
+ ],
+ "G_restart_G": [
+  0.003921005944592934,
+  0.0034124907564997745,
+  0.004441345367307958
+ ],
+ "G_best_restart": 1,
+ "D3": 0.3481699496606758,
+ "collision_ratio_target": 212.19080984202748,
+ "maxent_train_residual": 3.1044878887489304e-13,
+ "p_min": 8.959924999302626e-14,
+ "p_sum_err": 0.0,
+ "tau": 0.01,
+ "R_gate": 1.0,
+ "designed_after": "step 12 (notes/2026-11-10_step12_findings.md)",
+ "blas_threads_env": "1",
+ "total_seconds": 100.2297043800354
+}

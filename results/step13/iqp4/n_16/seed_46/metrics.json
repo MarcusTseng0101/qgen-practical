@@ -1,0 +1,40 @@
+{
+ "family": "iqp4",
+ "n": 16,
+ "seed": 46,
+ "sigma": 0.251,
+ "level": "B",
+ "N": "inf",
+ "versions": {
+  "python": "3.12.10",
+  "numpy": "2.5.4",
+  "scipy": "1.18.1",
+  "matplotlib": "3.11.2"
+ },
+ "G_iqp": 0.00022490300685277303,
+ "G_maxent": 0.0003681651958541298,
+ "R": 0.6108752521568648,
+ "G_train_residual": 0.03467968751322677,
+ "G_n_restarts": 3,
+ "G_restart_residuals": [
+  0.03467968751322677,
+  0.039910339327467126,
+  0.05561975058475833
+ ],
+ "G_restart_G": [
+  0.00022490300685277303,
+  0.00027106058043725837,
+  0.00037469192203780274
+ ],
+ "G_best_restart": 0,
+ "D3": 0.5041819160279999,
+ "collision_ratio_target": 337.44956960379426,
+ "maxent_train_residual": 5.0813364106160376e-14,
+ "p_min": 3.757523917815292e-12,
+ "p_sum_err": 0.0,
+ "tau": 0.01,
+ "R_gate": 1.0,
+ "designed_after": "step 12 (notes/2026-11-10_step12_findings.md)",
+ "blas_threads_env": "1",
+ "total_seconds": 2238.7312245368958
+}

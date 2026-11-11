@@ -1,0 +1,12 @@
+{
+  "seed": 302,
+  "G_xor": 0.00010693180747523214,
+  "G_iqp": 8.578702301397167e-05,
+  "G_maxent": 0.00010170981856918696,
+  "xor_fit": {
+    "residual": 0.06617696208789343,
+    "nit": 3357,
+    "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+    "n_nonpos": 27
+  }
+}

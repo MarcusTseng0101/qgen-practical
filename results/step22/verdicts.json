@@ -1,0 +1,72 @@
+{
+  "have": {
+    "synth": [
+      8,
+      8
+    ],
+    "iqp4": [
+      14,
+      14
+    ],
+    "partA": [
+      32,
+      32
+    ],
+    "partB": [
+      8,
+      8
+    ]
+  },
+  "X0": {
+    "value": "8/8",
+    "pass": true
+  },
+  "C1": {
+    "counts": {
+      "x_better": 0,
+      "y_better": 3,
+      "unresolved": 5
+    },
+    "pass": false
+  },
+  "C2": {
+    "counts": {
+      "x_better": 2,
+      "y_better": 0,
+      "unresolved": 6
+    },
+    "pass": false
+  },
+  "B_iqp_maxent": {
+    "x_better": 0,
+    "y_better": 4,
+    "unresolved": 4
+  },
+  "X4": {
+    "value": "13/14",
+    "pass": true
+  },
+  "A1": {
+    "xor_maxent": {
+      "x_better": 0,
+      "y_better": 10,
+      "unresolved": 22
+    },
+    "xor_iqp": {
+      "x_better": 7,
+      "y_better": 7,
+      "unresolved": 18
+    },
+    "iqp_maxent": {
+      "x_better": 0,
+      "y_better": 13,
+      "unresolved": 19
+    }
+  },
+  "A2": {
+    "rho": -0.36180351906158353,
+    "p_perm": 0.0415
+  },
+  "S0_max_rel_err": 0.0,
+  "A3": {}
+}

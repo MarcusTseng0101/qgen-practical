@@ -1,0 +1,7 @@
+ok   [spec] specs/step22_xor_interference.md committed and unchanged
+ok   [closed] src/step1..21 unchanged since 1f0050d
+ok   [files] all instance files exist {'synth': [8, 8], 'iqp4': [14, 14], 'partA': [32, 32], 'partB': [8, 8]}
+ok   [S0] Part A models reproduce step 21's R (< 1e-9 relative)
+ok   [summary] sentence present; X0, C1, C2, X4 each reported
+ok   [tests] 4 passed in 1.03s
+ALL CHECKS PASS (step 22)

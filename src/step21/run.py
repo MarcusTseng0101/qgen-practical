@@ -31,7 +31,7 @@ RUNS = tuple(f"surface_code_b{b}_d3_r{r}_center_{c}" for r in ("03", "05")
 SPLITS = (100, 101)
 B = 400
 MAX_PAR = 12
-STOP_LOSS_H = 4.0
+STOP_LOSS_H = 2.0  # amendment 1 (resume of the 5 killed fits); was 4.0
 n = 16
 SENT = ("Step 21 is a diagnostic on 16 spent QEC runs; it adds no claim; models are step 20's procedure, "
         "unchanged.")

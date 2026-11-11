@@ -46,6 +46,58 @@ N ≥ 3e4 at n = 16. The gate works at that N. That removes the blocker that mad
 recommendation. A real binary dataset with n ≤ 16 features and ≥ 3e4 rows can now be read through
 the frozen gate.
 
+## Update after steps 17–21 (added 2026-11-11)
+
+This box supersedes the claim wording of the steps 15–16 box. That box's "never picks the IQP on non-IQP
+data" holds only for the synthetic families and for MNIST. Every number below is quoted from the step
+notes.
+
+- **Step 17 (frozen; MNIST-16; `notes/2026-11-11_step17_mnist16_findings.md`).** U1 and U2 PASS.
+  - The IQP cannot fit the order-≤3 moments and loses about 4×.
+  - The gate falls back to MaxEnt(3) on 20/20 splits.
+  - The gate is safe here because the misfit is visible at low order.
+- **Step 18 (identifiability demo; `notes/2026-11-11_step18_identifiability.md`).**
+  - q_λ = λp + (1−λ)MaxEnt3(p) has the same order-≤3 moments for every λ.
+  - The gate picks G at every λ, but G loses below λ* = 0.60–0.74.
+  - So no order-≤3 gate can be safe in general.
+- **Step 19 (frozen; Google surface-code detection events, 7 hardware runs;
+  `notes/2026-11-11_step19_qec_findings.md`).**
+  - V1 FAIL: the gate picked the IQP on 7/7 runs and lost on 5 (median R 2.87).
+  - V2 FAIL.
+  - An order-4 check on the training rows flagged 0/7.
+- **Step 20 (frozen; held-out order-4 validation gate, 18 fresh instances;
+  `notes/2026-11-11_step20_val_gate_findings.md`).**
+  - W1 FAIL: 2 losses, both on QEC.
+  - W2 PASS: 2 losses against 7 for the step 14 gate.
+  - W3 PASS: kept 6/9 wins.
+  - On iqp4 the new gate had 0 losses on 14 instances (test plus pilot). On QEC its decisions matched the
+    outcome at chance (4/8).
+- **Step 21 (diagnostic; bootstrap CIs, 16 QEC runs × 2 splits;
+  `notes/2026-11-11_step21_qec_resolvability.md`).**
+  - 9/16 runs are unresolved, and the sign agreed across splits on only 8/16.
+  - IQP wins: 0/32 resolved.
+  - Losses: 12/32 resolved, and 3 runs lose in both splits.
+  - The validation CI excludes 0 in 1/32 cells.
+
+**Updated claim:**
+
+> At n = 16, on IQP-like synthetic data, the generic IQP completes order-4–6 moments better than MaxEnt(3)
+> at N ≥ 3e4. A training-only gate picks it there (17/2 at 3e4; 11/3 at 1e5). Adding a held-out order-4
+> validation check removed every loss on 14 IQP-family instances while keeping most wins. The order-≤3
+> gate alone is **not** safe in general (step 18). On real data it is safe only when the IQP visibly
+> misfits at low order (MNIST, 0/20 picks). On real parity-structured data (QEC syndromes, 5e4 shots) it
+> picks the IQP every time. There, the IQP shows no resolved advantage (0/32) and loses reproducibly on
+> 3 of 16 runs.
+
+**Reporting rule.** Real-data outcomes are reported as resolved / unresolved counts with bootstrap CIs over
+at least two splits. Win/loss counts of a single point R are not used.
+
+**Updated recommendation.**
+1. Write up. The synthetic advantage, the identifiability limit and the QEC negative result form a
+   complete, honest story.
+2. Optional: a larger real parity-structured dataset, ≥ 5e5 shots per run, so that validation and test
+   can resolve differences of about 3e-5.
+
 ## 1. Question and setup
 
 ### 1.1 The question

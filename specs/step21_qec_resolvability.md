@@ -66,3 +66,21 @@ Losses that stay resolved in both splits are real step 18-type failures, and the
 
 - 32 fits, at most 12 at a time (18 at once ran out of memory in step 20), about 3 × 65 min.
 - **Stop-loss: 4 h.**
+
+## Amendment 1 (written after the stop-loss, before any result was read)
+
+The 4 h stop-loss fired with 27/32 fits done. Five split-101 fits were killed while running:
+- bZ r03 5_3;
+- bZ r05 5_3, 5_7 and 7_5;
+- bX r05 7_5.
+
+12 parallel jobs plus the bootstrap ran about 3× slower per fit than step 20.
+
+No result had been read when this amendment was written. The amendment only completes the pre-declared
+grid and changes no design choice:
+- rerun exactly those 5 fits, unchanged, with `--all`, which skips existing files;
+- the 5 jobs run in parallel;
+- new stop-loss: 2 h.
+
+If it fires again, the report uses the completed (run, split) pairs only, and D2 is reported over the
+pairs available.

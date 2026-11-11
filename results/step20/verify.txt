@@ -1,0 +1,7 @@
+ok   [spec] specs/step20_heldout_val_gate.md committed and unchanged
+ok   [closed] src/step1..19 and step20/core.py unchanged since 28509d8
+ok   [grid] 18 instances with the frozen N, restarts, md5
+ok   [summary] SUMMARY opens with the required sentence
+ok   [summary] W1–W3 marked
+ok   [tests] 4 passed in 0.70s
+ALL CHECKS PASS (step 20)

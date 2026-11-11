@@ -1,0 +1,24 @@
+  File "C:\Users\tseng\qgen-practical-step1\src\step1\bits.py", line 45, in popcount
+    c += a & 1
+         ~~^~~
+numpy._core._exceptions._ArrayMemoryError: Unable to allocate 348. MiB for an array with shape (65536, 696) and data type int64
+done ['--qec', 'surface_code_bX_d3_r05_center_7_5'] rc=1 0.2 min
+done ['--iqp4', '310'] rc=1 0.2 min
+done ['--iqp4', '312'] rc=1 0.2 min
+done ['--iqp4', '314'] rc=1 0.2 min
+done ['--iqp4', '315'] rc=1 0.2 min
+done ['--iqp4', '316'] rc=1 0.2 min
+done ['--iqp4', '317'] rc=1 0.2 min
+done ['--iqp4', '318'] rc=1 0.2 min
+done ['--iqp4', '319'] rc=1 0.2 min
+done ['--iqp4', '311'] rc=0 14.1 min
+done ['--iqp4', '313'] rc=0 20.3 min
+done ['--qec', 'surface_code_bZ_d3_r05_center_5_7'] rc=0 56.3 min
+done ['--qec', 'surface_code_bX_d3_r05_center_5_7'] rc=0 57.2 min
+done ['--qec', 'surface_code_bZ_d3_r05_center_7_5'] rc=0 58.5 min
+done ['--qec', 'surface_code_bX_d3_r05_center_3_5'] rc=0 62.0 min
+done ['--qec', 'surface_code_bZ_d3_r05_center_3_5'] rc=0 67.0 min
+done ['--qec', 'surface_code_bZ_d3_r05_center_5_3'] rc=0 67.8 min
+done ['--qec', 'surface_code_bX_d3_r05_center_5_3'] rc=0 71.9 min
+
+[exited with code 0]

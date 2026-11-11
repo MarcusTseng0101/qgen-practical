@@ -1,0 +1,276 @@
+{
+  "complete": true,
+  "verdicts": {
+    "W1": {
+      "losses": 2,
+      "picks": 8,
+      "PASS": false,
+      "statement": "new gate losses <= 1 of 18"
+    },
+    "W2": {
+      "losses_new": 2,
+      "losses_step14": 7,
+      "PASS": true,
+      "statement": "new gate has fewer losses than the step 14 gate"
+    },
+    "W3": {
+      "wins": 9,
+      "kept": 6,
+      "PASS": true,
+      "statement": "new gate keeps >= 50% of the R < 1 instances"
+    }
+  },
+  "rows": [
+    {
+      "name": "bX_d3_r05_center_3_5",
+      "kind": "qec",
+      "R": 0.7219877241325233,
+      "R_raw": 0.8056933584305248,
+      "picks14": true,
+      "picks_val4": true,
+      "d4": -2.1227950363474764e-05,
+      "d5": -4.3157238648490516e-05,
+      "d6": -5.143116910320639e-05,
+      "pooled_pick": true,
+      "excess": -0.022401862403168674
+    },
+    {
+      "name": "bZ_d3_r05_center_3_5",
+      "kind": "qec",
+      "R": 1.6876490829428012,
+      "R_raw": 1.3690330677783127,
+      "picks14": true,
+      "picks_val4": false,
+      "d4": 1.2199194515725572e-05,
+      "d5": 5.1399685159025476e-05,
+      "d6": 0.00013253319917800853,
+      "pooled_pick": false,
+      "excess": -0.022450767390630205
+    },
+    {
+      "name": "bX_d3_r05_center_5_3",
+      "kind": "qec",
+      "R": 0.5004611310346857,
+      "R_raw": 0.6652139182935618,
+      "picks14": true,
+      "picks_val4": false,
+      "d4": 2.0096876747354e-05,
+      "d5": 5.231882243991047e-05,
+      "d6": 9.444144992275324e-05,
+      "pooled_pick": false,
+      "excess": -0.022696038734975447
+    },
+    {
+      "name": "bZ_d3_r05_center_5_3",
+      "kind": "qec",
+      "R": 3.39604397999743,
+      "R_raw": 1.8529253969499868,
+      "picks14": true,
+      "picks_val4": false,
+      "d4": 1.3447699088917803e-05,
+      "d5": 5.2720085565486124e-05,
+      "d6": 0.00012357339721833643,
+      "pooled_pick": false,
+      "excess": -0.022777693846925334
+    },
+    {
+      "name": "bX_d3_r05_center_5_7",
+      "kind": "qec",
+      "R": 8.138448799567401,
+      "R_raw": 3.1956479151286596,
+      "picks14": true,
+      "picks_val4": true,
+      "d4": -3.0476263951134506e-05,
+      "d5": -4.409934505396817e-05,
+      "d6": -1.2245053617372087e-05,
+      "pooled_pick": true,
+      "excess": -0.0215847823706959
+    },
+    {
+      "name": "bZ_d3_r05_center_5_7",
+      "kind": "qec",
+      "R": 4.2845035182694176,
+      "R_raw": 2.429970648359196,
+      "picks14": true,
+      "picks_val4": false,
+      "d4": 1.0281812077757103e-05,
+      "d5": 3.6685042379135e-05,
+      "d6": 8.352132839248366e-05,
+      "pooled_pick": false,
+      "excess": -0.021925887333733865
+    },
+    {
+      "name": "bX_d3_r05_center_7_5",
+      "kind": "qec",
+      "R": 4.063542279986603,
+      "R_raw": 1.9681528370812775,
+      "picks14": true,
+      "picks_val4": true,
+      "d4": -1.1474908683691347e-05,
+      "d5": -2.7238088336543774e-05,
+      "d6": -3.230528379882966e-05,
+      "pooled_pick": true,
+      "excess": -0.02198044738108342
+    },
+    {
+      "name": "bZ_d3_r05_center_7_5",
+      "kind": "qec",
+      "R": 0.5281622980650822,
+      "R_raw": 0.7020978412748045,
+      "picks14": true,
+      "picks_val4": false,
+      "d4": 3.0620985145888465e-05,
+      "d5": 9.293713897953352e-05,
+      "d6": 0.00018009261746475166,
+      "pooled_pick": false,
+      "excess": -0.022272455755552912
+    },
+    {
+      "name": "iqp4 310",
+      "kind": "iqp4",
+      "R": 0.9281283881235904,
+      "R_raw": null,
+      "picks14": true,
+      "picks_val4": true,
+      "d4": -7.916751695333999e-07,
+      "d5": -1.2061640746527429e-05,
+      "d6": -2.771180887733087e-05,
+      "pooled_pick": true,
+      "excess": -0.006206617995594738
+    },
+    {
+      "name": "iqp4 311",
+      "kind": "iqp4",
+      "R": 1.1471407417796458,
+      "R_raw": null,
+      "picks14": false,
+      "picks_val4": false,
+      "d4": 2.7827286498464644e-05,
+      "d5": 1.8807559553504725e-05,
+      "d6": 3.98019105045562e-06,
+      "pooled_pick": false,
+      "excess": 0.019537282869243784
+    },
+    {
+      "name": "iqp4 312",
+      "kind": "iqp4",
+      "R": 0.5955082962973434,
+      "R_raw": null,
+      "picks14": true,
+      "picks_val4": true,
+      "d4": -1.7458936695107097e-05,
+      "d5": -4.0167806644933165e-05,
+      "d6": -4.6329394465802995e-05,
+      "pooled_pick": true,
+      "excess": -0.005375212317251217
+    },
+    {
+      "name": "iqp4 313",
+      "kind": "iqp4",
+      "R": 0.4349101872640311,
+      "R_raw": null,
+      "picks14": true,
+      "picks_val4": true,
+      "d4": -4.823528178399233e-05,
+      "d5": -0.0001357526392327891,
+      "d6": -0.00023677696239001518,
+      "pooled_pick": true,
+      "excess": -0.005377026823054063
+    },
+    {
+      "name": "iqp4 314",
+      "kind": "iqp4",
+      "R": 0.9573047755171906,
+      "R_raw": null,
+      "picks14": false,
+      "picks_val4": false,
+      "d4": 1.8631045764079665e-05,
+      "d5": -7.829794120940605e-06,
+      "d6": -2.8279427144313008e-05,
+      "pooled_pick": false,
+      "excess": 0.010735935606848986
+    },
+    {
+      "name": "iqp4 315",
+      "kind": "iqp4",
+      "R": 1.292494078818196,
+      "R_raw": null,
+      "picks14": false,
+      "picks_val4": false,
+      "d4": 0.00011312233562246047,
+      "d5": 0.0001184923810908107,
+      "d6": 5.867843434126125e-05,
+      "pooled_pick": false,
+      "excess": 0.017115708333128973
+    },
+    {
+      "name": "iqp4 316",
+      "kind": "iqp4",
+      "R": 1.0341477868863571,
+      "R_raw": null,
+      "picks14": true,
+      "picks_val4": false,
+      "d4": 1.5166992496087875e-05,
+      "d5": -2.7529906354520502e-06,
+      "d6": 3.7939621604760575e-07,
+      "pooled_pick": false,
+      "excess": 0.008742086848795603
+    },
+    {
+      "name": "iqp4 317",
+      "kind": "iqp4",
+      "R": 2.266654599994536,
+      "R_raw": null,
+      "picks14": true,
+      "picks_val4": false,
+      "d4": 3.153692757312908e-05,
+      "d5": 5.136822783365426e-05,
+      "d6": 6.643657381040784e-05,
+      "pooled_pick": false,
+      "excess": 0.0015323605032902653
+    },
+    {
+      "name": "iqp4 318",
+      "kind": "iqp4",
+      "R": 0.38600648107278374,
+      "R_raw": null,
+      "picks14": true,
+      "picks_val4": true,
+      "d4": -6.087532867617819e-05,
+      "d5": -0.00019260688821522338,
+      "d6": -0.0003503199892546736,
+      "pooled_pick": true,
+      "excess": -0.004707683853034302
+    },
+    {
+      "name": "iqp4 319",
+      "kind": "iqp4",
+      "R": 0.8580452970545307,
+      "R_raw": null,
+      "picks14": true,
+      "picks_val4": true,
+      "d4": -1.255635692116624e-05,
+      "d5": -3.8555501984905615e-05,
+      "d6": -6.306273232607965e-05,
+      "pooled_pick": true,
+      "excess": -0.0035127222950739174
+    }
+  ],
+  "families": {
+    "qec": {
+      "n": 8,
+      "wins": 3,
+      "losses_step14": 5,
+      "losses_new": 2,
+      "kept": 1
+    },
+    "iqp4": {
+      "n": 10,
+      "wins": 6,
+      "losses_step14": 2,
+      "losses_new": 0,
+      "kept": 5
+    }
+  },
+  "pooled_disagree": 0
+}

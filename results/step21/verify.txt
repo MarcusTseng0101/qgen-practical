@@ -1,0 +1,7 @@
+ok   [spec] specs/step21_qec_resolvability.md committed and unchanged
+ok   [closed] src/step1..20 unchanged since 33712d6
+ok   [grid] 32 files with B = 400
+ok   [repro] split 100 reproduces step 20's R (< 1e-6 relative)
+ok   [summary] sentence and D1–D3 present
+ok   [tests] 3 passed in 0.81s
+ALL CHECKS PASS (step 21)

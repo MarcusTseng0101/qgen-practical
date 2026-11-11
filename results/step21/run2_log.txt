@@ -1,0 +1,5 @@
+done ('surface_code_bZ_d3_r05_center_5_7', 101) rc=0 35.1 min
+done ('surface_code_bX_d3_r05_center_7_5', 101) rc=0 35.1 min
+done ('surface_code_bZ_d3_r05_center_7_5', 101) rc=0 35.3 min
+done ('surface_code_bZ_d3_r05_center_5_3', 101) rc=0 35.6 min
+done ('surface_code_bZ_d3_r03_center_5_3', 101) rc=0 50.8 min

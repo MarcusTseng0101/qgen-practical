@@ -1,0 +1,7 @@
+ok   [spec] specs/step19_real_qec16.md committed and unchanged
+ok   [closed] src/step1..18 unchanged since 97648b2
+ok   [grid] 7 runs: split seed 100, N_train 3e4, N_test 2e4, 3 restarts, zip md5
+ok   [summary] SUMMARY opens with the required sentence
+ok   [summary] V1–V2 marked
+ok   [tests] 3 passed in 0.62s
+ALL CHECKS PASS (step 19)

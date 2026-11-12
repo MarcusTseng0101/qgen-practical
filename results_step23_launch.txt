@@ -1,0 +1,5 @@
+done ('grid_ising', '10000', 950) rc=0 5491s
+done ('grid_iqp', 'inf', 932) rc=0 5511s
+done ('grid_ising', '10000', 951) rc=0 5511s
+done ('grid_ising', '10000', 952) rc=0 5541s
+done ('grid_ising', '10000', 953) rc=0 5551s

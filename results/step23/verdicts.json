@@ -1,0 +1,61 @@
+{
+ "H1": {
+  "wins": 14,
+  "of": 14,
+  "need": 11,
+  "verdict": "PASS"
+ },
+ "H2": {
+  "wins": 14,
+  "of": 14,
+  "need": 13,
+  "verdict": "PASS"
+ },
+ "H3": {
+  "wins": 14,
+  "of": 14,
+  "need": 11,
+  "verdict": "PASS"
+ },
+ "H4": {
+  "wins": 14,
+  "of": 14,
+  "need": 11,
+  "verdict": "PASS"
+ },
+ "reported": {
+  "grid_iqp/N_10000": {
+   "n": 14,
+   "median_R_me3": 0.3531887234007474,
+   "wins_R_me3": 14,
+   "median_R_me_local": 0.06828671573652934,
+   "wins_R_me_local": 14,
+   "median_R_generic_me3": 1.1696355690803233,
+   "wins_generic_me3": 2,
+   "median_resid_over_floor": 0.4941729345121502
+  },
+  "grid_iqp/N_100000": {
+   "n": 14,
+   "median_R_me3": 0.19446631759957295,
+   "wins_R_me3": 14,
+   "median_R_me_local": 0.02254994504664668,
+   "wins_R_me_local": 14,
+   "median_resid_over_floor": 0.793906009422483
+  },
+  "grid_iqp/N_inf": {
+   "n": 14,
+   "median_R_me3": 0.16688145039509505,
+   "wins_R_me3": 14,
+   "median_R_me_local": 0.020898572367257652,
+   "wins_R_me_local": 14
+  },
+  "grid_ising/N_10000": {
+   "n": 14,
+   "median_R_me3": 7.939343376171708,
+   "wins_R_me3": 0,
+   "median_R_me_local": 56.42666744236209,
+   "wins_R_me_local": 0,
+   "median_resid_over_floor": 4.9888502069897775
+  }
+ }
+}

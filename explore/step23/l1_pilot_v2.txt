@@ -1,0 +1,30 @@
+seed 303 N 10000 lam 3e-01 k 25 w4 18 val 1.2932e+00 R 10.587 res 9.498e-01
+seed 303 N 10000 lam 1e-01 k 52 w4 38 val 1.0752e+00 R 9.317 res 7.116e-01
+seed 303 N 10000 lam 3e-02 k 109 w4 70 val 5.0987e-01 R 3.564 res 1.248e-01
+seed 303 N 10000 lam 1e-02 k 234 w4 144 val 4.5711e-01 R 2.913 res 5.162e-02  <- disc
+seed 303 N 10000 lam 3e-03 k 505 w4 329 val 4.5023e-01 R 2.669 res 2.782e-02
+seed 303 N 10000 lam 1e-03 k 714 w4 476 val 4.4380e-01 R 2.410 res 1.355e-02  <- val
+seed 303 N 10000 noise 6.841e-02 VAL R=2.410 DISC R=2.913  142s
+seed 302 N 10000 lam 3e-01 k 21 w4 20 val 1.0576e+00 R 14.038 res 9.116e-01
+seed 302 N 10000 lam 1e-01 k 43 w4 37 val 8.0755e-01 R 11.889 res 6.208e-01
+seed 302 N 10000 lam 3e-02 k 103 w4 81 val 4.4014e-01 R 3.991 res 1.926e-01
+seed 302 N 10000 lam 1e-02 k 225 w4 186 val 3.7789e-01 R 2.534 res 8.471e-02
+seed 302 N 10000 lam 3e-03 k 466 w4 422 val 3.6624e-01 R 2.579 res 5.463e-02  <- val  <- disc
+seed 302 N 10000 lam 1e-03 k 667 w4 609 val 3.6916e-01 R 2.601 res 4.804e-02
+seed 302 N 10000 noise 6.866e-02 VAL R=2.579 DISC R=2.579  286s
+seed 300 N 10000 lam 3e-01 k 30 w4 18 val 1.4036e+00 R 37.028 res 1.055e+00
+seed 300 N 10000 lam 1e-01 k 53 w4 32 val 1.0534e+00 R 31.423 res 7.419e-01
+seed 300 N 10000 lam 3e-02 k 122 w4 62 val 5.6053e-01 R 15.893 res 2.232e-01
+seed 300 N 10000 lam 1e-02 k 115 w4 39 val 3.9711e-01 R 2.042 res 2.574e-02  <- disc
+seed 300 N 10000 lam 3e-03 k 205 w4 88 val 3.8907e-01 R 0.634 res 7.727e-03
+seed 300 N 10000 lam 1e-03 k 372 w4 204 val 3.8849e-01 R 0.492 res 3.234e-03  <- val
+seed 300 N 10000 noise 6.034e-02 VAL R=0.492 DISC R=2.042  301s
+seed 301 N 10000 lam 3e-01 k 28 w4 24 val 1.1301e+00 R 16.822 res 9.575e-01
+seed 301 N 10000 lam 1e-01 k 40 w4 29 val 8.7373e-01 R 13.784 res 6.477e-01
+seed 301 N 10000 lam 3e-02 k 81 w4 46 val 3.8760e-01 R 4.329 res 1.547e-01
+seed 301 N 10000 lam 1e-02 k 140 w4 71 val 2.8910e-01 R 1.924 res 3.746e-02  <- disc
+seed 301 N 10000 lam 3e-03 k 223 w4 124 val 2.7051e-01 R 0.420 res 9.033e-03  <- val
+seed 301 N 10000 lam 1e-03 k 453 w4 267 val 2.7342e-01 R 0.436 res 3.790e-03
+seed 301 N 10000 noise 6.537e-02 VAL R=0.420 DISC R=1.924  309s
+
+[exited with code 0]

@@ -1,0 +1,26 @@
+seed 303 N 10000 lam 1e-02 k 116 w4 73 val 4.3702e-01 R 0.927  <- val
+seed 303 N 10000 lam 3e-03 k 281 w4 162 val 4.4294e-01 R 0.642
+seed 303 N 10000 lam 1e-03 k 520 w4 323 val 4.5496e-01 R 0.613
+seed 303 N 10000 lam 3e-04 k 908 w4 595 val 4.5860e-01 R 0.662
+seed 303 N 10000 lam 1e-04 k 1334 w4 906 val 4.6124e-01 R 0.698
+seed 303 N 10000 VAL-CHOSEN R=0.927  549s
+seed 301 N 10000 lam 1e-02 k 126 w4 72 val 2.8457e-01 R 1.437
+seed 301 N 10000 lam 3e-03 k 238 w4 131 val 2.7066e-01 R 0.630  <- val
+seed 301 N 10000 lam 1e-03 k 466 w4 276 val 2.7153e-01 R 0.482
+seed 301 N 10000 lam 3e-04 k 916 w4 591 val 2.7464e-01 R 0.427
+seed 301 N 10000 lam 1e-04 k 1445 w4 970 val 2.7572e-01 R 0.477
+seed 301 N 10000 VAL-CHOSEN R=0.630  565s
+seed 302 N 10000 lam 1e-02 k 167 w4 98 val 3.2827e-01 R 1.963
+seed 302 N 10000 lam 3e-03 k 394 w4 222 val 3.2657e-01 R 1.672  <- val
+seed 302 N 10000 lam 1e-03 k 750 w4 456 val 3.2967e-01 R 1.568
+seed 302 N 10000 lam 3e-04 k 1109 w4 728 val 3.3197e-01 R 1.561
+seed 302 N 10000 lam 1e-04 k 1494 w4 977 val 3.3327e-01 R 1.404
+seed 302 N 10000 VAL-CHOSEN R=1.672  627s
+seed 300 N 10000 lam 1e-02 k 117 w4 58 val 3.9552e-01 R 1.072
+seed 300 N 10000 lam 3e-03 k 211 w4 104 val 3.8812e-01 R 0.774
+seed 300 N 10000 lam 1e-03 k 365 w4 186 val 3.8797e-01 R 0.475  <- val
+seed 300 N 10000 lam 3e-04 k 679 w4 395 val 3.8915e-01 R 0.499
+seed 300 N 10000 lam 1e-04 k 1137 w4 733 val 3.9030e-01 R 0.557
+seed 300 N 10000 VAL-CHOSEN R=0.475  616s
+
+[exited with code 0]

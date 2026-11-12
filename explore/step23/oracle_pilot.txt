@@ -1,0 +1,10 @@
+seed 303 N 10000 oracle-w3 k=42  R=8.469  resid=3.88e+00  52s
+seed 302 N 10000 oracle-w3 k=42  R=1.035  resid=1.35e-01  55s
+seed 300 N 10000 oracle-w3 k=42  R=7.935  resid=1.11e+00  22s
+seed 301 N 10000 oracle-w3 k=42  R=7.913  resid=1.01e+00  35s
+seed 302 N 10000 oracle-all k=48  R=0.274  resid=5.23e-02  64s
+seed 301 N 10000 oracle-all k=48  R=0.189  resid=3.82e-02  41s
+seed 303 N 10000 oracle-all k=48  R=0.206  resid=4.59e-02  71s
+seed 300 N 10000 oracle-all k=48  R=0.343  resid=2.65e-02  34s
+
+[exited with code 0]

@@ -1,0 +1,5 @@
+done ('noise05', 972) rc=0 5781s
+done ('noise05', 971) rc=0 5791s
+done ('noise05', 968) rc=0 5801s
+done ('noise05', 969) rc=0 5801s
+done ('noise05', 973) rc=0 5821s

@@ -1,0 +1,61 @@
+{
+ "M1": {
+  "cond": "miss",
+  "wins": 3,
+  "of": 14,
+  "need": 11,
+  "verdict": "FAIL"
+ },
+ "E1": {
+  "cond": "extra",
+  "wins": 14,
+  "of": 14,
+  "need": 11,
+  "verdict": "PASS"
+ },
+ "D1": {
+  "cond": "noise02",
+  "wins": 11,
+  "of": 14,
+  "need": 11,
+  "verdict": "PASS"
+ },
+ "reported": {
+  "miss": {
+   "n": 14,
+   "median_R_me3": 2.862635062954088,
+   "wins_R_me3": 3,
+   "median_R_me_local": 0.3583522072145595,
+   "wins_R_me_local": 14,
+   "median_resid_over_floor": 1.766626714757772
+  },
+  "extra": {
+   "n": 14,
+   "median_R_me3": 0.4589408388509286,
+   "wins_R_me3": 14,
+   "median_R_me_local": 0.12865342311608352,
+   "wins_R_me_local": 14,
+   "median_resid_over_floor": 0.4231538538881679
+  },
+  "noise02": {
+   "n": 14,
+   "median_R_me3": 0.7816650445656386,
+   "wins_R_me3": 11,
+   "median_R_me_local": 0.21418221785244726,
+   "wins_R_me_local": 14,
+   "median_R_mitig_me3": 0.4233809793858011,
+   "wins_R_mitig_me3": 14,
+   "median_mitig_over_local": 0.5902588913367113,
+   "wins_mitig_over_local": 14,
+   "median_resid_over_floor": 0.5875951664716258
+  },
+  "noise05": {
+   "n": 14,
+   "median_R_me3": 1.2158379260004408,
+   "wins_R_me3": 1,
+   "median_R_me_local": 0.4000110057000684,
+   "wins_R_me_local": 13,
+   "median_resid_over_floor": 0.6545184861453173
+  }
+ }
+}

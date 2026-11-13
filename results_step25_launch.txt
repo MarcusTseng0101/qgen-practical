@@ -1,0 +1,5 @@
+done ('full02', 990) rc=0 8941s
+done ('full02', 989) rc=0 9031s
+done ('full02', 991) rc=0 9211s
+done ('full02', 992) rc=0 9381s
+done ('full02', 993) rc=0 9521s

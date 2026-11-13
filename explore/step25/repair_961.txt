@@ -1,0 +1,3 @@
+{"round": 0, "n_gens": 76, "resid_over_floor": 19.475985720463083, "R": 5.312033543942682}
+{"round": 1, "pick": 17408, "pick_is_dropped": true, "top5_dropped": [true, false, false, false, false], "added": 7, "n_gens": 83, "resid_over_floor": 0.5988935821203103, "R": 0.4475390547850497}
+RESULT {"seed": 961, "dropped": [49152, 17408], "rows": [{"round": 0, "n_gens": 76, "resid_over_floor": 19.475985720463083, "R": 5.312033543942682}, {"round": 1, "pick": 17408, "pick_is_dropped": true, "top5_dropped": [true, false, false, false, false], "added": 7, "n_gens": 83, "resid_over_floor": 0.5988935821203103, "R": 0.4475390547850497}], "secs": 1356}

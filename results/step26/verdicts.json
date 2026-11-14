@@ -1,0 +1,70 @@
+{
+ "G1": {
+  "wins": 13,
+  "of": 14,
+  "need": 11,
+  "verdict": "PASS"
+ },
+ "G2": {
+  "wins": 14,
+  "of": 14,
+  "need": 11,
+  "verdict": "PASS"
+ },
+ "G3": {
+  "wins": 14,
+  "of": 14,
+  "need": 11,
+  "verdict": "PASS"
+ },
+ "reported": {
+  "g01": {
+   "n": 14,
+   "median_R_flip_me3": 0.624633967296489,
+   "wins_R_flip_me3": 13,
+   "median_R_pipe_me3": 0.9660801886136794,
+   "wins_R_pipe_me3": 8,
+   "median_R_flip_me_local": 0.2338185802917181,
+   "wins_R_flip_me_local": 14,
+   "median_R_pipe_me_local": 0.43479759548478125,
+   "wins_R_pipe_me_local": 14,
+   "flip_beats_pipe": 14,
+   "pipe_flags": 0,
+   "lam_pinned_total": 2,
+   "median_lam": 0.9200985045497441,
+   "median_flip_resid_over_floor": 0.5134434391174684
+  },
+  "g005": {
+   "n": 14,
+   "median_R_flip_me3": 0.504885643388844,
+   "wins_R_flip_me3": 14,
+   "median_R_pipe_me3": 0.7005043283912551,
+   "wins_R_pipe_me3": 10,
+   "median_R_flip_me_local": 0.15531384651505462,
+   "wins_R_flip_me_local": 14,
+   "median_R_pipe_me_local": 0.209933289527894,
+   "wins_R_pipe_me_local": 14,
+   "flip_beats_pipe": 12,
+   "pipe_flags": 0,
+   "lam_pinned_total": 0,
+   "median_lam": 0.9441941223542611,
+   "median_flip_resid_over_floor": 0.4572920768658968
+  },
+  "g02": {
+   "n": 14,
+   "median_R_flip_me3": 0.5963425997933598,
+   "wins_R_flip_me3": 13,
+   "median_R_pipe_me3": 1.5965142627875535,
+   "wins_R_pipe_me3": 0,
+   "median_R_flip_me_local": 0.3851269831887115,
+   "wins_R_flip_me_local": 14,
+   "median_R_pipe_me_local": 0.8736601200704219,
+   "wins_R_pipe_me_local": 9,
+   "flip_beats_pipe": 14,
+   "pipe_flags": 0,
+   "lam_pinned_total": 0,
+   "median_lam": 0.8555328573212564,
+   "median_flip_resid_over_floor": 0.5163181760131997
+  }
+ }
+}

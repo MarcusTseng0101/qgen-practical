@@ -1,0 +1,115 @@
+{
+ "X1": {
+  "wins": 12,
+  "of": 14,
+  "need": 11,
+  "verdict": "PASS"
+ },
+ "X2": {
+  "wins": 10,
+  "of": 14,
+  "need": 11,
+  "verdict": "FAIL"
+ },
+ "X4": {
+  "wins": 13,
+  "of": 14,
+  "need": 11,
+  "verdict": "PASS"
+ },
+ "X3": {
+  "flags": 3,
+  "of": 14,
+  "max": 2,
+  "verdict": "FAIL"
+ },
+ "reported": {
+  "xm02": {
+   "n": 14,
+   "median_R_flow_me3": 0.68201925064866,
+   "wins_R_flow_me3": 12,
+   "median_R_flow_me_local": 0.1214163208595733,
+   "wins_R_flow_me_local": 14,
+   "median_R_given_me3": 1.1943388302162243,
+   "wins_R_given_me3": 4,
+   "median_R_given_me_local": 0.3461718460170903,
+   "wins_R_given_me_local": 14,
+   "median_R_enl_me3": 0.6873595589945936,
+   "wins_R_enl_me3": 12,
+   "median_R_enl_me_local": 0.1214163208595733,
+   "wins_R_enl_me_local": 14,
+   "flags": 13,
+   "missed_alarms": 0,
+   "flow_beats_given": 13,
+   "pinned_given": 2,
+   "pinned_enl": 1,
+   "median_lam_given": 1.0,
+   "ratio_given_range": [
+    0.609079015279616,
+    3.3547279550329887
+   ],
+   "ratio_enl_range": [
+    0.2227797556386141,
+    0.8225236127656365
+   ]
+  },
+  "xf02": {
+   "n": 14,
+   "median_R_flow_me3": 0.7376657870383585,
+   "wins_R_flow_me3": 10,
+   "median_R_flow_me_local": 0.3174134181775484,
+   "wins_R_flow_me_local": 14,
+   "median_R_given_me3": 0.6994737704708176,
+   "wins_R_given_me3": 10,
+   "median_R_given_me_local": 0.2680884625422786,
+   "wins_R_given_me_local": 14,
+   "median_R_enl_me3": 0.6873595589945936,
+   "wins_R_enl_me3": 12,
+   "median_R_enl_me_local": 0.23580788638507327,
+   "wins_R_enl_me_local": 14,
+   "flags": 3,
+   "missed_alarms": 3,
+   "flow_beats_given": 2,
+   "pinned_given": 1,
+   "pinned_enl": 1,
+   "median_lam_given": 0.9853357715503512,
+   "ratio_given_range": [
+    0.3456589888401929,
+    1.0266113876290677
+   ],
+   "ratio_enl_range": [
+    0.2227797556386141,
+    0.8225236127656365
+   ]
+  },
+  "xm01": {
+   "n": 14,
+   "median_R_flow_me3": 0.6606937860500331,
+   "wins_R_flow_me3": 13,
+   "median_R_flow_me_local": 0.12905707659199428,
+   "wins_R_flow_me_local": 14,
+   "median_R_given_me3": 1.0914252185852231,
+   "wins_R_given_me3": 6,
+   "median_R_given_me_local": 0.2601598191358823,
+   "wins_R_given_me_local": 14,
+   "median_R_enl_me3": 0.6881333424823368,
+   "wins_R_enl_me3": 14,
+   "median_R_enl_me_local": 0.12905707659199428,
+   "wins_R_enl_me_local": 14,
+   "flags": 11,
+   "missed_alarms": 1,
+   "flow_beats_given": 9,
+   "pinned_given": 1,
+   "pinned_enl": 1,
+   "median_lam_given": 0.995788281224153,
+   "ratio_given_range": [
+    0.5805132035274286,
+    3.219182580437066
+   ],
+   "ratio_enl_range": [
+    0.2246657140855849,
+    0.6876486008439793
+   ]
+  }
+ }
+}

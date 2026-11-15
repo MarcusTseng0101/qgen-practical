@@ -163,6 +163,15 @@ A real device departs from the ideal circuit in two ways: its stated coupling gr
 readout are noisy.
 Table~\ref{tab:robust} summarizes the tests of both departures.
 Each row is a separate test on fresh instances.
+Figure~\ref{fig:instances} shows the ratio $R$ on every instance of selected tests.
+
+\begin{figure}[t]
+\includegraphics[width=\columnwidth]{fig_instances.pdf}
+\caption{Per-instance ratio $R$ for selected tests, 14 fresh instances each, $N=10^4$. Filled circles are wins
+($R<1$) and open squares are losses. Bars mark the medians, and the right column gives the win count.}
+\label{fig:instances}
+\end{figure}
+% fig_instances.py reads results/step23, 24, 26, 27, 28, 29 metrics.json; it prints each row's wins and median.
 
 \begin{table*}[t]
 \caption{Robustness tests on the $4\times4$ grid. Each row uses 14 fresh instances, $N=10^4$, and compares with

@@ -36,7 +36,7 @@ model beats MaxEnt(3).
 | 27 | missing couplers + gate noise 0.5–1% | **FlipIQP + alarm (0.75) + enlargement** | 13/14, 12/14; correct graph 13/14; false alarms 1/14 |
 | 28 | correlated gate noise 1–2% | same recipe, unchanged | 14/14, 12/14; correct graph 14/14; false alarms 0/14 |
 | 29 | coherent RX miscalibration, ε 0.1–0.2 (≈0.25–1% per touch) | same recipe, unchanged | wrong graph 13/14 (ε 0.1), 12/14 (ε 0.2); **correct graph 10/14 (FAIL)**; false alarms 3/14 (FAIL) |
-| 30 | same as step 29, correct graph | coherent-aware layered IQP (exploration, spent seeds) | no better than FlipIQP head-to-head (7/14 untied, 6/12 tied); worse under Pauli noise |
+| 30 | same as step 29, correct graph | coherent-aware layered IQP (exploration, spent seeds) | no better than FlipIQP head-to-head (7/14 untied, 8/14 tied); worse under Pauli noise |
 
 ## 3. The recipe (final, since step 27)
 

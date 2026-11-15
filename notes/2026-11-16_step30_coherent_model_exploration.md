@@ -33,14 +33,12 @@ Two variants were tried:
 |---|---|---|---|---|---|
 | coherent ε 0.2, correct graph (step 29 `xf02`, 1060–1073) | step 29 given-graph FlipIQP | 14 | 10 | 0.70 | — |
 | same | CohIQP untied | 14 | 12 | 0.75 | 7/14 |
-| same | CohIQP tied | 12 | 8 | 0.75 | 6/12 |
+| same | CohIQP tied | 14 | 10 | 0.69 | 8/14 |
 | Pauli 1% + 2% readout, correct graph (step 26 `g01`, 1000–1013) | FlipIQP | 14 | 13 | 0.62 | — |
 | same | CohIQP untied | 14 | 13 | 0.79 | 2/14 |
-| same | CohIQP tied | 10 | 7 | 0.76 | 2/10 |
+| same | CohIQP tied | 14 | 11 | 0.74 | 2/14 |
 
-**About the six unfinished tied fits.** Six tied fits had not finished when this note was written: xf02 seeds 1067 and
-1068, and g01 seeds 1001, 1002, 1004 and 1006. They cannot change the conclusion. Even if the tied model won all six,
-it would beat FlipIQP head-to-head on at most 8/14 coherent seeds.
+**Update (after the note was first committed).** The six tied fits that were still running (xf02 1067, 1068; g01 1001, 1002, 1004, 1006) have finished; the table above now includes them. The tied model won both remaining coherent seeds head-to-head (8/14, the maximum the first version allowed) and lost all four Pauli seeds (2/14). The conclusion is unchanged: no better than FlipIQP on coherent data, worse under Pauli noise.
 
 ## Reading
 

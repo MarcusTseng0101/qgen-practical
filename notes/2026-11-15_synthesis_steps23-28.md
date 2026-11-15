@@ -1,7 +1,10 @@
-# Synthesis of steps 23–28: the connectivity-prior IQP as a practical moment-completion method
+# Synthesis of steps 23–30: the connectivity-prior IQP as a practical moment-completion method
 
-This note collects the evidence chain for the paper's main positive result. Every row below is a pre-registered test
-on fresh seeds: the spec was frozen on master before the run, the sign test needed ≥ 11/14, and missing seeds counted
+(Updated 2026-11-16 to add step 29, a pre-registered test, and step 30, spent-seed exploration with no verdict. The file
+name still says 23–28.)
+
+This note collects the evidence chain for the paper's main positive result. Every row below except step 30 is a
+pre-registered test on fresh seeds: the spec was frozen on master before the run, the sign test needed ≥ 11/14, and missing seeds counted
 as failures. The details are in each step's note.
 
 The question asked of every model is the same: complete the order-4–6 parity moments from N = 1e4 shots' order-≤3
@@ -32,6 +35,8 @@ model beats MaxEnt(3).
 | 26 | independent gate noise 0.5–2% | **FlipIQP** (+16 learned per-qubit dampings) | 14/14, 13/14, 13/14; R 0.51, 0.63, 0.60 |
 | 27 | missing couplers + gate noise 0.5–1% | **FlipIQP + alarm (0.75) + enlargement** | 13/14, 12/14; correct graph 13/14; false alarms 1/14 |
 | 28 | correlated gate noise 1–2% | same recipe, unchanged | 14/14, 12/14; correct graph 14/14; false alarms 0/14 |
+| 29 | coherent RX miscalibration, ε 0.1–0.2 (≈0.25–1% per touch) | same recipe, unchanged | wrong graph 13/14 (ε 0.1), 12/14 (ε 0.2); **correct graph 10/14 (FAIL)**; false alarms 3/14 (FAIL) |
+| 30 | same as step 29, correct graph | coherent-aware layered IQP (exploration, spent seeds) | no better than FlipIQP head-to-head (7/14 untied, 6/12 tied); worse under Pauli noise |
 
 ## 3. The recipe (final, since step 27)
 
@@ -55,8 +60,15 @@ median R 0.72 in step 28, and its cost on correct graphs is small.
 
 ## 5. Open limits (not done)
 
-- **Coherent non-Pauli errors.** Over-rotations of the diagonal gates stay inside the IQP family. Unwanted ZZ crosstalk
-  is the case enlargement covers.
+- **Coherent non-Pauli errors: tested, and this is the recipe's limit (step 29, H3).**
+  - Over-rotations of the diagonal gates stay inside the IQP family, and unwanted ZZ crosstalk is the case enlargement
+    covers.
+  - Off-diagonal RX miscalibration of about 1% per touch is different. It breaks the correct-graph case (10/14) and
+    gives false alarms, because per-qubit damping is the wrong effective model for a unitary error (λ ≈ 1.0).
+  - The wrong-graph cases still pass.
+  - A coherent-aware model with in-circuit RX layers did not fix it (step 30, exploration only). It fits order ≤ 3
+    better, but it completes orders 4–6 no better. Candidate remedies are more shots or hardware calibration of ε,
+    and both are untested.
 - **n > 16.** Exact G needs 2^n. At 20 qubits a FlipIQP fit with 20 restarts would take roughly 8 h per job on this
   machine, so this needs a cheaper fitter or estimated G.
 - **Real hardware data.** This needs the user, because it means money, a collaborator, or an outside request.

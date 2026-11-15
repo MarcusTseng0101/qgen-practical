@@ -1,0 +1,290 @@
+% Draft 1 (2026-11-16). Built from notes/2026-11-15_synthesis_steps23-28.md and the per-step notes.
+% Every number below is taken from a step note; the step is given in a comment next to it.
+\documentclass[aps,pra,twocolumn,superscriptaddress,nofootinbib]{revtex4-2}
+\usepackage{amsmath,amssymb,bm}
+\usepackage{graphicx}
+
+\newcommand{\Gm}{G}
+\newcommand{\ME}{\mathrm{MaxEnt}(3)}
+
+\begin{document}
+
+% Title candidates (the user picks one):
+%  A. Completing high-order correlations of noisy IQP circuits with a connectivity prior   <- used below
+%  B. A device-connectivity prior makes IQP Born machines identifiable from low-order moments
+%  C. Connectivity-prior IQP models for moment completion under realistic noise
+\title{Completing high-order correlations of noisy IQP circuits with a connectivity prior}
+
+\author{Marcus Tseng}
+\altaffiliation{Undergraduate in the CYCU--UWM Dual Degree Program in Electrical Engineering and Computer Engineering.}
+\affiliation{College of Electrical Engineering and Computer Science, Chung Yuan Christian University, Taoyuan 320314, Taiwan}
+
+\date{\today}
+
+\begin{abstract}
+A quantum device's samples determine its low-order correlations well, but its high-order correlations poorly.
+We ask whether a quantum circuit model can complete the high-order parity moments better than the classical model
+that sees the same information, the maximum-entropy model on order-three moments.
+A generic IQP circuit cannot, because it is not identifiable from these moments.
+We show that the device's coupling graph fixes this.
+On sixteen-qubit grid circuits, an IQP restricted to the graph completes orders four to six better than the
+maximum-entropy model on all fourteen fresh instances, with a median error ratio of 0.35.
+A recipe of learned per-qubit damping, a residual alarm and graph enlargement keeps this advantage under readout noise,
+missing couplers and independent or correlated gate noise up to two percent.
+Coherent over-rotations of about one percent per gate are the limit, and a coherent-aware model did not remove it.
+\end{abstract}
+
+\maketitle
+
+% ---------------------------------------------------------------------------
+\section{Introduction}
+
+Quantum generative models are often proposed as a route to a practical quantum advantage
+\cite{huang2025generative,hibatallah2024framework}, but the evidence so far is mixed.
+IQP circuit Born machines can be trained classically at large scale, yet their reported wins are against classical
+models that were not given the same information \cite{recio2025train}.
+The authors of that study note that their classical baselines could likely be improved.
+A related study reports a large win over a maximum-entropy model fitted to parity moments \cite{baumann2026parity}.
+That classical model had no order cutoff and was fitted to two hundred samples, so it may have overfitted.
+
+We use a fairer test, in which both models receive the same order-$\le 3$ parity moments estimated from $N$ shots.
+Each model must then predict the order-4 to order-6 moments, which the shots determine poorly.
+The classical opponent is $\ME$, the maximum-entropy distribution with the given moments \cite{jaynes1957information}.
+It is the least-committal completion of that information, so a model beats it only if its inductive bias matches
+the structure of the data.
+
+Our first finding is negative: a generic IQP circuit with all 696 order-$\le 3$ generators is not identifiable from
+these moments, and it loses to $\ME$ on most instances.
+Our second finding is positive.
+Restricting the IQP to the device's coupling graph makes it identifiable, and the restricted model beats $\ME$
+as well as a maximum-entropy model given the same graph.
+Our third finding is practical: a three-step recipe keeps the advantage under realistic departures from the ideal
+circuit, and we locate the noise class where it fails.
+
+Every result in this paper comes from simulation of sixteen qubits on a $4\times 4$ grid.
+Each robustness claim was tested on fresh random instances under a protocol fixed before the run.
+The claim is statistical, not computational.
+Sampling from IQP circuits is believed to be classically hard \cite{bremner2011classical}, but their parity moments
+can be estimated classically at any size \cite{recio2025train}.
+
+% ---------------------------------------------------------------------------
+\section{Setup}
+
+\subsection{Task and score}
+
+Let $p$ be a distribution on $n=16$ bits.
+The parity moment of a mask $S\subseteq\{1,\dots,n\}$ is $f_S = \mathbb{E}_{x\sim p}[(-1)^{\sum_{j\in S} x_j}]$.
+A model receives the 696 estimated moments $\hat f_S$ with $1\le |S|\le 3$, computed from $N=10^4$ shots, and
+outputs a distribution $q$.
+We score its completion of orders four to six against the exact target:
+\begin{equation}
+  \Gm(q) = \frac{1}{3}\sum_{l=4}^{6} \frac{1}{\binom{n}{l}} \sum_{|S|=l} \bigl(f_S(q) - f_S(p)\bigr)^2 .
+\end{equation}
+The main statistic is the ratio $R = \Gm(\text{model})/\Gm(\ME)$, and $R<1$ means that the model completes better
+than $\ME$.
+
+\subsection{Models}
+
+An IQP circuit with generator set $\mathcal{G}$ prepares
+$|\psi\rangle = H^{\otimes n}\exp(i\sum_{g\in\mathcal{G}}\theta_g Z_g)H^{\otimes n}|0\rangle$,
+where $Z_g$ is the product of Pauli $Z$ operators on the qubits of mask $g$.
+Its parity moments have a closed form, and we fit $\theta$ by least squares on the order-$\le 3$ moments.
+The fit uses L-BFGS-B with twenty random restarts and keeps the solution with the lowest residual.
+
+The \emph{local IQP} uses only the generators allowed by the coupling graph.
+On the $4\times4$ grid these are the 16 single-qubit terms, the 24 edges, the 36 corner triples of the 9 plaquettes, and
+the 9 plaquettes, which gives 85 candidates in all.
+
+\emph{FlipIQP} adds one damping factor per qubit to model noise.
+It multiplies each output moment by $\prod_{j\in S}\lambda_j$, with $\lambda_j\in[0.5,1]$.
+These 16 factors absorb readout and gate noise without any calibration data.
+
+The classical arms are $\ME$, with 696 parameters, and a maximum-entropy model restricted to the 76 local masks of
+weight at most three.
+We call the second model MaxEnt-on-graph, since it receives the same prior as the local IQP.
+
+\subsection{Data}
+
+The target is an IQP circuit on the grid with 49 generators: the singles, the edges and the plaquettes.
+The model is not told which of its candidates are active.
+Angles are drawn as $\theta_g\sim\mathcal{N}(0,\sigma^2)$ with $\sigma=0.251$.
+Later sections add readout bit flips, Pauli errors after each gate, or coherent over-rotations.
+
+\subsection{Protocol}
+
+Each test was specified in writing before it was run, including its hypotheses, thresholds and fresh random seeds.
+A hypothesis passed if the model beat its opponent on at least 11 of 14 instances, a one-sided sign test at $p=0.029$.
+Missing or failed runs counted as losses.
+Development used separate seeds, which were never reused for testing.
+
+% ---------------------------------------------------------------------------
+\section{Why a prior is needed}
+
+The order-$\le3$ moments do not determine the higher moments.
+For any target $p$, every mixture of $p$ with its own $\ME$ distribution has the same order-$\le3$ moments.
+The high-order moments of these mixtures, however, interpolate between those of $p$ and those of $\ME$.
+No method that sees only low-order moments can be right on every such mixture, so an advantage must come from a
+prior that matches the data.
+
+The generic IQP has no such prior.
+With all 696 order-$\le3$ generators its fit is badly conditioned, with a condition number near $10^9$.
+At $N=10^4$ it beats $\ME$ on only 2 of 14 instances, with median $R=1.17$.
+
+The coupling graph supplies the missing prior.
+Table~\ref{tab:step23} shows that the local IQP beats $\ME$ on all 14 fresh targets, at both $N=10^4$ and $N=10^5$.
+The advantage grows with $N$, as expected when the model family is right and $\ME$ is not.
+
+\begin{table}[t]
+\caption{Local IQP on fresh grid targets. $R$ is the median ratio of completion errors; wins are out of 14.}
+\label{tab:step23}
+\begin{ruledtabular}
+\begin{tabular}{lccc}
+Opponent & $N$ & Wins & Median $R$ \\
+\hline
+$\ME$ & $10^4$ & 14 & 0.35 \\
+$\ME$ & $10^5$ & 14 & 0.19 \\
+MaxEnt-on-graph & $10^4$ & 14 & 0.068 \\
+Generic IQP & $10^4$ & 14 & --- \\
+\end{tabular}
+\end{ruledtabular}
+\end{table}
+% step 23: H1-H4, seeds 920-933.
+
+The classical model cannot use the same prior.
+MaxEnt-on-graph has about as many parameters as the local IQP, 76 against 85, yet it completes far worse.
+Interference makes $\log p$ non-local in the graph, so a local log-linear model is the wrong family for these data.
+
+The prior is not a general improvement.
+On a classical grid-Ising target the local IQP loses to $\ME$ on all 14 instances.
+An IQP model also gave no advantage on real surface-code detection events \cite{google2023suppressing}.
+The advantage appears only when the data come from a circuit like the model.
+
+% ---------------------------------------------------------------------------
+\section{Robustness}
+
+A real device departs from the ideal circuit in two ways: its stated coupling graph may be wrong, and its gates and
+readout are noisy.
+Table~\ref{tab:robust} summarizes the tests of both departures.
+Each row is a separate test on fresh instances.
+
+\begin{table*}[t]
+\caption{Robustness tests on the $4\times4$ grid. Each row uses 14 fresh instances, $N=10^4$, and compares with
+$\ME$. ``Wrong graph'' means two active couplers are missing from the model. Rows marked $^\dagger$ were run in the same
+protocol but were reported without a pre-specified hypothesis.}
+\label{tab:robust}
+\begin{ruledtabular}
+\begin{tabular}{llcc}
+Departure & Method & Wins & Median $R$ \\
+\hline
+2 missing couplers & local IQP & 3 & 2.86 \\
+18 extra inactive candidates & local IQP & 14 & 0.46 \\
+2\% readout noise & local IQP & 11 & 0.78 \\
+2\% readout noise & local IQP, mitigated$^\dagger$ & 14 & 0.42 \\
+Gate noise 0.5\% & FlipIQP & 14 & 0.51 \\
+Gate noise 1\% & FlipIQP & 13 & 0.63 \\
+Gate noise 2\% & FlipIQP$^\dagger$ & 13 & 0.60 \\
+Wrong graph, gate noise 0.5\% & recipe & 13 & 0.56 \\
+Wrong graph, gate noise 1\% & recipe & 12 & 0.66 \\
+Correct graph, gate noise 1\% & recipe & 13 & 0.57 \\
+Wrong graph, correlated noise 1\% & recipe & 14 & 0.54 \\
+Correct graph, correlated noise 1\% & recipe & 14 & 0.53 \\
+Wrong graph, correlated noise 2\% & recipe & 12 & 0.80 \\
+\end{tabular}
+\end{ruledtabular}
+\end{table*}
+% rows: step 24 (M1, E1, D1, mitigated arm reported), step 26 (G2, G1, stress), step 27 (K2, K1, K4), step 28 (C1, C2, C4).
+% Gate-noise rows include 2% readout noise.
+
+\subsection{Graph errors}
+
+Extra candidates are cheap: adding 18 inactive diagonal candidates moves the median $R$ only from 0.35 to 0.46.
+Missing candidates are costly, and dropping two of the 24 couplers turns the win into a clear loss.
+The prior must therefore contain every active coupler.
+
+A missing coupler leaves a mark in the fit, because the training residual can no longer reach the sampling-noise
+floor $F=\sum_S(1-\hat f_S^2)/N$.
+We raise an alarm when the residual exceeds $0.75F$.
+When the alarm fires, the model is refitted on an enlarged graph that adds the 18 plaquette diagonals, for 103
+candidates in all.
+
+\subsection{Noise}
+
+Readout noise alone can be mitigated if its rate is calibrated, but gate noise cannot be removed this way.
+With readout mitigation only, the advantage fades at 1\% gate error and reverses at 2\%.
+FlipIQP's learned damping restores it, keeping the median $R$ near 0.6 from 0.5\% to 2\% gate error.
+The learned factors track the noise, and their median falls from 0.94 to 0.86 as the gate error grows.
+
+\subsection{The recipe}
+
+The final recipe has three steps.
+(i) Fit FlipIQP on the stated coupling graph, using the raw order-$\le3$ moments.
+(ii) If the residual exceeds $0.75F$, refit on the enlarged graph.
+(iii) Use the fitted model to predict the higher moments.
+The recipe needs no calibration of readout or gate errors.
+
+The recipe passed every one of its tests in Table~\ref{tab:robust}.
+Without the alarm, a wrong graph loses to $\ME$ on most instances, winning only 6 of 14 at 1\% gate noise.
+On the correct graph the alarm fired once in 14 instances at 1\% independent noise, and never at 1\% correlated noise.
+FlipIQP assumes noise that is independent across qubits.
+Correlated multi-qubit Pauli errors break that assumption, yet the recipe still won all 14 instances at 1\%.
+
+The alarm weakens as the noise grows.
+At 2\% correlated noise, four of the 14 wrong-graph instances stayed below the threshold, and two of these lost.
+Always enlarging the graph won all 14 instances in that setting, with median $R=0.72$.
+On a correct graph enlarging costs some accuracy, raising the median $R$ from 0.57 to 0.71 at 1\% noise.
+We therefore recommend always enlarging when gate errors reach about 2\%, a recommendation we observed but did not
+test.
+
+% ---------------------------------------------------------------------------
+\section{The limit: coherent over-rotations}
+
+Pauli noise shrinks correlations, which FlipIQP's damping can model, but a coherent error does not shrink them.
+We tested over-rotations $R_X(\epsilon_j)$ applied to qubit $j$ after every gate that touches it.
+Each $\epsilon_j$ is a fixed miscalibration drawn from $\mathcal{N}(0,\epsilon^2)$.
+The infidelity per gate is about $\epsilon^2/4$, so $\epsilon=0.2$ corresponds to about 1\%.
+
+On a wrong graph the recipe still passed, winning 12 of 14 instances at $\epsilon=0.2$ and 13 of 14 at
+$\epsilon=0.1$.
+On the correct graph it failed at $\epsilon=0.2$, winning only 10 of 14 with median $R=0.74$.
+The alarm also fired falsely on 3 of those 14 instances.
+The learned damping stayed near $\lambda=1$ and therefore did nothing.
+A unitary error moves weight between moments rather than shrinking them, so damping is the wrong correction.
+
+The failure is not visible in the fit.
+On one losing instance the residual was only $0.35F$, yet $R=1.21$.
+The residual checks orders up to three, while the damage appears at higher orders.
+
+We then explored a coherent-aware model that places unknown $R_X$ layers between the gate layers of the IQP circuit.
+This exploration reused instances from the failed test, so it has no formal verdict.
+The new model fitted the order-$\le3$ moments better than FlipIQP but did not complete the higher orders better.
+It beat FlipIQP on only 7 of 14 coherent instances, and on only 2 of 14 instances with Pauli noise, where it overfitted.
+A version with one angle per qubit, which matches how the data were generated, did no better.
+At $N=10^4$ the low-order moments do not pin down the coherent angles.
+
+% ---------------------------------------------------------------------------
+\section{Discussion}
+
+A prior from the device's coupling graph turns an unidentifiable IQP model into a useful one.
+The resulting model completes high-order moments better than the information-matched classical model.
+Without noise, it also beats the classical model given the same graph by more than an order of magnitude.
+The advantage survives the departures a real device is likely to show, with the exception of coherent over-rotations.
+
+The scope of the claim is narrow.
+It covers data from IQP-like devices with an approximately known coupling graph.
+It does not cover classical data, IQP models gave no advantage on surface-code detection events, and the advantage
+is statistical rather than computational.
+
+Three questions remain open.
+The first is coherent miscalibration, which more shots or calibrated rotation angles might fix, although neither was tested.
+The second is size, because the exact score needs $2^n$ probabilities and larger tests need an estimated score or a
+cheaper fitter.
+The third is real hardware data, which is the test that matters most.
+
+% ---------------------------------------------------------------------------
+\begin{acknowledgments}
+% TODO: acknowledgments; ask whether an advisor should be an author or acknowledged.
+\end{acknowledgments}
+
+\bibliography{refs}
+
+\end{document}

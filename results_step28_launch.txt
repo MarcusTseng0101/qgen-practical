@@ -1,0 +1,5 @@
+done ('cm02', 1050) rc=0 9322s
+done ('cm02', 1049) rc=0 9482s
+done ('cm02', 1053) rc=0 9802s
+done ('cm02', 1051) rc=0 9812s
+done ('cm02', 1052) rc=0 9922s

@@ -1,0 +1,115 @@
+{
+ "C1": {
+  "wins": 14,
+  "of": 14,
+  "need": 11,
+  "verdict": "PASS"
+ },
+ "C2": {
+  "wins": 14,
+  "of": 14,
+  "need": 11,
+  "verdict": "PASS"
+ },
+ "C4": {
+  "wins": 12,
+  "of": 14,
+  "need": 11,
+  "verdict": "PASS"
+ },
+ "C3": {
+  "flags": 0,
+  "of": 14,
+  "max": 2,
+  "verdict": "PASS"
+ },
+ "reported": {
+  "cm01": {
+   "n": 14,
+   "median_R_flow_me3": 0.5359366601339237,
+   "wins_R_flow_me3": 14,
+   "median_R_flow_me_local": 0.09670565484936315,
+   "wins_R_flow_me_local": 14,
+   "median_R_given_me3": 1.297210591173071,
+   "wins_R_given_me3": 2,
+   "median_R_given_me_local": 0.37017868595813685,
+   "wins_R_given_me_local": 14,
+   "median_R_enl_me3": 0.5359366601339237,
+   "wins_R_enl_me3": 14,
+   "median_R_enl_me_local": 0.09670565484936315,
+   "wins_R_enl_me_local": 14,
+   "flags": 14,
+   "missed_alarms": 0,
+   "flow_beats_given": 14,
+   "pinned_given": 1,
+   "pinned_enl": 0,
+   "median_lam_given": 0.956216636621469,
+   "ratio_given_range": [
+    0.7553848437550993,
+    4.915088867311321
+   ],
+   "ratio_enl_range": [
+    0.3300561765526041,
+    0.6153093599270899
+   ]
+  },
+  "cf01": {
+   "n": 14,
+   "median_R_flow_me3": 0.5268953270153447,
+   "wins_R_flow_me3": 14,
+   "median_R_flow_me_local": 0.15835911740401754,
+   "wins_R_flow_me_local": 14,
+   "median_R_given_me3": 0.5268953270153447,
+   "wins_R_given_me3": 14,
+   "median_R_given_me_local": 0.15835911740401754,
+   "wins_R_given_me_local": 14,
+   "median_R_enl_me3": 0.5359366601339237,
+   "wins_R_enl_me3": 14,
+   "median_R_enl_me_local": 0.16780220100732895,
+   "wins_R_enl_me_local": 14,
+   "flags": 0,
+   "missed_alarms": 0,
+   "flow_beats_given": 0,
+   "pinned_given": 0,
+   "pinned_enl": 0,
+   "median_lam_given": 0.921865627746312,
+   "ratio_given_range": [
+    0.36881164399648936,
+    0.6379108061044703
+   ],
+   "ratio_enl_range": [
+    0.3300561765526041,
+    0.6153093599270899
+   ]
+  },
+  "cm02": {
+   "n": 14,
+   "median_R_flow_me3": 0.7988782507306504,
+   "wins_R_flow_me3": 12,
+   "median_R_flow_me_local": 0.22048592667149988,
+   "wins_R_flow_me_local": 14,
+   "median_R_given_me3": 1.1496575271869456,
+   "wins_R_given_me3": 3,
+   "median_R_given_me_local": 0.30197431722093926,
+   "wins_R_given_me_local": 14,
+   "median_R_enl_me3": 0.7239005257399319,
+   "wins_R_enl_me3": 14,
+   "median_R_enl_me_local": 0.15343992724086666,
+   "wins_R_enl_me_local": 14,
+   "flags": 10,
+   "missed_alarms": 2,
+   "flow_beats_given": 9,
+   "pinned_given": 2,
+   "pinned_enl": 2,
+   "median_lam_given": 0.9169628197139287,
+   "ratio_given_range": [
+    0.6270342613360547,
+    3.1157810436657205
+   ],
+   "ratio_enl_range": [
+    0.36002733661160513,
+    0.587153604747956
+   ]
+  }
+ }
+}

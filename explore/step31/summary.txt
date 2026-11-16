@@ -1,0 +1,29 @@
+N1e4 flow (step 29)              n=14 wins=10 median R=0.738
+N1e4 given (step 29)             n=14 wins=10 median R=0.699
+N1e4 enl (step 29)               n=14 wins=12 median R=0.687
+N1e4 CohIQP untied (step 30)     n=14 wins=12 median R=0.752
+N1e5 flow                        n=14 wins=10 median R=0.765
+N1e5 given                       n=14 wins= 9 median R=0.885
+N1e5 enl                         n=14 wins=10 median R=0.765
+N1e5 CohIQP untied               n=14 wins=12 median R=0.580
+Ninf given (exact moments)       n=14 wins=10 median R=0.794
+flags N1e5 given ratio>0.75: 14 / 14  ratio range 1.2934174793157769 4.5068558694419645
+coh5 ratio range 0.39652563460532564 2.0868283028297565
+h2h N1e5 coh vs N1e5 flow: 10 / 14
+h2h N1e5 coh vs N1e4 flow: 9 / 14
+me3 G ratio N1e5/N1e4 median: 0.591465362335097
+1060 N1e4 flow 0.49 coh1e4 0.46 coh1e5 0.33 flow1e5 0.52 inf 0.67
+1061 N1e4 flow 0.68 coh1e4 0.94 coh1e5 0.59 flow1e5 0.84 inf 0.98
+1062 N1e4 flow 0.47 coh1e4 0.37 coh1e5 0.24 flow1e5 0.45 inf 0.60
+1063 N1e4 flow 0.47 coh1e4 0.82 coh1e5 0.98 flow1e5 0.79 inf 0.80
+1064 N1e4 flow 1.43 coh1e4 1.53 coh1e5 1.53 flow1e5 1.44 inf 1.72
+1065 N1e4 flow 0.77 coh1e4 0.76 coh1e5 0.57 flow1e5 0.64 inf 0.79
+1066 N1e4 flow 1.07 coh1e4 1.35 coh1e5 1.55 flow1e5 1.46 inf 1.65
+1067 N1e4 flow 1.21 coh1e4 0.74 coh1e5 0.43 flow1e5 1.00 inf 1.81
+1068 N1e4 flow 0.41 coh1e4 0.31 coh1e5 0.20 flow1e5 0.29 inf 0.34
+1069 N1e4 flow 0.93 coh1e4 0.60 coh1e5 0.32 flow1e5 0.74 inf 0.68
+1070 N1e4 flow 1.08 coh1e4 0.88 coh1e5 0.89 flow1e5 1.31 inf 1.53
+1071 N1e4 flow 0.72 coh1e4 0.57 coh1e5 0.43 flow1e5 0.50 inf 0.69
+1072 N1e4 flow 0.61 coh1e4 0.65 coh1e5 0.61 flow1e5 0.51 inf 0.62
+1073 N1e4 flow 0.75 coh1e4 0.81 coh1e5 0.84 flow1e5 0.96 inf 0.86
+coh vs given 1e5: 11

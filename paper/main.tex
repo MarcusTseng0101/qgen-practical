@@ -29,6 +29,8 @@ maximum-entropy model on all fourteen fresh instances, with a median error ratio
 A recipe of learned per-qubit damping, a residual alarm and graph enlargement keeps this advantage under readout noise,
 missing couplers and independent or correlated gate noise up to two percent.
 Coherent over-rotations of about one percent per gate are the limit, and a coherent-aware model did not remove it.
+An exploratory comparison of full distributions shows that the advantage extends to total variation, KL divergence
+and the unscored orders above six, but not to single-bit marginals.
 \end{abstract}
 
 \maketitle
@@ -57,6 +59,8 @@ Restricting the IQP to the device's coupling graph makes it identifiable, and th
 as well as a maximum-entropy model given the same graph.
 Our third finding is practical: a three-step recipe keeps the advantage under realistic departures from the ideal
 circuit, and we locate the noise class where it fails.
+Finally, an exploratory check of the full distributions shows that the fitted IQP model also samples closer to the
+target than $\ME$, except on single-bit marginals.
 
 Every result in this paper comes from simulation of sixteen qubits on a $4\times 4$ grid.
 Each robustness claim was tested on fresh random instances under a protocol fixed before the run.
@@ -268,12 +272,144 @@ A version with one angle per qubit, which matches how the data were generated, d
 At $N=10^4$ the low-order moments do not pin down the coherent angles.
 
 % ---------------------------------------------------------------------------
+\section{Sampling quality}
+\label{sec:sampling}
+
+A generative model is used to draw samples, not only to predict a few moments.
+The score $\Gm$ checks 14,196 of the $2^{16}-1$ nonconstant parity moments.
+A model could complete those moments well and still sample poorly, for example by distorting single-bit marginals or
+correlations of order seven and above.
+We therefore compared the full distributions $q$ of the fitted models with the exact target $p$.
+
+This analysis reused the 42 instances of three earlier tests: the ideal test of Table~\ref{tab:step23}, FlipIQP at
+1\% gate noise, and the recipe under coherent errors with $\epsilon=0.2$ on the correct graph.
+We refitted every model with the original settings, and the refits reproduced the reported $\Gm$ to within $10^{-15}$.
+Because the instances were not fresh, the results below are exploratory and carry no formal verdict.
+
+\subsection{Metrics}
+
+At $n=16$ the target is known exactly, so every metric is computed without sampling error.
+The total variation distance $\mathrm{TVD}=\frac12\sum_x|p(x)-q(x)|$ is the largest advantage with which a single
+sample can tell $q$ from $p$.
+The divergence $\mathrm{KL}(p\|q)=\sum_x p\log(p/q)$ is the excess log-loss on held-out data, and it punishes a model
+that misses part of the support.
+The classical fidelity is $F_{\rm c}=(\sum_x\sqrt{p(x)q(x)})^2$.
+
+We also computed the per-order error
+\begin{equation}
+  E_k = \frac{1}{\binom{n}{k}}\sum_{|S|=k}\bigl(f_S(q)-f_S(p)\bigr)^2, \qquad k=1,\dots,n,
+\end{equation}
+for every order with a fast Walsh--Hadamard transform, so that $\Gm$ is the mean of $E_4$, $E_5$ and $E_6$.
+Large-scale IQP studies score samples with the maximum mean discrepancy (MMD) under a Gaussian kernel
+\cite{recio2025train}.
+On bit strings this kernel is $k(x,y)=c^{d(x,y)}$, where $d$ is the Hamming distance and $c=e^{-1/2s^2}$ for
+bandwidth $s$.
+Each factor $c^{[x_j\ne y_j]}$ equals $a+b(-1)^{x_j+y_j}$ with $a=(1+c)/2$ and $b=(1-c)/2$.
+Expanding the product over the $n$ bits gives
+\begin{equation}
+  \mathrm{MMD}^2(p,q) = \sum_{k=1}^{n}\binom{n}{k}a^{n-k}b^{k}E_k .
+  \label{eq:mmd}
+\end{equation}
+The MMD is therefore a weighted sum of the same per-order errors.
+A narrow kernel spreads its weight over many orders, while a wide kernel puts most of it on orders one and two.
+
+\begin{table}[t]
+\caption{Distribution-level comparison with $\ME$ on reused instances (exploratory). Each entry gives the wins of the
+IQP model out of 14 and, in parentheses, the median ratio of the model's error to that of $\ME$. For fidelity a win is
+a higher value. The median TVDs of the model, $\ME$ and MaxEnt-on-graph are 0.13, 0.24 and 0.38 (ideal), 0.11, 0.14
+and 0.17 (gate noise), and 0.18, 0.20 and 0.26 (coherent).}
+\label{tab:sampling}
+\begin{ruledtabular}
+\begin{tabular}{lccc}
+Metric & Ideal & 1\% gate & Coherent \\
+\hline
+$\Gm$, orders 4--6 & 14 (0.35) & 13 (0.62) & 10 (0.74) \\
+Mean $E_k$, orders 7--16 & 14 (0.08) & 10 (0.65) & 12 (0.53) \\
+$E_1$ & 5 & 2 & 1 \\
+TVD & 14 (0.62) & 13 (0.78) & 12 (0.85) \\
+KL & 13 (0.61) & 13 (0.56) & 13 (0.74) \\
+Fidelity & 13 & 13 & 11 \\
+MMD, $s=1$ & 14 (0.58) & 14 (0.71) & 12 (0.83) \\
+MMD, $s=2$ & 9 (0.92) & 7 (1.00) & 1 (1.24) \\
+\end{tabular}
+\end{ruledtabular}
+\end{table}
+% step 32 (exploration): worktree commit a73c98c, explore/step32_dist/metrics.json; instances of steps 23, 26, 29.
+
+\begin{figure*}[t]
+\centering\includegraphics{figures/fig_orders.pdf}
+\caption{Median per-order error $E_k$ of the full fitted distribution, 14 reused instances per panel, $N=10^4$.
+The shaded band marks the orders scored by $\Gm$, and the dotted line marks $1/N$. The numbers along the bottom count
+the instances on which the IQP model beats $\ME$ at that order; red marks counts below 11.}
+\label{fig:orders}
+\end{figure*}
+% fig_orders.py (run with uv) reads explore/step32_dist/metrics.json in the step-18 worktree.
+
+\subsection{Results}
+
+Table~\ref{tab:sampling} shows that the moment advantage carries over to the whole distribution.
+In all three settings the IQP model has a lower TVD and a lower KL than $\ME$ on at least 12 of 14 instances.
+In the ideal setting its median TVD is 0.13, against 0.24 for $\ME$ and 0.38 for MaxEnt-on-graph.
+MaxEnt-on-graph has the largest median error of the three models on every metric except $E_1$.
+
+Figure~\ref{fig:orders} shows where the advantage lives.
+In the ideal setting the IQP model wins every order from two to sixteen on all 14 instances.
+The error of $\ME$ grows nearly a hundredfold from order four to order sixteen, while that of the IQP model
+grows only about sixfold.
+Under 1\% gate noise the high orders of the target are damped toward zero, so every model's error there is small.
+The wins at orders 7 to 14 then drop to between 8 and 10 of 14.
+
+The model also improves on the training moments themselves.
+$\ME$ reproduces the estimated moments of orders one to three exactly, so its error there equals the shot noise,
+about $1/N$.
+The IQP model has fewer parameters than there are moments, and at orders two and three it beats $\ME$ on all 14 ideal
+instances.
+The prior removes part of the shot noise from the moments it was fitted to.
+
+\subsection{The weak spot: single-bit marginals}
+
+The IQP model is worse than $\ME$ on single-bit marginals in every setting, winning $E_1$ on only 5, 2 and 1 of 14
+instances.
+In the ideal and gate-noise settings the loss is small, because both errors sit near the shot noise.
+The least-squares fit spreads its residual over all 696 moments, so it does not match the 16 marginals exactly as
+$\ME$ does.
+Under coherent errors the loss is larger, with a median $E_1$ of $1.0\times10^{-4}$ against $7.1\times10^{-5}$ for $\ME$.
+An over-rotation biases each marginal, and the IQP family cannot express that bias.
+
+Eq.~\eqref{eq:mmd} turns this weak spot into a metric choice.
+The narrow kernel with $s=1$ gives most of its weight to orders two to five, and the IQP model wins it in all settings.
+The wide kernel with $s=2$ gives about 60\% of its weight to order one.
+There the IQP model only ties $\ME$ in the ideal and gate-noise settings, and it loses on 13 of 14 coherent instances.
+An MMD score at a single bandwidth can therefore reverse the ranking of two models.
+We recommend reporting the per-order errors, or several bandwidths, rather than one MMD value.
+
+The coherent setting looks better on the full distribution than on $\Gm$.
+The recipe failed its test there, winning $\Gm$ on only 10 of 14 instances.
+Yet it wins TVD on 12 and KL on 13 of the same instances, and it wins orders seven to sixteen on 12.
+Its losses concentrate at order one and at orders four to six, which are the orders that $\Gm$ scores.
+
+\subsection{Distance from a faithful sampler}
+
+Neither model is a faithful sampler at $N=10^4$.
+In the ideal setting the median classical fidelity is 0.94 for the IQP model and 0.87 for $\ME$.
+The error of the best test between $p$ and $q$ with $m$ samples is at most $\frac12 F_{\rm c}^{m/2}$.
+This bound falls below 5\% after about 77 samples for the IQP model and after about 34 for $\ME$.
+The IQP model is thus closer to the target, but a few dozen samples still separate either model from it.
+Its remaining error is of the order of the shot noise, since its median $E_k$ stays below $1/N$ up to order
+thirteen.
+
+% ---------------------------------------------------------------------------
 \section{Discussion}
 
 A prior from the device's coupling graph turns an unidentifiable IQP model into a useful one.
 The resulting model completes high-order moments better than the information-matched classical model.
 Without noise, it also beats the classical model given the same graph by more than an order of magnitude.
 The advantage survives the departures a real device is likely to show, with the exception of coherent over-rotations.
+It also extends beyond the scored moments.
+On the reused instances the fitted IQP distribution is closer to the target than that of $\ME$ in total variation and
+in KL divergence.
+It also wins the orders above six, which $\Gm$ never scores.
+Its weak spot is the single-bit marginals, which a wide-kernel MMD weights heavily.
 
 The scope of the claim is narrow.
 It covers data from IQP-like devices with an approximately known coupling graph.

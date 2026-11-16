@@ -1,0 +1,76 @@
+{
+ "Y1": {
+  "wins": 12,
+  "of": 14,
+  "need": 11,
+  "verdict": "PASS"
+ },
+ "Y2": {
+  "wins": 11,
+  "of": 14,
+  "need": 10,
+  "verdict": "PASS"
+ },
+ "Y3": {
+  "wins": 14,
+  "of": 14,
+  "need": 11,
+  "verdict": "PASS"
+ },
+ "reported": {
+  "cf": {
+   "coh": {
+    "n": 14,
+    "wins_vs_me3": 12,
+    "median_R": 0.514884922705802,
+    "ratio_range": [
+     0.2979958404009263,
+     2.424820038484472
+    ],
+    "ratio_over_0.75": 10,
+    "restarts_at_maxiter": 70,
+    "eps_at_bound": 14
+   },
+   "flip": {
+    "n": 14,
+    "wins_vs_me3": 12,
+    "median_R": 0.6495300998775844,
+    "ratio_range": [
+     0.6911051489626973,
+     6.0763627043835795
+    ],
+    "ratio_over_0.75": 13,
+    "median_lam": 0.9609630792988382,
+    "pinned": 0
+   },
+   "coh_beats_flip": 11
+  },
+  "pf": {
+   "coh": {
+    "n": 14,
+    "wins_vs_me3": 14,
+    "median_R": 0.37886745054242915,
+    "ratio_range": [
+     0.3381924009887165,
+     0.9746184907027281
+    ],
+    "ratio_over_0.75": 2,
+    "restarts_at_maxiter": 70,
+    "eps_at_bound": 15
+   },
+   "flip": {
+    "n": 14,
+    "wins_vs_me3": 14,
+    "median_R": 0.16741798610844383,
+    "ratio_range": [
+     0.3901296018590935,
+     1.226955582845882
+    ],
+    "ratio_over_0.75": 2,
+    "median_lam": 0.8804000820282561,
+    "pinned": 0
+   },
+   "coh_beats_flip": 0
+  }
+ }
+}

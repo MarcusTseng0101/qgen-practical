@@ -1,0 +1,5 @@
+done ('pf', 'coh', 1090) rc=0 32021s
+done ('pf', 'flip', 1085) rc=0 32131s
+done ('pf', 'flip', 1090) rc=0 32471s
+done ('pf', 'flip', 1092) rc=0 32531s
+done ('pf', 'flip', 1088) rc=0 33321s

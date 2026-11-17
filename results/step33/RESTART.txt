@@ -1,0 +1,10 @@
+Step 33 run interruption record (written 2026-11-17 05:02 +0800).
+- First launch: 2026-11-17 01:59:39 (errors.log creation time).
+- The machine rebooted at about 03:39 (uptime at 05:01 was 4900 s; run_log.txt was left as 448 NUL bytes,
+  the signature of an unclean shutdown). All workers died with it.
+- Completed before the reboot: xf02 seeds 1120-1123, 1125-1133 (13) and mg01 seed 1120 (1); all 14
+  metrics.json and dist.npz files load and are complete.
+- Resumed with the unchanged code (`--all` skips jobs whose metrics.json exists). Fits are seeded, so a
+  restarted job computes the same result it would have computed before the reboot.
+- The spec's 16 h stop-loss is kept from the FIRST launch: any job still running at 2026-11-17 17:59 is
+  killed and counts as a failure.

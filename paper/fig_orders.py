@@ -26,7 +26,7 @@ def main():
     Parameters
     ----------
     sys.argv[1] : str, optional
-        The metrics.json written by explore/step32_dist/metrics.py in the step-18 worktree.
+        results/step33/verdicts.json (default) or the step-32 exploration metrics.json, both in the step-18 worktree.
 
     Saves
     -----
@@ -38,18 +38,29 @@ def main():
                          "ytick.labelsize": 7, "axes.titlesize": 7.5})
 
     # --- Data ---
-    src = sys.argv[1] if len(sys.argv) > 1 else \
-        "C:/Users/tseng/qgen-practical-step1/explore/step32_dist/metrics.json"
+    src = sys.argv[1] if len(sys.argv) > 1 else         "C:/Users/tseng/qgen-practical-step1/results/step33/verdicts.json"
     rep = json.load(open(src))
-    panels = [("ideal", "(a) Ideal, local IQP"), ("g01", "(b) 1% gate noise, FlipIQP"),
-              ("xf02", r"(c) Coherent $\epsilon=0.2$, recipe")]
+    if "reported" in rep:  # step 33 verdicts.json (pre-registered, fresh seeds)
+        rep = {c: {"E_median": {"model": r["E_median"]["model"], "me3": r["E_median"]["me3"],
+                                "me_local": r["E_median"]["me_graph"]},
+                   "E_wins_vs_me3": r["order_wins_vs_me3"]} for c, r in rep["reported"].items()}
+        rep["ideal"] = rep.pop("id")
+        panels = [("ideal", "(a) Ideal, local IQP"), ("g01", "(b) 1% gate noise, FlipIQP"),
+                  ("mg01", "(c) Wrong graph, 1% gate"), ("xf02", r"(d) Coherent $\epsilon=0.2$, recipe")]
+    else:  # step 32 exploration metrics.json
+        panels = [("ideal", "(a) Ideal, local IQP"), ("g01", "(b) 1% gate noise, FlipIQP"),
+                  ("xf02", r"(c) Coherent $\epsilon=0.2$, recipe")]
     series = [("model", "IQP model", "#4575b4", "o", "-"),
               ("me3", "MaxEnt(3)", "#333333", "s", "-"),
               ("me_local", "MaxEnt-on-graph", "#999999", "^", "--")]
     k = np.arange(1, 17)
 
     # --- Plot ---
-    fig, axes = plt.subplots(1, 3, figsize=(7.0, 2.3), dpi=150, sharey=True)
+    if len(panels) == 3:
+        fig, axes = plt.subplots(1, 3, figsize=(7.0, 2.3), dpi=150, sharey=True)
+    else:  # four settings: 2 x 2 grid so titles and win counts stay readable
+        fig, axes = plt.subplots(2, 2, figsize=(7.0, 4.3), dpi=150, sharey=True, sharex=True)
+        axes = axes.ravel()
     for ax, (cond, title) in zip(axes, panels):
         r = rep[cond]
         ax.axvspan(3.5, 6.5, color="#fee090", alpha=0.5, lw=0, zorder=0)
@@ -66,11 +77,13 @@ def main():
         ax.set_ylim(2e-7, 3e-2)
         ax.set_xlim(0.4, 16.6)
         ax.set_xticks([1, 4, 6, 8, 12, 16])
-        ax.set_xlabel("order $k$", color="dimgrey")
+        if len(panels) == 3 or ax in axes[2:]:
+            ax.set_xlabel("order $k$", color="dimgrey")
         ax.tick_params(axis="both", which="both", length=0, labelcolor="dimgrey")
         ax.grid(axis="x", visible=False)
         ax.grid(axis="y", which="major", alpha=0.6, linewidth=0.6)
-    axes[0].set_ylabel(r"median $E_k$", color="dimgrey")
+    for ax in (axes[0], axes[2]) if len(panels) == 4 else (axes[0],):
+        ax.set_ylabel(r"median $E_k$", color="dimgrey")
     axes[1].text(10.0, 1.2e-4, "shot noise $1/N$", ha="center", va="bottom", color="dimgrey", fontsize=6)
     axes[0].text(5.0, 1.5e-2, "scored\nin $G$", ha="center", va="top", color="#8c6d1f", fontsize=6)
     axes[0].text(0.6, 8.5e-7, "wins over MaxEnt(3), of 14", ha="left", va="bottom", color="dimgrey", fontsize=5.5)
@@ -78,7 +91,7 @@ def main():
     axes[0].legend(loc="lower left", bbox_to_anchor=(0.0, 1.12), ncol=3, frameon=True, facecolor="white",
                    framealpha=0.8, edgecolor="lightgrey", labelcolor="dimgrey", fontsize=6.5,
                    handletextpad=0.3, borderpad=0.4)
-    fig.subplots_adjust(wspace=0.08)
+    fig.subplots_adjust(wspace=0.08, hspace=0.32)
     for cond, _ in panels:
         print(cond, "order wins vs ME3:", rep[cond]["E_wins_vs_me3"])
 

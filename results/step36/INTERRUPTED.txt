@@ -1,0 +1,6 @@
+Step 36 run stopped at the user's request on 2026-11-18 01:33 (the user needed the machine).
+- Launch: 01:19. No job had finished; all 14 running workers were killed (process trees), none left running.
+- Resume later with the unchanged code: python -m src.step36.run --all (it skips finished jobs; fits are seeded, so
+  a restart gives the same results). The 12 h stop-loss then counts from the resumed launch, because this stop was
+  a user decision, not the budget running out.
+- Resumed at 2026-11-18 01:36 on the user's instruction; the 12 h stop-loss counts from here.

@@ -28,7 +28,8 @@ On sixteen-qubit grid circuits, an IQP restricted to the graph completes orders 
 maximum-entropy model on all fourteen fresh instances, with a median error ratio of 0.35.
 A recipe of learned per-qubit damping, a residual alarm and graph enlargement keeps this advantage under readout noise,
 missing couplers and independent or correlated gate noise up to two percent.
-Coherent over-rotations of about one percent per gate are the limit, and a coherent-aware model did not remove it.
+Coherent over-rotations of about one percent per gate are the hardest case: the advantage shrinks, and it passed only
+one of three tests on separate instance sets.
 A second test on fresh instances shows that the fitted model also samples closer to the target in total variation
 and KL divergence, in all four settings tested, but matches single-bit marginals less well.
 \end{abstract}
@@ -58,7 +59,7 @@ Our second finding is positive.
 Restricting the IQP to the device's coupling graph makes it identifiable, and the restricted model beats $\ME$
 as well as a maximum-entropy model given the same graph.
 Our third finding is practical: a three-step recipe keeps the advantage under realistic departures from the ideal
-circuit, and we locate the noise class where it fails.
+circuit, and we identify the noise class where it is weakest.
 Finally, a test of the full distributions on fresh instances shows that the fitted IQP model also samples closer to
 the target than $\ME$, except on single-bit marginals.
 
@@ -246,7 +247,7 @@ We therefore recommend always enlarging when gate errors reach about 2\%, a reco
 test.
 
 % ---------------------------------------------------------------------------
-\section{The limit: coherent over-rotations}
+\section{The hardest case: coherent over-rotations}
 \label{sec:coherent}
 
 Pauli noise shrinks correlations, which FlipIQP's damping can model, but a coherent error does not shrink them.
@@ -256,18 +257,21 @@ The infidelity per gate is about $\epsilon^2/4$, so $\epsilon=0.2$ corresponds t
 
 On a wrong graph the recipe still passed, winning 12 of 14 instances at $\epsilon=0.2$ and 13 of 14 at
 $\epsilon=0.1$.
-On the correct graph it failed at $\epsilon=0.2$, winning only 10 of 14 with median $R=0.74$.
-The alarm also fired falsely on 3 of those 14 instances.
+On the correct graph at $\epsilon=0.2$ we ran three tests on separate fresh instances.
+The first failed, winning only 10 of 14 with median $R=0.74$, and the alarm fired falsely on 3 of the 14.
+The second, on 28 instances, also failed, but for lack of compute.
+Only 20 fits finished within a budget fixed in advance, the recipe won 15 of them, and the 8 unfinished instances
+counted as losses, giving 15 of 28 against a threshold of 19.
+The third repeated the second on 28 new instances with a budget sized from a timing run, and every fit finished.
+It passed, winning 26 of 28 ($p=1.5\times10^{-6}$), with median $R=0.62$ and a bootstrap 95\% interval of 0.57 to
+0.64.
+Over all 76 coherent instances the recipe won 64.
+Coherent errors therefore do not remove the advantage, but they make it less reliable from one set of instances to
+the next.
 The learned damping stayed near $\lambda=1$ and therefore did nothing.
-A replication on 28 further fresh instances, with a compute budget fixed in advance, also failed.
-Only 20 fits finished within the budget, and the recipe won 15 of them.
-The 8 unfinished instances counted as losses, so the count was 15 of 28 against a threshold of 19.
-On the finished instances the median $R$ was 0.68, with a bootstrap 95\% interval of 0.52 to 0.91.
-Coherent errors therefore shrink the advantage and make it unreliable, although the recipe still wins on most
-instances.
 A unitary error moves weight between moments rather than shrinking them, so damping is the wrong correction.
 
-The failure is not visible in the fit.
+A loss is not visible in the fit.
 On one losing instance the residual was only $0.35F$, yet $R=1.21$.
 The residual checks orders up to three, while the damage appears at higher orders.
 
@@ -406,9 +410,7 @@ An MMD score at a single bandwidth can therefore reverse the ranking of two mode
 We recommend reporting the per-order errors, or several bandwidths, rather than one MMD value.
 
 On these fresh coherent instances the recipe also won $\Gm$ on 13 of 14.
-This number was reported without a verdict.
-It does not overturn the two failed tests of Sec.~\ref{sec:coherent}.
-Together with them it shows that the coherent win rate on $\Gm$ varies strongly between sets of 14 instances.
+This number was reported without a verdict, and it agrees with the passing coherent test of Sec.~\ref{sec:coherent}.
 
 \subsection{Distance from a faithful sampler}
 
@@ -426,7 +428,8 @@ thirteen.
 A prior from the device's coupling graph turns an unidentifiable IQP model into a useful one.
 The resulting model completes high-order moments better than the information-matched classical model.
 Without noise, it also beats the classical model given the same graph by more than an order of magnitude.
-The advantage survives the departures a real device is likely to show, with the exception of coherent over-rotations.
+The advantage survives the departures a real device is likely to show.
+Coherent over-rotations are the hardest case, where the margin shrinks and one of three tests failed on the merits.
 It also extends beyond the scored moments.
 On fresh instances the fitted IQP distribution is closer to the target than that of $\ME$ in total variation and in
 KL divergence, in all four settings tested, including a wrong graph and coherent errors.
@@ -439,7 +442,7 @@ It does not cover classical data, IQP models gave no advantage on surface-code d
 is statistical rather than computational.
 
 Three questions remain open.
-The first is coherent miscalibration, which more shots or calibrated rotation angles might fix, although neither was tested.
+The first is coherent miscalibration, where the outcome varies between instance sets and the alarm is unreliable.
 The second is size, because the exact score needs $2^n$ probabilities and larger tests need an estimated score or a
 cheaper fitter.
 The third is real hardware data, which is the test that matters most.

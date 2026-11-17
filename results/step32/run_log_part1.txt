@@ -1,0 +1,35 @@
+done ('cf', 'coh', 1111) rc=0 14401s
+done ('cf', 'coh', 1109) rc=0 14411s
+done ('cf', 'coh', 1112) rc=0 14421s
+done ('pf', 'coh', 1103) rc=0 14772s
+done ('cf', 'coh', 1100) rc=0 15222s
+done ('cf', 'coh', 1102) rc=0 15312s
+done ('cf', 'coh', 1103) rc=0 15392s
+done ('cf', 'coh', 1104) rc=0 15402s
+done ('cf', 'coh', 1101) rc=0 15482s
+done ('pf', 'coh', 1105) rc=0 15502s
+done ('cf', 'coh', 1106) rc=0 15532s
+done ('pf', 'coh', 1104) rc=0 15592s
+done ('pf', 'coh', 1102) rc=0 15822s
+done ('pf', 'coh', 1100) rc=0 16033s
+done ('cf', 'coh', 1110) rc=0 16043s
+done ('pf', 'coh', 1101) rc=0 16123s
+done ('cf', 'coh', 1108) rc=0 16463s
+done ('cf', 'coh', 1105) rc=0 16553s
+done ('cf', 'coh', 1113) rc=0 16573s
+done ('cf', 'coh', 1107) rc=0 18494s
+done ('cf', 'flip', 1108) rc=0 19555s
+done ('cf', 'flip', 1101) rc=0 20185s
+done ('cf', 'flip', 1103) rc=0 20365s
+done ('cf', 'flip', 1104) rc=0 20555s
+done ('cf', 'flip', 1110) rc=0 20665s
+done ('cf', 'flip', 1107) rc=0 21176s
+done ('cf', 'flip', 1102) rc=0 22096s
+done ('cf', 'flip', 1106) rc=0 22166s
+done ('cf', 'flip', 1100) rc=0 22747s
+done ('cf', 'flip', 1105) rc=0 23958s
+done ('cf', 'flip', 1112) rc=0 24768s
+INTERRUPTED: session exit killed launcher and workers between 01:44 and 01:52 on 2026-11-17; 31/56 metrics on disk; relaunched 01:56 (original launch 18:46, spec stop-loss 12 h -> 06:46)
+INTERRUPTED 2: relaunch (01:56) killed by a machine reboot at ~03:39 (see results/step33/RESTART.txt: uptime 4900 s at 05:01) on 2026-11-17 (run_log.txt left as 2 NUL bytes); still 31/56 metrics; not relaunched as of 05:10; spec stop-loss 06:46
+USER DECISION 05:13: option A - user relaunches remaining jobs as an independent process; verdicts reported both as-spec (missing = fail at 06:46) and completed.
+RELAUNCH 3 by the user at ~05:15 (option A, via ! in the Claude session); all 25 remaining jobs done by ~09:50; no errors

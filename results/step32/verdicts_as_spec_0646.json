@@ -1,0 +1,56 @@
+{
+ "note": "as-spec reading: spec stop-loss 12 h from first launch (2026-11-16 18:46) = 2026-11-17 06:46; metrics written after it count as missing (= failure)",
+ "late_metrics": [
+  "results/step32/cf/flip/seed_1109/metrics.json",
+  "results/step32/cf/flip/seed_1111/metrics.json",
+  "results/step32/cf/flip/seed_1113/metrics.json",
+  "results/step32/pf/coh/seed_1106/metrics.json",
+  "results/step32/pf/coh/seed_1107/metrics.json",
+  "results/step32/pf/coh/seed_1108/metrics.json",
+  "results/step32/pf/coh/seed_1109/metrics.json",
+  "results/step32/pf/coh/seed_1110/metrics.json",
+  "results/step32/pf/coh/seed_1111/metrics.json",
+  "results/step32/pf/coh/seed_1112/metrics.json",
+  "results/step32/pf/coh/seed_1113/metrics.json",
+  "results/step32/pf/flip/seed_1100/metrics.json",
+  "results/step32/pf/flip/seed_1101/metrics.json",
+  "results/step32/pf/flip/seed_1102/metrics.json",
+  "results/step32/pf/flip/seed_1103/metrics.json",
+  "results/step32/pf/flip/seed_1104/metrics.json",
+  "results/step32/pf/flip/seed_1105/metrics.json",
+  "results/step32/pf/flip/seed_1106/metrics.json",
+  "results/step32/pf/flip/seed_1107/metrics.json",
+  "results/step32/pf/flip/seed_1108/metrics.json",
+  "results/step32/pf/flip/seed_1109/metrics.json",
+  "results/step32/pf/flip/seed_1110/metrics.json",
+  "results/step32/pf/flip/seed_1111/metrics.json",
+  "results/step32/pf/flip/seed_1112/metrics.json",
+  "results/step32/pf/flip/seed_1113/metrics.json"
+ ],
+ "verdicts": {
+  "Z1": {
+   "count": 11,
+   "of": 14,
+   "need": 11,
+   "verdict": "PASS"
+  },
+  "Z2": {
+   "count": 8,
+   "of": 14,
+   "need": 9,
+   "verdict": "FAIL"
+  },
+  "Z3": {
+   "count": 0,
+   "of": 14,
+   "need": 12,
+   "verdict": "FAIL"
+  },
+  "Z4": {
+   "count": 0,
+   "of": 14,
+   "need": 12,
+   "verdict": "FAIL"
+  }
+ }
+}

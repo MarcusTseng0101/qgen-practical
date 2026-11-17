@@ -1,0 +1,29 @@
+done 1148 rc=0 13607s
+done 1142 rc=0 14688s
+done 1140 rc=0 15513s
+done 1149 rc=0 17840s
+done 1153 rc=0 19056s
+done 1147 rc=0 19131s
+done 1145 rc=0 19867s
+done 1152 rc=0 20707s
+done 1141 rc=0 22284s
+done 1150 rc=0 22494s
+done 1143 rc=0 23034s
+done 1151 rc=0 23500s
+done 1144 rc=0 24355s
+done 1146 rc=0 30727s
+done 1158 rc=0 32102s
+done 1156 rc=0 33077s
+done 1160 rc=0 33332s
+done 1157 rc=0 33813s
+done 1154 rc=0 34503s
+done 1164 rc=0 34773s
+KILLED 1155
+KILLED 1159
+KILLED 1161
+KILLED 1162
+KILLED 1163
+KILLED 1165
+KILLED 1166
+KILLED 1167
+STOP-LOSS after 10.0 h; unstarted: []

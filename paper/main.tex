@@ -259,6 +259,12 @@ $\epsilon=0.1$.
 On the correct graph it failed at $\epsilon=0.2$, winning only 10 of 14 with median $R=0.74$.
 The alarm also fired falsely on 3 of those 14 instances.
 The learned damping stayed near $\lambda=1$ and therefore did nothing.
+A replication on 28 further fresh instances, with a compute budget fixed in advance, also failed.
+Only 20 fits finished within the budget, and the recipe won 15 of them.
+The 8 unfinished instances counted as losses, so the count was 15 of 28 against a threshold of 19.
+On the finished instances the median $R$ was 0.68, with a bootstrap 95\% interval of 0.52 to 0.91.
+Coherent errors therefore shrink the advantage and make it unreliable, although the recipe still wins on most
+instances.
 A unitary error moves weight between moments rather than shrinking them, so damping is the wrong correction.
 
 The failure is not visible in the fit.
@@ -401,8 +407,8 @@ We recommend reporting the per-order errors, or several bandwidths, rather than 
 
 On these fresh coherent instances the recipe also won $\Gm$ on 13 of 14.
 This number was reported without a verdict.
-It does not overturn the failed test of Sec.~\ref{sec:coherent}, but it suggests that the coherent loss on $\Gm$ varies
-between instance sets.
+It does not overturn the two failed tests of Sec.~\ref{sec:coherent}.
+Together with them it shows that the coherent win rate on $\Gm$ varies strongly between sets of 14 instances.
 
 \subsection{Distance from a faithful sampler}
 

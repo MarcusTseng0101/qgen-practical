@@ -1,0 +1,51 @@
+queued ('cf', 'coh', 'enl', 1238) 0s
+queued ('cf', 'coh', 'enl', 1239) 0s
+queued ('cf', 'coh', 'full', 1239) 0s
+queued ('cf', 'coh', 'enl', 1241) 0s
+queued ('cf', 'coh', 'full', 1241) 0s
+start ('cf', 'coh', 'full', 1241) 0s
+start ('cf', 'coh', 'enl', 1241) 0s
+start ('cf', 'coh', 'full', 1239) 0s
+start ('cf', 'coh', 'enl', 1239) 0s
+start ('cf', 'coh', 'enl', 1238) 0s
+start ('pf', 'flip', 'full', 1240) 0s
+start ('pf', 'flip', 'enl', 1240) 0s
+start ('pf', 'flip', 'enl', 1241) 0s
+start ('cf', 'flip', 'enl', 1242) 0s
+start ('pf', 'flip', 'full', 1242) 0s
+start ('pf', 'flip', 'miss', 1242) 0s
+start ('pf', 'flip', 'enl', 1242) 0s
+start ('cf', 'flip', 'full', 1243) 0s
+start ('cf', 'flip', 'enl', 1243) 0s
+start ('pf', 'flip', 'full', 1243) 0s
+start ('pf', 'flip', 'miss', 1243) 0s
+start ('pf', 'flip', 'enl', 1243) 0s
+done ('pf', 'flip', 'miss', 1243) rc=0 4261s
+done ('cf', 'flip', 'full', 1243) rc=0 4413s
+done ('pf', 'flip', 'miss', 1242) rc=0 4434s
+queued ('cf', 'coh', 'enl', 1242) 4707s
+queued ('cf', 'coh', 'full', 1242) 4707s
+done ('cf', 'flip', 'enl', 1242) rc=0 4707s
+start ('cf', 'coh', 'full', 1242) 4707s
+start ('cf', 'coh', 'enl', 1242) 4707s
+done ('pf', 'flip', 'full', 1242) rc=0 5347s
+queued ('pf', 'coh', 'full', 1241) 5377s
+done ('pf', 'flip', 'enl', 1241) rc=0 5377s
+start ('pf', 'coh', 'full', 1241) 5377s
+queued ('cf', 'coh', 'full', 1243) 5388s
+done ('cf', 'flip', 'enl', 1243) rc=0 5388s
+start ('cf', 'coh', 'full', 1243) 5388s
+done ('pf', 'flip', 'full', 1243) rc=0 5986s
+done ('pf', 'flip', 'enl', 1242) rc=0 6462s
+done ('pf', 'flip', 'enl', 1243) rc=0 6979s
+done ('pf', 'flip', 'full', 1240) rc=0 8579s
+done ('pf', 'flip', 'enl', 1240) rc=0 9672s
+done ('cf', 'coh', 'enl', 1241) rc=0 10097s
+done ('cf', 'coh', 'full', 1241) rc=0 10127s
+done ('cf', 'coh', 'enl', 1239) rc=0 10360s
+done ('cf', 'coh', 'full', 1239) rc=0 10410s
+done ('cf', 'coh', 'enl', 1238) rc=0 10522s
+done ('cf', 'coh', 'enl', 1242) rc=0 13164s
+done ('cf', 'coh', 'full', 1243) rc=0 13356s
+done ('pf', 'coh', 'full', 1241) rc=0 13710s
+done ('cf', 'coh', 'full', 1242) rc=0 13720s

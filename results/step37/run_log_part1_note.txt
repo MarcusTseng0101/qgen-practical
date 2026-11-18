@@ -1,0 +1,2 @@
+INTERRUPTED ~00:56 2026-11-19: Claude session restart killed the launcher and all workers (no stop-loss). 72/84 flip and 16 coh metrics on disk.
+The relaunch (~01:37, by the user with !) overwrote run_log.txt, so the first launch log (13:04-00:56) is lost; its metrics files remain. Wall-clock from first launch to last file: 13:04 -> 05:25 (16.4 h, with a ~40 min gap); compute time ~15.7 h. 4 coh fits finished after the 16 h mark (05:04): see verdicts_as_spec_0504.json.

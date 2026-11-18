@@ -1,0 +1,109 @@
+{
+ "A1": {
+  "count": 13,
+  "of": 14,
+  "need": 11,
+  "verdict": "PASS"
+ },
+ "A2": {
+  "count": 13,
+  "of": 14,
+  "need": 12,
+  "verdict": "PASS"
+ },
+ "A3": {
+  "count": 28,
+  "of": 28,
+  "need": 26,
+  "verdict": "PASS"
+ },
+ "A4": {
+  "count": 28,
+  "of": 28,
+  "need": 24,
+  "verdict": "PASS"
+ },
+ "A5": {
+  "count": 26,
+  "of": 28,
+  "need": 23,
+  "verdict": "PASS"
+ },
+ "reported": {
+  "cf_full": {
+   "n": 14,
+   "n_with_recipe": 14,
+   "median_R_recipe": 0.4157210776628898,
+   "median_R_flip_given": 0.5563171184587925,
+   "recipe_beats_flip_given": 10,
+   "picked": {
+    "full/coh": 12,
+    "full/flip": 2
+   },
+   "drop_near_threshold": {},
+   "gate_ratio_near_threshold": {
+    "1231": 0.9792837275767284,
+    "1239": 1.2291964356841485,
+    "1240": 0.9729416125345896,
+    "1243": 1.2271085447477201
+   }
+  },
+  "cf_miss": {
+   "n": 14,
+   "n_with_recipe": 14,
+   "median_R_recipe": 0.48363475352161156,
+   "median_R_flip_given": 2.0224118092893875,
+   "recipe_beats_flip_given": 14,
+   "picked": {
+    "enl/coh": 11,
+    "enl/flip": 3
+   },
+   "drop_near_threshold": {},
+   "gate_ratio_near_threshold": {
+    "1239": 1.031955707447907,
+    "1240": 0.8347111334105575,
+    "1243": 0.9782299092481115
+   }
+  },
+  "pf_full": {
+   "n": 14,
+   "n_with_recipe": 14,
+   "median_R_recipe": 0.20123816473213985,
+   "median_R_flip_given": 0.20123816473213985,
+   "recipe_beats_flip_given": 1,
+   "picked": {
+    "full/coh": 2,
+    "full/flip": 12
+   },
+   "drop_near_threshold": {
+    "1232": 1.6881097101578095
+   },
+   "gate_ratio_near_threshold": {
+    "1233": 0.8788725396091983,
+    "1234": 1.0957867822175447
+   }
+  },
+  "pf_miss": {
+   "n": 14,
+   "n_with_recipe": 14,
+   "median_R_recipe": 0.23693829190418375,
+   "median_R_flip_given": 1.7258845421638593,
+   "recipe_beats_flip_given": 14,
+   "picked": {
+    "enl/flip": 14
+   },
+   "drop_near_threshold": {},
+   "gate_ratio_near_threshold": {
+    "1230": 0.8945235336657268,
+    "1234": 0.9173583887360403,
+    "1241": 0.9765725252060776
+   }
+  },
+  "coh": {
+   "n_needed": 25,
+   "n_done": 25,
+   "restarts_at_maxiter": 124,
+   "eps_at_bound": 34
+  }
+ }
+}

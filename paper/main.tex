@@ -28,8 +28,8 @@ On sixteen-qubit grid circuits, an IQP restricted to the graph completes orders 
 maximum-entropy model on all fourteen fresh instances, with a median error ratio of 0.35.
 A recipe of learned per-qubit damping, a residual alarm and graph enlargement keeps this advantage under readout noise,
 missing couplers and independent or correlated gate noise up to two percent.
-Coherent over-rotations of about one percent per gate are the hardest case: the advantage shrinks, and it passed only
-one of three tests on separate instance sets.
+Coherent over-rotations of about one percent per gate are the hardest case: the advantage shrinks, and the recipe
+passed only one of three tests on separate instance sets.
 A second test on fresh instances shows that the fitted model also samples closer to the target in total variation
 and KL divergence, in all four settings tested, but matches single-bit marginals less well.
 \end{abstract}
@@ -64,7 +64,8 @@ Finally, a test of the full distributions on fresh instances shows that the fitt
 the target than $\ME$, except on single-bit marginals.
 
 Every result in this paper comes from simulation of sixteen qubits on a $4\times 4$ grid.
-Each robustness claim was tested on fresh random instances under a protocol fixed before the run.
+Each robustness claim was tested on fresh random instances under a protocol fixed before the run, except where
+marked.
 The claim is statistical, not computational.
 Sampling from IQP circuits is believed to be classically hard \cite{bremner2011classical}, but their parity moments
 can be estimated classically at any size \cite{recio2025train}.
@@ -116,6 +117,7 @@ Later sections add readout bit flips, Pauli errors after each gate, or coherent 
 
 Each test was specified in writing before it was run, including its hypotheses, thresholds and fresh random seeds.
 A hypothesis passed if the model beat its opponent on at least 11 of 14 instances, a one-sided sign test at $p=0.029$.
+Tests on 28 instances required 19 wins, at $p=0.044$.
 Missing or failed runs counted as losses.
 Development used separate seeds, which were never reused for testing.
 
@@ -265,7 +267,7 @@ counted as losses, giving 15 of 28 against a threshold of 19.
 The third repeated the second on 28 new instances with a budget sized from a timing run, and every fit finished.
 It passed, winning 26 of 28 ($p=1.5\times10^{-6}$), with median $R=0.62$ and a bootstrap 95\% interval of 0.57 to
 0.64.
-Over all 76 coherent instances the recipe won 64.
+Over the 76 finished coherent instances, including the 14 of Sec.~\ref{sec:sampling}, the recipe won 64.
 Coherent errors therefore do not remove the advantage, but they make it less reliable from one set of instances to
 the next.
 The learned damping stayed near $\lambda=1$ and therefore did nothing.
@@ -276,7 +278,7 @@ On one losing instance the residual was only $0.35F$, yet $R=1.21$.
 The residual checks orders up to three, while the damage appears at higher orders.
 
 We then explored a coherent-aware model that places unknown $R_X$ layers between the gate layers of the IQP circuit.
-This exploration reused instances from the failed test, so it has no formal verdict.
+This exploration reused instances from the first test, so it has no formal verdict.
 The new model fitted the order-$\le3$ moments better than FlipIQP but did not complete the higher orders better.
 It beat FlipIQP on only 7 of 14 coherent instances, and on only 2 of 14 instances with Pauli noise, where it overfitted.
 A version with one angle per qubit, which matches how the data were generated, did no better.
@@ -319,7 +321,7 @@ We also computed the per-order error
 for every order with a fast Walsh--Hadamard transform, so that $\Gm$ is the mean of $E_4$, $E_5$ and $E_6$.
 Large-scale IQP studies score samples with the maximum mean discrepancy (MMD) under a Gaussian kernel
 \cite{recio2025train}.
-On bit strings this kernel is $k(x,y)=c^{d(x,y)}$, where $d$ is the Hamming distance and $c=e^{-1/2s^2}$ for
+On bit strings this kernel is $\kappa(x,y)=c^{d(x,y)}$, where $d$ is the Hamming distance and $c=e^{-1/2s^2}$ for
 bandwidth $s$.
 Each factor $c^{[x_j\ne y_j]}$ equals $a+b(-1)^{x_j+y_j}$ with $a=(1+c)/2$ and $b=(1-c)/2$.
 Expanding the product over the $n$ bits gives
@@ -430,7 +432,7 @@ The resulting model completes high-order moments better than the information-mat
 Without noise, it also beats the classical model given the same graph by more than an order of magnitude.
 The advantage survives the departures a real device is likely to show.
 Coherent over-rotations are the hardest case, where the margin shrinks and one of three tests failed on the merits.
-It also extends beyond the scored moments.
+The advantage also extends beyond the scored moments.
 On fresh instances the fitted IQP distribution is closer to the target than that of $\ME$ in total variation and in
 KL divergence, in all four settings tested, including a wrong graph and coherent errors.
 It also wins most orders above six, which $\Gm$ never scores.
